@@ -10,7 +10,7 @@ A wizard for unlocking Android bootloaders and installing mobile Linux distribut
 
 ## 🎉 Version 0.3.0 - Latest Release
 
-**Sidestep 0.3.0** adds 6 new devices (OnePlus 6T, Pocophone F1, Fairphone 4/5, SHIFT6mq) with Mobian support, and cross-references all distros across the full device catalog.
+**Sidestep 0.3.0** adds 10 new devices with Mobian and Droidian community support, and cross-references all distros across the full 25-device catalog.
 
 ### ✨ Key Features
 
