@@ -1,0 +1,17 @@
+name: "/e/OS"
+prerequisites:
+  - title: "Pre-requisites"
+    check: "android_version_12"
+    message: "/e/OS for Pixel 3a requires Android 12 Stock firmware.\n\nRequired build: SP2A.220505.008 (or any Android 12 build)\nCheck: Settings → About phone → Build number\n\nAre you running Android 12?"
+    on_success: "install"
+    on_failure: "upgrade"
+steps:
+  upgrade:
+    type: "flash_android"
+    android_version: "Android 12 (SP2A.220505.008)"
+    url: "https://dl.google.com/dl/android/aosp/sargo-sp2a.220505.008-factory-071e368a.zip"
+    sha256: "071e368a127ce5a3c553f8b717895eaf1e44dec78971dc4c80baa7237d2d37f1"
+    message: "This will download and flash Android 12 to your Pixel 3a.\n\nThis will ERASE ALL DATA on the device.\nDownload size: ~1.8 GB."
+  install:
+    type: "flash"
+    url: ""

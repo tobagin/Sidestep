@@ -185,6 +185,45 @@ available_distros:
         - "Full hardware support via stock kernel"
         - "Monthly security patches"
 
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/sargo/"
+    channels:
+      - id: "a15"
+        label: "Android 15 (Community)"
+      - id: "a14"
+        label: "Android 14 (Community)"
+      - id: "t"
+        label: "Android 13 (Community)"
+    image_pattern: "e-.*-{channel}-.*-community-sargo\\.zip"
+    recovery_pattern: "recovery-e-.*-{channel}-.*-community-sargo\\.img"
+    flash_method: "recovery_sideload"
+    firmware_requirement: "Android 12 (SP2A.220505.008)"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial:
+        - "eSIM (limited carrier support)"
+      not_working: []
+      notes:
+        - "De-Googled Android-based OS focused on privacy"
+        - "Community build — maintained by /e/OS Build Team"
+        - "Full hardware support via stock kernel"
+        - "OTA updates available via system settings"
+    homepage: "https://e.foundation"
+
   # --- Droidian ---
   - id: "droidian"
     name: "Droidian"

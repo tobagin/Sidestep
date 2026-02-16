@@ -1,0 +1,14 @@
+name: "/e/OS"
+prerequisites:
+  - title: "Pre-requisites"
+    check: "bootloader_unlocked"
+    message: "/e/OS for Motorola Edge 30 requires an unlocked bootloader.\n\nMotorola uses a web-based unlock process:\n1. Go to motorola.com/unlocking-bootloader\n2. Sign in with your Motorola account\n3. Run: fastboot oem get_unlock_data\n4. Submit the unlock data on the website\n5. Apply the unlock code from the email\n\nIs your bootloader unlocked?"
+    on_success: "install"
+    on_failure: "unlock_info"
+steps:
+  unlock_info:
+    type: "instruction"
+    message: "Please unlock your bootloader first.\n\nVisit: https://motorola.com/unlocking-bootloader\n\n1. Enable Developer Options and OEM Unlocking\n2. Boot to fastboot: adb reboot bootloader\n3. Run: fastboot oem get_unlock_data\n4. Submit data on Motorola's website\n5. Apply unlock code: fastboot oem unlock <code>"
+  install:
+    type: "flash"
+    url: ""

@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **New Devices**: OnePlus 6T (fajita), Pocophone F1 (beryllium), Fairphone 4 (FP4), Fairphone 5 (FP5), SHIFT6mq (axolotl), Moto Z (griffin), OnePlus 3/3T (oneplus3), Redmi Note 7 Pro (violet), Xperia 5 II (pdx206).
 - **Droidian Community Devices**: Added griffin, oneplus3, violet, pdx206 with Droidian community support and cross-referenced distros (postmarketOS, Ubuntu Touch, LineageOS where applicable).
 - **Mobian Support**: Added Mobian as a distro option for all Qualcomm-based devices (sdm845, sm6350, sc7280 chipsets).
-- **Cross-Distro Coverage**: Each new device includes all applicable distros (postmarketOS, Ubuntu Touch, Droidian, LineageOS, Mobian).
+- **/e/OS Support**: Added /e/OS community builds for Pixel 3a (sargo) and Motorola Edge 30 (dubai) with Android 13/14/15 channels and recovery sideload method.
+- **Cross-Distro Coverage**: Each new device includes all applicable distros (postmarketOS, Ubuntu Touch, Droidian, LineageOS, Mobian, /e/OS).
 - **OnePlus 6 Data**: Created missing data directory for enchilada with full distro coverage (Mobian, postmarketOS, Ubuntu Touch, Droidian, LineageOS).
 - **New Manufacturers**: Fairphone and SHIFT added as supported manufacturers.
 

@@ -16,7 +16,7 @@ A wizard for unlocking Android bootloaders and installing mobile Linux distribut
 
 - **📱 Automatic Device Detection**: Plug in your phone via USB and Sidestep identifies it instantly
 - **🔓 Bootloader Unlocking**: Step-by-step guidance through the unlock process for each device
-- **🐧 Multi-Distro Support**: Install Droidian, Mobian, Ubuntu Touch, postmarketOS, and more
+- **🐧 Multi-Distro Support**: Install /e/OS, Droidian, Mobian, Ubuntu Touch, postmarketOS, and more
 - **📥 Full Install Pipeline**: Download, decompress, verify checksums, and flash — all in one flow
 - **📖 Device Browser**: Browse supported devices and distributions without connecting a phone
 - **🔒 Fail-Safe Design**: Clear warnings, firmware checks, and battery validation before flashing

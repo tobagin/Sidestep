@@ -2,6 +2,49 @@ device_codename: "dubai"
 last_updated: "2026-02-16"
 
 available_distros:
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/dubai/"
+    channels:
+      - id: "a15"
+        label: "Android 15 (Community)"
+      - id: "a14"
+        label: "Android 14 (Community)"
+      - id: "t"
+        label: "Android 13 (Community)"
+    image_pattern: "e-.*-{channel}-.*-community-dubai\\.zip"
+    recovery_pattern: "recovery-IMG-e-.*-{channel}-.*-community-dubai\\.zip"
+    flash_method: "recovery_sideload"
+    extra_partitions:
+      - "dtbo"
+      - "vendor_boot"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi (802.11ax)"
+        - "Bluetooth 5.2"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+        - "5G"
+      partial:
+        - "USB OTG (may need manual toggle)"
+      not_working: []
+      notes:
+        - "De-Googled Android-based OS focused on privacy"
+        - "Community build — maintained by /e/OS Build Team"
+        - "Requires dtbo and vendor_boot partition flashing"
+        - "OTA updates available via system settings"
+    homepage: "https://e.foundation"
+
   # --- LineageOS ---
   - id: "lineageos"
     name: "LineageOS"

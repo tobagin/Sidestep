@@ -1,7 +1,7 @@
 // Flashing Progress Page
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::flashing::{DroidianInstaller, FactoryImageInstaller, InstallProgress, LineageosInstaller, MobianInstaller, PostmarketosInstaller, UbportsInstaller};
+use crate::flashing::{DroidianInstaller, EosInstaller, FactoryImageInstaller, InstallProgress, LineageosInstaller, MobianInstaller, PostmarketosInstaller, UbportsInstaller};
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::prelude::*;
@@ -312,6 +312,45 @@ impl FlashingPage {
         let receiver = installer.spawn();
 
         // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
+    /// Start /e/OS installation with progress from background thread
+    pub fn start_eos_installation(
+        &self,
+        serial: &str,
+        base_url: &str,
+        codename: &str,
+        channel: &str,
+    ) {
+        self.set_distro_name("/e/OS");
+
+        let imp = self.imp();
+        imp.status_page.set_title("Installing /e/OS");
+        imp.status_page.set_description(Some("Preparing..."));
+        imp.status_page.set_icon_name(Some("eos-symbolic"));
+
+        imp.decompress_row.set_title("Verifying Checksums");
+        #[allow(deprecated)]
+        imp.decompress_row.set_icon_name(Some("channel-secure-symbolic"));
+
+        let installer = EosInstaller::new(
+            serial.to_string(),
+            base_url.to_string(),
+            codename.to_string(),
+            channel.to_string(),
+        );
+        let receiver = installer.spawn();
+
         let page = self.clone();
         glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
             while let Ok(msg) = receiver.try_recv() {

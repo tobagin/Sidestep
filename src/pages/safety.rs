@@ -25,6 +25,8 @@ mod imp {
         pub risk_check: TemplateChild<gtk::CheckButton>,
         #[template_child]
         pub continue_button: TemplateChild<gtk::Button>,
+        #[template_child]
+        pub warnings_group: TemplateChild<adw::PreferencesGroup>,
     }
 
     #[glib::object_subclass]
@@ -101,7 +103,22 @@ impl SafetyPage {
 
     pub fn set_device(&self, device: &Device) {
         let imp = self.imp();
-        imp.device_name_label.set_label(&format!("Device: {}", device.name));
+        imp.device_name_label.set_label(&device.name);
+
+        if device.warnings.is_empty() {
+            imp.warnings_group.set_visible(false);
+        } else {
+            imp.warnings_group.set_visible(true);
+            for warning in &device.warnings {
+                let row = adw::ActionRow::builder()
+                    .title(warning)
+                    .build();
+                let icon = gtk::Image::from_icon_name("dialog-warning-symbolic");
+                icon.add_css_class("warning");
+                row.add_prefix(&icon);
+                imp.warnings_group.add(&row);
+            }
+        }
     }
 
     pub fn connect_confirmed<F: Fn(&Self) + 'static>(&self, f: F) -> glib::SignalHandlerId {

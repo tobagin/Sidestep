@@ -886,15 +886,12 @@ impl DeviceDetailsPage {
 
             let url_string = url.to_string();
             link_btn.connect_clicked(move |_| {
-                gtk::UriLauncher::new(&url_string).launch(
-                    None::<&gtk::Window>,
-                    None::<&gtk::gio::Cancellable>,
-                    |result| {
-                        if let Err(e) = result {
-                            log::warn!("Failed to launch URI: {}", e);
-                        }
-                    },
-                );
+                let launcher = gtk::UriLauncher::new(&url_string);
+                glib::spawn_future_local(async move {
+                    if let Err(e) = launcher.launch_future(None::<&gtk::Window>).await {
+                        log::warn!("Failed to launch URI: {}", e);
+                    }
+                });
             });
 
             buttons_box.append(&link_btn);
@@ -1146,6 +1143,7 @@ impl DeviceDetailsPage {
             "droidian" => self.launch_droidian_install(nav_view, device, channel),
             "postmarketos" => self.show_postmarketos_interface_selection(nav_view, device, channel),
             "lineageos" => self.launch_lineageos_install(nav_view, device, channel),
+            "eos" => self.launch_eos_install(nav_view, device, channel),
             _ => log::warn!("No installer backend for '{}'", distro_id),
         }
     }
@@ -1244,6 +1242,50 @@ impl DeviceDetailsPage {
         }
 
         progress_page.start_lineageos_installation("LineageOS", serial, release_url, false);
+
+        self.push_flashing_page(nav_view, &progress_page);
+    }
+
+    fn launch_eos_install(
+        &self,
+        nav_view: &adw::NavigationView,
+        device: &Device,
+        channel: &ChannelConfig,
+    ) {
+        let Some(ref serial) = device.serial else {
+            log::error!("No device serial available for /e/OS installation");
+            return;
+        };
+
+        let distro_config = match self.load_distro_config(device, "eos") {
+            Some(c) => c,
+            None => {
+                log::error!("Could not load distro config for /e/OS");
+                return;
+            }
+        };
+
+        let base_url = match distro_config.base_url {
+            Some(ref url) => url.clone(),
+            None => {
+                log::error!("No base_url defined for /e/OS");
+                return;
+            }
+        };
+
+        log::info!(
+            "Installing /e/OS channel {} for {} from {}",
+            channel.id,
+            device.codename,
+            base_url
+        );
+
+        let progress_page = FlashingPage::new();
+        if let Some(menu_model) = self.imp().main_menu_button.menu_model() {
+            progress_page.set_menu_model(&menu_model);
+        }
+
+        progress_page.start_eos_installation(serial, &base_url, &device.codename, &channel.id);
 
         self.push_flashing_page(nav_view, &progress_page);
     }

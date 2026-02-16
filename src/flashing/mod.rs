@@ -11,6 +11,7 @@ pub mod droidian;
 pub mod mobian;
 pub mod postmarketos;
 pub mod lineageos;
+pub mod eos;
 pub mod factory_image;
 
 pub use downloader::ImageDownloader;
@@ -23,4 +24,5 @@ pub use droidian::DroidianInstaller;
 pub use mobian::MobianInstaller;
 pub use postmarketos::PostmarketosInstaller;
 pub use lineageos::LineageosInstaller;
+pub use eos::EosInstaller;
 pub use factory_image::FactoryImageInstaller;

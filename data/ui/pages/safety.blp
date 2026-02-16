@@ -39,11 +39,21 @@ template $SafetyPage: Adw.NavigationPage {
 
                     Box {
                         orientation: vertical;
-                        spacing: 12;
+                        spacing: 8;
+                        halign: center;
+
+                        Image {
+                            icon-name: "dialog-warning-symbolic";
+                            pixel-size: 64;
+
+                            styles [
+                                "warning",
+                            ]
+                        }
 
                         Label {
                             label: _("Before You Begin");
-                            xalign: 0;
+                            halign: center;
 
                             styles [
                                 "title-1",
@@ -52,10 +62,11 @@ template $SafetyPage: Adw.NavigationPage {
 
                         Label device_name_label {
                             label: _("Device: Unknown");
-                            xalign: 0;
+                            halign: center;
 
                             styles [
                                 "title-3",
+                                "dim-label",
                             ]
                         }
                     }
@@ -119,6 +130,7 @@ template $SafetyPage: Adw.NavigationPage {
 
                     Adw.PreferencesGroup warnings_group {
                         title: _("Device-Specific Warnings");
+                        visible: false;
                     }
 
                     Button continue_button {

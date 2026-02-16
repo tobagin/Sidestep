@@ -1677,6 +1677,24 @@ impl DeviceDatabase {
                 requires_unlock: true,
                 post_install_notes: Some("First boot may take several minutes".to_string()),
             },
+            Distro {
+                name: "/e/OS".to_string(),
+                version: "3.4".to_string(),
+                description: "De-Googled Android-based mobile OS focused on privacy".to_string(),
+                download_base_url: "https://images.ecloud.global/community/sargo/".to_string(),
+                checksum_url: None,
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "recovery-e-community-sargo.img".to_string(),
+                        erase_first: false,
+                    },
+                ],
+                homepage: Some("https://e.foundation".to_string()),
+                download_size_bytes: Some(1_500_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("Flash recovery, then sideload ROM zip via adb sideload".to_string()),
+            },
         ]);
 
         // postmarketOS for OnePlus 6
@@ -1887,6 +1905,28 @@ impl DeviceDatabase {
                 download_size_bytes: Some(500_000_000),
                 requires_unlock: true,
                 post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // Motorola Edge 30 (dubai) - /e/OS
+        self.distros.insert("dubai".to_string(), vec![
+            Distro {
+                name: "/e/OS".to_string(),
+                version: "3.4".to_string(),
+                description: "De-Googled Android-based mobile OS focused on privacy".to_string(),
+                download_base_url: "https://images.ecloud.global/community/dubai/".to_string(),
+                checksum_url: None,
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "recovery-IMG-e-community-dubai.zip".to_string(),
+                        erase_first: false,
+                    },
+                ],
+                homepage: Some("https://e.foundation".to_string()),
+                download_size_bytes: Some(2_000_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("Flash recovery (dtbo + vendor_boot), then sideload ROM zip via adb sideload".to_string()),
             },
         ]);
     }

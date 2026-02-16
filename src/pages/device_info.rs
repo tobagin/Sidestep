@@ -588,8 +588,6 @@ fn make_info_row(title: &str, value: &str) -> adw::ActionRow {
     let label = gtk::Label::builder()
         .label(value)
         .css_classes(vec!["dim-label".to_string()])
-        .wrap(true)
-        .xalign(1.0)
         .build();
     row.add_suffix(&label);
     row

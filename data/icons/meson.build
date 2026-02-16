@@ -47,3 +47,8 @@ install_data(
   'hicolor' / 'symbolic' / 'apps' / 'droidian-symbolic.svg',
   install_dir: symbolic_icondir,
 )
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'eos-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
