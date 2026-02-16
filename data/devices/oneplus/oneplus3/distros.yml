@@ -1,0 +1,134 @@
+device_codename: "oneplus3"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "WiFi"
+        - "Bluetooth"
+        - "USB networking"
+        - "Internal storage"
+      partial:
+        - "3D acceleration"
+        - "Audio (speaker works, call audio may need configuration)"
+        - "GPS"
+      not_working:
+        - "Camera"
+        - "Fingerprint sensor"
+      notes:
+        - "Uses linux-postmarketos-qcom-msm8996 kernel"
+        - "First boot may take several minutes"
+        - "Installation via recovery recommended"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/oneplus3/"
+        label: "20.04 (Stable)"
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/oneplus3/"
+        label: "20.04 (Devel)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "Fingerprint reader"
+      partial:
+        - "Camera"
+      not_working:
+        - "NFC"
+      notes:
+        - "Community port based on Halium"
+        - "Requires OxygenOS 9 base firmware"
+
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "oneplus_oneplus3-api28-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Vibration"
+        - "Fingerprint reader"
+      partial:
+        - "Camera"
+        - "GPS"
+      not_working:
+        - "NFC"
+      notes:
+        - "Community port"
+        - "Requires treblized vendor partition"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/oneplus3/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece, 3.5mm jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Shared builds for OnePlus 3 and 3T"
+        - "No longer actively maintained"
+        - "Last official builds were LineageOS 18.1"

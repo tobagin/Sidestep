@@ -425,9 +425,90 @@ impl DeviceDatabase {
             battery_level: None,
         });
 
+        // Motorola Moto Z (griffin)
+        self.devices.insert("griffin".to_string(), Device {
+            codename: "griffin".to_string(),
+            name: "Motorola Moto Z".to_string(),
+            maker: "Motorola".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+                "Verizon Droid Edition may have bootloader unlock restrictions".to_string(),
+            ],
+            aliases: vec!["moto z".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // OnePlus 3 (oneplus3)
+        self.devices.insert("oneplus3".to_string(), Device {
+            codename: "oneplus3".to_string(),
+            name: "OnePlus 3".to_string(),
+            maker: "OnePlus".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+                "OxygenOS backup recommended before proceeding".to_string(),
+            ],
+            aliases: vec!["OnePlus3".to_string()],
+            variants: vec![
+                "OnePlus 3T".to_string(),
+            ],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Xiaomi Redmi Note 7 Pro (violet)
+        self.devices.insert("violet".to_string(), Device {
+            codename: "violet".to_string(),
+            name: "Xiaomi Redmi Note 7 Pro".to_string(),
+            maker: "Xiaomi".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["Redmi Note 7 Pro".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Sony Xperia 5 II (pdx206)
+        self.devices.insert("pdx206".to_string(), Device {
+            codename: "pdx206".to_string(),
+            name: "Sony Xperia 5 II".to_string(),
+            maker: "Sony".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+                "Sony DRM keys will be permanently lost after unlocking".to_string(),
+            ],
+            aliases: vec!["Xperia 5 II".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
         // Load unlocking steps for each device
         self.load_unlocking_steps();
-        
+
         // Load distros for each device
         self.load_distros();
     }
@@ -1362,6 +1443,212 @@ impl DeviceDatabase {
                 warning: Some("This will factory reset your device!".to_string()),
             },
         ]);
+
+        // Motorola Moto Z (griffin) — Motorola unlock code
+        self.unlocking_steps.insert("griffin".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'. Note: this option may take up to a week to appear after first setup.".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Get Unlock Code from Motorola".to_string(),
+                description: "Visit the Motorola bootloader unlock page to request an unlock code for your device".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run OEM unlock command with the code from Motorola".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock <code>".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // OnePlus 3 (oneplus3) — standard OEM unlock
+        self.unlocking_steps.insert("oneplus3".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Use volume keys to confirm on device.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Xiaomi Redmi Note 7 Pro (violet) — Xiaomi Mi Unlock
+        self.unlocking_steps.insert("violet".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'MIUI version' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Link Mi Account".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options > Mi Unlock status and link your Mi account. Wait for the required unlock period (up to 168 hours).".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command via fastboot".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Sony Xperia 5 II (pdx206) — Sony unlock code
+        self.unlocking_steps.insert("pdx206".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Get Unlock Code from Sony".to_string(),
+                description: "Visit Sony's bootloader unlock page to request an unlock code for your device. You will need your IMEI number.".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("Unlocking will permanently void DRM keys (camera quality may be affected)".to_string()),
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run OEM unlock command with the code from Sony".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock 0x<code>".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
     }
 
     fn load_distros(&mut self) {
@@ -1573,6 +1860,33 @@ impl DeviceDatabase {
                 download_size_bytes: Some(400_000_000),
                 requires_unlock: true,
                 post_install_notes: Some("Dual screen support is experimental".to_string()),
+            },
+        ]);
+
+        // OnePlus 3 (oneplus3) - postmarketOS
+        self.distros.insert("oneplus3".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "edge".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/edge/oneplus-oneplus3/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/edge/oneplus-oneplus3/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-oneplus-oneplus3.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(500_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
             },
         ]);
     }

@@ -1,0 +1,92 @@
+device_codename: "violet"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/violet/"
+        label: "20.04 (Devel)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial:
+        - "Camera"
+        - "Fingerprint reader"
+      not_working:
+        - "IR blaster"
+      notes:
+        - "Community port based on Halium 9"
+        - "Development builds only"
+
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "xiaomi_violet-api28-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Vibration"
+      partial:
+        - "Camera"
+        - "GPS"
+        - "Fingerprint reader"
+      not_working:
+        - "IR blaster"
+      notes:
+        - "Community port"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/violet/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece, 3.5mm jack)"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+        - "IR blaster"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "No longer actively maintained"
+        - "Last official builds were LineageOS 20"

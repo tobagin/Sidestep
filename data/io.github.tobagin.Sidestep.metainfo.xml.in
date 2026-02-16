@@ -35,10 +35,11 @@
       <description>
         <p>New devices and Mobian support:</p>
         <ul>
-          <li>6 new devices: OnePlus 6T, Pocophone F1, Fairphone 4, Fairphone 5, SHIFT6mq</li>
+          <li>10 new devices: OnePlus 6T, OnePlus 3/3T, Pocophone F1, Redmi Note 7 Pro, Fairphone 4/5, SHIFT6mq, Moto Z, Xperia 5 II</li>
+          <li>Droidian community device support for griffin, oneplus3, violet, pdx206</li>
           <li>Mobian support for all Qualcomm-based devices</li>
           <li>Full cross-distro coverage for every new device</li>
-          <li>21 supported devices across 11 manufacturers</li>
+          <li>25 supported devices across 11 manufacturers</li>
         </ul>
       </description>
     </release>

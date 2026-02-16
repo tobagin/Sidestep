@@ -41,14 +41,14 @@ For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md)
 
 ### Supported Devices
 - **Google** - Pixel 3a (sargo)
-- **OnePlus** - OnePlus 6 (enchilada), OnePlus 6T (fajita)
-- **Xiaomi** - POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (miatoll), Pocophone F1 (beryllium)
+- **OnePlus** - OnePlus 6 (enchilada), OnePlus 6T (fajita), OnePlus 3 / 3T (oneplus3)
+- **Xiaomi** - POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (miatoll), Pocophone F1 (beryllium), Redmi Note 7 Pro (violet)
 - **Fairphone** - Fairphone 4 (FP4), Fairphone 5 (FP5)
 - **SHIFT** - SHIFT6mq (axolotl)
 - **Microsoft** - Surface Duo (zeta) *(experimental)*
-- **Motorola** - Edge 30 (dubai)
+- **Motorola** - Edge 30 (dubai), Moto Z (griffin)
 - **F(x)tec** - Pro1 (pro1), Pro1 X (pro1x)
-- **Sony** - Xperia 5 (bahamut)
+- **Sony** - Xperia 5 (bahamut), Xperia 5 II (pdx206)
 - **Volla** - Phone (yggdrasil), Phone X (yggdrasilx), Phone 22 (mimameid), Phone X23 (vidofnir), Quintus (algiz), Tablet (mimir)
 - **Lenovo** - ThinkPhone (bronco)
 
