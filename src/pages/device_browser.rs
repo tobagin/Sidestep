@@ -113,50 +113,49 @@ impl DeviceBrowserPage {
                 .push(device.clone());
         }
 
-        // Sort devices within each group alphabetically
-        for devices in grouped.values_mut() {
-            devices.sort_by(|a, b| a.name.cmp(&b.name));
-        }
-
         // Create a PreferencesGroup per manufacturer
         for (maker, devices) in &grouped {
             let group = adw::PreferencesGroup::builder()
                 .title(maker)
                 .build();
 
+            // Flatten all display names (primary + variants) into a single sorted list
+            let mut rows: Vec<(String, String, bool)> = Vec::new();
             for device in devices {
-                // Collect all display names: primary name + variants
-                let mut display_names = vec![device.name.clone()];
-                display_names.extend(device.variants.iter().cloned());
-
-                for display_name in &display_names {
-                    let subtitle = if device.experimental {
-                        format!("{} (Experimental)", device.codename)
-                    } else {
-                        device.codename.clone()
-                    };
-
-                    let row = adw::ActionRow::builder()
-                        .title(display_name)
-                        .subtitle(&subtitle)
-                        .activatable(true)
-                        .build();
-
-                    let icon = gtk::Image::from_icon_name("phone-symbolic");
-                    icon.set_pixel_size(32);
-                    row.add_prefix(&icon);
-
-                    let chevron = gtk::Image::from_icon_name("go-next-symbolic");
-                    row.add_suffix(&chevron);
-
-                    let page_clone = self.clone();
-                    let codename = device.codename.clone();
-                    row.connect_activated(move |_| {
-                        page_clone.emit_by_name::<()>("device-selected", &[&codename]);
-                    });
-
-                    group.add(&row);
+                rows.push((device.name.clone(), device.codename.clone(), device.experimental));
+                for variant in &device.variants {
+                    rows.push((variant.clone(), device.codename.clone(), device.experimental));
                 }
+            }
+            rows.sort_by(|a, b| a.0.cmp(&b.0));
+
+            for (display_name, codename, experimental) in &rows {
+                let subtitle = if *experimental {
+                    format!("{} (Experimental)", codename)
+                } else {
+                    codename.clone()
+                };
+
+                let row = adw::ActionRow::builder()
+                    .title(display_name)
+                    .subtitle(&subtitle)
+                    .activatable(true)
+                    .build();
+
+                let icon = gtk::Image::from_icon_name("phone-symbolic");
+                icon.set_pixel_size(32);
+                row.add_prefix(&icon);
+
+                let chevron = gtk::Image::from_icon_name("go-next-symbolic");
+                row.add_suffix(&chevron);
+
+                let page_clone = self.clone();
+                let codename = codename.clone();
+                row.connect_activated(move |_| {
+                    page_clone.emit_by_name::<()>("device-selected", &[&codename]);
+                });
+
+                group.add(&row);
             }
 
             content_box.append(&group);
