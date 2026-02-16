@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="sidestep">
+<schema id="@APP_ID@" path="@APP_PATH@">
+    <key name="download-path" type="s">
+      <default>''</default>
+      <summary>Download directory</summary>
+      <description>Directory where ROM images are downloaded. Empty uses XDG download directory.</description>
+    </key>
+    <key name="sync-interval-hours" type="i">
+      <default>24</default>
+      <summary>Sync interval</summary>
+      <description>Hours between automatic database sync checks.</description>
+    </key>
+    <key name="show-terminal" type="b">
+      <default>false</default>
+      <summary>Show terminal</summary>
+      <description>Whether to show the terminal overlay by default.</description>
+    </key>
+    <key name="window-width" type="i">
+      <default>800</default>
+      <summary>Window width</summary>
+      <description>Last saved window width.</description>
+    </key>
+    <key name="window-height" type="i">
+      <default>600</default>
+      <summary>Window height</summary>
+      <description>Last saved window height.</description>
+    </key>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+      <description>Whether the window is maximized.</description>
+    </key>
+  </schema>
+</schemalist>

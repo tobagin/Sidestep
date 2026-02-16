@@ -1,0 +1,6 @@
+target/
+build-dir/
+.flatpak-builder/
+cargo/
+*.gresource
+build/

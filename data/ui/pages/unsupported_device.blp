@@ -1,0 +1,68 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $UnsupportedDevicePage: Adw.NavigationPage {
+    tag: "unsupported_device";
+    title: _("Unsupported Device");
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [title]
+            Adw.WindowTitle {
+                title: _("Sidestep");
+                subtitle: _("Install Linux on mobile");
+            }
+
+            [end]
+            MenuButton {
+                icon-name: "open-menu-symbolic";
+                menu-model: primary_menu;
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: Adw.StatusPage {
+            icon-name: "dialog-warning-symbolic";
+            title: _("Device Not Supported");
+            description: _("The connected device is not currently supported by Sidestep.");
+
+            child: Button back_button {
+                label: _("Try Another Device");
+                halign: center;
+
+                styles [
+                    "pill",
+                    "suggested-action",
+                ]
+
+                action-name: "page.back";
+            };
+        };
+    };
+}
+
+menu primary_menu {
+    section {
+        item {
+            label: _("Preferences");
+            action: "app.preferences";
+        }
+
+        item {
+            label: _("Show Terminal");
+            action: "win.show-terminal";
+        }
+
+        item {
+            label: _("Keyboard Shortcuts");
+            action: "win.show-help-overlay";
+        }
+
+        item {
+            label: _("About Sidestep");
+            action: "app.about";
+        }
+    }
+}

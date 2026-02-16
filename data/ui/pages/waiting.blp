@@ -1,0 +1,95 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WaitingPage: Adw.NavigationPage {
+    tag: "waiting";
+    title: _("Waiting");
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [title]
+            Adw.WindowTitle {
+                title: _("Sidestep");
+                subtitle: _("Install Linux on mobile");
+            }
+
+            [end]
+            MenuButton {
+                icon-name: "open-menu-symbolic";
+                menu-model: primary_menu;
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: Stack stack {
+            transition-type: crossfade;
+
+            StackPage {
+                name: "connecting";
+                child: Adw.StatusPage {
+                    icon-name: "phone-symbolic";
+                    title: _("Connect Your Device");
+                    description: _("Connect an Android device via USB to begin.\nMake sure USB debugging is enabled.");
+
+                    child: Box {
+                        orientation: vertical;
+                        spacing: 12;
+                        halign: center;
+
+                        Spinner waiting_spinner {
+                            spinning: true;
+                            width-request: 32;
+                            height-request: 32;
+                        }
+
+                        Label {
+                            label: _("Listening for devices...");
+
+                            styles [
+                                "dim-label",
+                            ]
+                        }
+                    };
+                };
+            }
+
+            StackPage {
+                name: "connected";
+                child: Adw.StatusPage {
+                    icon-name: "phone-symbolic";
+                    title: _("Connected Devices");
+                    description: _("Select a device to continue.");
+
+                    child: Adw.PreferencesGroup device_list {
+                    };
+                };
+            }
+        };
+    };
+}
+
+menu primary_menu {
+    section {
+        item {
+            label: _("Preferences");
+            action: "app.preferences";
+        }
+
+        item {
+            label: _("Show Terminal");
+            action: "win.show-terminal";
+        }
+
+        item {
+            label: _("Keyboard Shortcuts");
+            action: "win.show-help-overlay";
+        }
+
+        item {
+            label: _("About Sidestep");
+            action: "app.about";
+        }
+    }
+}

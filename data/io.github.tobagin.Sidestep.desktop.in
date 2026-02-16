@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=@APP_NAME@
+Comment=Mobile Linux Installer
+Exec=sidestep
+Icon=@ICON_NAME@
+Terminal=false
+Type=Application
+Categories=System;Utility;
+Keywords=Linux;Mobile;Android;Flash;Install;postmarketOS;Ubuntu Touch;
+StartupNotify=true

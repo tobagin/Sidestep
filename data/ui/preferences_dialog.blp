@@ -1,0 +1,68 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PreferencesDialog: Adw.PreferencesDialog {
+    title: _("Preferences");
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            title: _("Downloads");
+
+            Adw.ActionRow download_path_row {
+                title: _("Download Location");
+                subtitle: _("Where ROM images are saved");
+
+                [suffix]
+                Button choose_folder_button {
+                    icon-name: "folder-open-symbolic";
+                    valign: center;
+                    tooltip-text: _("Choose Folder");
+
+                    styles [
+                        "flat",
+                    ]
+                }
+            }
+        }
+
+        Adw.PreferencesGroup {
+            title: _("Database");
+
+            Adw.SpinRow sync_interval_row {
+                title: _("Sync Interval");
+                subtitle: _("Hours between automatic updates");
+
+                adjustment: Adjustment {
+                    lower: 1;
+                    upper: 168;
+                    step-increment: 1;
+                    value: 24;
+                };
+            }
+
+            Adw.ActionRow {
+                title: _("Last Sync");
+                subtitle: _("Never");
+
+                [suffix]
+                Button sync_now_button {
+                    label: _("Sync Now");
+                    valign: center;
+
+                    styles [
+                        "flat",
+                    ]
+                }
+            }
+        }
+
+        Adw.PreferencesGroup {
+            title: _("Interface");
+
+            Adw.SwitchRow show_terminal_row {
+                title: _("Show Terminal by Default");
+                subtitle: _("Display command output during operations");
+            }
+        }
+    }
+}

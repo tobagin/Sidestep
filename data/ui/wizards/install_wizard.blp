@@ -1,0 +1,12 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $InstallWizard: Adw.Window {
+    modal: true;
+    default-width: 600;
+    default-height: 500;
+    width-request: 360;
+    height-request: 200;
+
+    content: Adw.NavigationView navigation_view {};
+}

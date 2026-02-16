@@ -1,0 +1,74 @@
+project('sidestep', 'rust',
+          version: '0.1.0',
+    meson_version: '>= 0.59.0',
+  default_options: [ 'warning_level=2', 'werror=false', ],
+)
+
+i18n = import('i18n')
+gnome = import('gnome')
+
+profile = get_option('profile')
+if profile == 'development'
+  base_id = 'io.github.tobagin.Sidestep.Dev'
+  app_name = 'Sidestep (Dev)'
+else
+  base_id = 'io.github.tobagin.Sidestep'
+  app_name = 'Sidestep'
+endif
+
+dependency('glib-2.0', version: '>= 2.66')
+dependency('gio-2.0', version: '>= 2.66')
+dependency('gtk4', version: '>= 4.0.0')
+dependency('libadwaita-1', version: '>= 1.0.0')
+
+cargo = find_program('cargo', required: true)
+fs = import('fs')
+
+output = meson.project_name()
+
+# Cargo build logic
+cargo_options = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml' ]
+cargo_options += [ '--target-dir', meson.project_build_root() / 'target' ]
+
+if get_option('profile') == 'development'
+  cargo_options += [ '--release' ]
+  rust_target = 'release'
+else
+  cargo_options += [ '--release', '--offline' ]
+  rust_target = 'release'
+endif
+
+if fs.is_dir(meson.project_source_root() / 'cargo')
+  cargo_env = [ 'CARGO_HOME=' + meson.project_source_root() / 'cargo' ]
+else
+  cargo_env = [ 'CARGO_HOME=' + meson.project_build_root() / 'cargo-home' ]
+endif
+
+custom_target('cargo-build',
+  build_by_default: true,
+  build_always_stale: true,
+  output: output,
+  console: true,
+  install: true,
+  install_dir: get_option('bindir'),
+  command: [
+    'env',
+    cargo_env,
+    cargo, 'build',
+    cargo_options,
+    '&&',
+    'cp', meson.project_build_root() / 'target' / rust_target / 'sidestep', '@OUTPUT@',
+  ],
+)
+
+subdir('src')
+subdir('data')
+subdir('po')
+
+install_subdir('data/devices', install_dir: get_option('datadir') / 'sidestep')
+
+gnome.post_install(
+  glib_compile_schemas: true,
+  update_desktop_database: true,
+  gtk_update_icon_cache: true,
+)

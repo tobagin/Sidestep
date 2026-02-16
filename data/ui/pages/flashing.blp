@@ -1,0 +1,134 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $FlashingPage: Adw.NavigationPage {
+    title: _("Installing");
+    tag: "flashing-progress";
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            show-back-button: false;
+
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: ScrolledWindow {
+            child: Adw.Clamp {
+                maximum-size: 600;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 12;
+                margin-end: 12;
+
+                child: Box {
+                    orientation: vertical;
+                    spacing: 24;
+
+                    Box {
+                        orientation: vertical;
+                        spacing: 8;
+
+                        Label {
+                            label: _("Installing Distribution");
+                            xalign: 0;
+
+                            styles [
+                                "title-1",
+                            ]
+                        }
+
+                        Label status_label {
+                            label: _("Preparing...");
+                            xalign: 0;
+
+                            styles [
+                                "dim-label",
+                            ]
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        title: _("Progress");
+
+                        Adw.ActionRow download_row {
+                            icon-name: "folder-download-symbolic";
+                            title: _("Downloading Image");
+                            subtitle: _("Waiting...");
+
+                            [suffix]
+                            ProgressBar download_progress {
+                                valign: center;
+                                width-request: 150;
+                            }
+                        }
+
+                        Adw.ActionRow decompress_row {
+                            icon-name: "package-x-generic-symbolic";
+                            title: _("Decompressing");
+                            subtitle: _("Waiting...");
+
+                            [suffix]
+                            ProgressBar decompress_progress {
+                                valign: center;
+                                width-request: 150;
+                            }
+                        }
+
+                        Adw.ActionRow flash_row {
+                            icon-name: "media-flash-symbolic";
+                            title: _("Flashing Partitions");
+                            subtitle: _("Waiting...");
+
+                            [suffix]
+                            ProgressBar flash_progress {
+                                valign: center;
+                                width-request: 150;
+                            }
+                        }
+
+                        Adw.ActionRow verify_row {
+                            icon-name: "emblem-default-symbolic";
+                            title: _("Verifying Checksums");
+                            subtitle: _("Waiting...");
+
+                            [suffix]
+                            Image verify_icon {
+                                visible: false;
+                            }
+                        }
+                    }
+
+                    Adw.Banner error_banner {
+                        title: _("An error occurred");
+                        revealed: false;
+                        button-label: _("View Logs");
+
+                        styles [
+                            "error",
+                        ]
+                    }
+
+                    Box {
+                        halign: center;
+                        visible: false;
+
+                        Button cancel_button {
+                            label: _("Cancel");
+
+                            styles [
+                                "destructive-action",
+                                "pill",
+                            ]
+                        }
+                    }
+                };
+            };
+        };
+    };
+}

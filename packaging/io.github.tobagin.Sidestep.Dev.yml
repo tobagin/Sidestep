@@ -1,0 +1,61 @@
+app-id: io.github.tobagin.Sidestep.Dev
+runtime: org.gnome.Platform
+runtime-version: '49'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+
+command: sidestep
+
+finish-args:
+  # USB access for adb/fastboot
+  - --device=all
+  # Wayland and X11 display
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  # Network for downloading images
+  - --share=network
+  # Access to Downloads folder for images
+  - --filesystem=xdg-download/sidestep:create
+  # dconf/gsettings
+  - --filesystem=xdg-run/dconf
+  - --filesystem=~/.config/dconf:ro
+  - --talk-name=ca.desrt.dconf
+  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  # Enable network for development builds
+  build-args:
+    - --share=network
+
+modules:
+  # Android platform tools (adb, fastboot, mke2fs)
+  # Pinned to 33.0.3 to match UBports installer — fastboot 36.0.2 has a
+  # regression where --disable-verity --disable-verification flags fail
+  # with "Failed to find AVB_MAGIC at offset: 0".
+  - name: android-tools
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 adb ${FLATPAK_DEST}/bin/adb
+      - install -Dm755 fastboot ${FLATPAK_DEST}/bin/fastboot
+      - install -Dm755 mke2fs ${FLATPAK_DEST}/bin/mke2fs
+      - install -Dm644 mke2fs.conf ${FLATPAK_DEST}/etc/mke2fs.conf
+    sources:
+      - type: archive
+        url: https://dl.google.com/android/repository/platform-tools_r33.0.3-linux.zip
+        sha256: ab885c20f1a9cb528eb145b9208f53540efa3d26258ac3ce4363570a0846f8f7
+        strip-components: 1
+
+  # Main application
+  - name: sidestep
+    buildsystem: meson
+    config-opts:
+      - -Dprofile=development
+    sources:
+      - type: dir
+        path: ..
+    build-options:
+      env:
+        CARGO_HOME: /run/build/sidestep/cargo

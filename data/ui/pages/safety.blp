@@ -1,0 +1,123 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SafetyPage: Adw.NavigationPage {
+    title: _("Safety Warnings");
+    tag: "safety-warnings";
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: ScrolledWindow {
+            child: Adw.Clamp {
+                maximum-size: 600;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 12;
+                margin-end: 12;
+
+                child: Box {
+                    orientation: vertical;
+                    spacing: 24;
+
+                    Adw.Banner warning_banner {
+                        title: _("Experimental device support - proceed with caution");
+                        revealed: false;
+
+                        styles [
+                            "warning",
+                        ]
+                    }
+
+                    Box {
+                        orientation: vertical;
+                        spacing: 12;
+
+                        Label {
+                            label: _("Before You Begin");
+                            xalign: 0;
+
+                            styles [
+                                "title-1",
+                            ]
+                        }
+
+                        Label device_name_label {
+                            label: _("Device: Unknown");
+                            xalign: 0;
+
+                            styles [
+                                "title-3",
+                            ]
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        title: _("Requirements");
+
+                        Adw.ActionRow battery_row {
+                            icon-name: "battery-full-symbolic";
+                            title: _("Battery Level");
+                            subtitle: _("Ensure at least 50% battery charge");
+
+                            [suffix]
+                            Image battery_check {
+                                icon-name: "emblem-ok-symbolic";
+                                visible: false;
+
+                                styles [
+                                    "success",
+                                ]
+                            }
+                        }
+
+                        Adw.ActionRow backup_row {
+                            icon-name: "drive-harddisk-symbolic";
+                            title: _("Backup Your Data");
+                            subtitle: _("All data on the device will be erased");
+
+                            [suffix]
+                            CheckButton backup_check {
+                                valign: center;
+                            }
+                        }
+
+                        Adw.ActionRow warranty_row {
+                            icon-name: "dialog-warning-symbolic";
+                            title: _("Warranty Void");
+                            subtitle: _("Unlocking the bootloader may void your warranty");
+
+                            [suffix]
+                            CheckButton warranty_check {
+                                valign: center;
+                            }
+                        }
+                    }
+
+                    Adw.PreferencesGroup warnings_group {
+                        title: _("Device-Specific Warnings");
+                    }
+
+                    Button continue_button {
+                        label: _("I Understand, Continue");
+                        halign: center;
+                        sensitive: false;
+
+                        styles [
+                            "suggested-action",
+                            "pill",
+                        ]
+                    }
+                };
+            };
+        };
+    };
+}

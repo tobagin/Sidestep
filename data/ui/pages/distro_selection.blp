@@ -1,0 +1,93 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DistroSelectionPage: Adw.NavigationPage {
+    title: _("Select Distribution");
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: ScrolledWindow {
+            child: Adw.Clamp {
+                maximum-size: 600;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 12;
+                margin-end: 12;
+
+                child: Box {
+                    orientation: vertical;
+                    spacing: 24;
+
+                    Box {
+                        orientation: vertical;
+                        spacing: 8;
+
+                        Label {
+                            label: _("Choose Your Distribution");
+                            xalign: 0;
+
+                            styles [
+                                "title-1",
+                            ]
+                        }
+
+                        Label {
+                            label: _("Select a mobile Linux distribution to install on your device.");
+                            xalign: 0;
+                            wrap: true;
+
+                            styles [
+                                "dim-label",
+                            ]
+                        }
+                    }
+
+                    Adw.PreferencesGroup distros_group {
+                        title: _("Available Distributions");
+                    }
+
+                    Adw.PreferencesGroup selected_info_group {
+                        title: _("Selected Distribution");
+                        visible: false;
+
+                        Adw.ActionRow selected_distro_row {
+                            title: _("postmarketOS");
+                            subtitle: _("Alpine-based mobile Linux");
+                        }
+
+                        Adw.ActionRow download_size_row {
+                            title: _("Download Size");
+                            subtitle: _("~500 MB");
+                        }
+                    }
+
+                    Box {
+                        halign: center;
+                        spacing: 12;
+                        // Back button removed - handled by HeaderBar
+                        Button install_button {
+                            label: _("Install");
+                            sensitive: false;
+
+                            styles [
+                                "suggested-action",
+                                "pill",
+                            ]
+
+                            clicked => $on_install_button_clicked();
+                        }
+                    }
+                };
+            };
+        };
+    };
+}

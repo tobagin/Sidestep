@@ -1,0 +1,10 @@
+data/io.github.tobagin.Sidestep.desktop.in
+data/io.github.tobagin.Sidestep.metainfo.xml.in
+data/io.github.tobagin.Sidestep.gschema.xml
+data/ui/window.blp
+data/ui/terminal_overlay.blp
+data/ui/preferences_dialog.blp
+data/ui/wizard/safety_warnings.blp
+data/ui/wizard/unlocking_steps.blp
+data/ui/wizard/distro_selection.blp
+data/ui/wizard/flashing_progress.blp

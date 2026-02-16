@@ -1,0 +1,100 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $UnlockingPage: Adw.NavigationPage {
+    title: _("Unlock Bootloader");
+    tag: "unlocking-steps";
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: ScrolledWindow {
+            child: Adw.Clamp {
+                maximum-size: 600;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 12;
+                margin-end: 12;
+
+                child: Box {
+                    orientation: vertical;
+                    spacing: 24;
+
+                    Box {
+                        orientation: vertical;
+                        spacing: 8;
+
+                        Label {
+                            label: _("Unlock Bootloader");
+                            xalign: 0;
+
+                            styles [
+                                "title-1",
+                            ]
+                        }
+
+                        Label {
+                            label: _("Follow these steps in order. Check each step when complete.");
+                            xalign: 0;
+                            wrap: true;
+
+                            styles [
+                                "dim-label",
+                            ]
+                        }
+                    }
+
+                    Adw.PreferencesGroup steps_group {
+                        title: _("Steps");
+                    }
+
+                    Box progress_box {
+                        orientation: vertical;
+                        spacing: 12;
+                        visible: false;
+
+                        Label progress_label {
+                            label: _("Running command...");
+                            xalign: 0;
+                        }
+
+                        ProgressBar command_progress {
+                            pulse-step: 0.1;
+                        }
+                    }
+
+                    Box {
+                        halign: center;
+                        spacing: 12;
+
+                        Button back_button {
+                            label: _("Back");
+
+                            styles [
+                                "pill",
+                            ]
+                        }
+
+                        Button continue_button {
+                            label: _("Continue");
+                            sensitive: false;
+
+                            styles [
+                                "suggested-action",
+                                "pill",
+                            ]
+                        }
+                    }
+                };
+            };
+        };
+    };
+}

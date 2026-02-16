@@ -1,0 +1,56 @@
+app-id: io.github.tobagin.Sidestep
+runtime: org.gnome.Platform
+runtime-version: '49'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+
+command: sidestep
+
+finish-args:
+  # USB access for adb/fastboot
+  - --device=all
+  # Wayland and X11 display
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  # Network for downloading images
+  - --share=network
+  # Access to Downloads folder for images
+  - --filesystem=xdg-download/sidestep:create
+  # dconf/gsettings (sandboxed access only)
+  # - --filesystem=xdg-run/dconf
+  # - --filesystem=~/.config/dconf:ro
+  # - --talk-name=ca.desrt.dconf
+  # - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  # Enable network for development builds
+  build-args:
+    - --share=network
+
+modules:
+  # Android platform tools (adb, fastboot)
+  - name: android-tools
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 adb ${FLATPAK_DEST}/bin/adb
+      - install -Dm755 fastboot ${FLATPAK_DEST}/bin/fastboot
+    sources:
+      - type: archive
+        url: https://dl.google.com/android/repository/platform-tools_r35.0.1-linux.zip
+        sha256: 823d270be01444828ccd09e94209ff394fb8a8457243e1c15689fe0544acbc72
+        strip-components: 1
+
+  # Main application
+  - name: sidestep
+    buildsystem: meson
+    config-opts:
+      - -Dprofile=development
+    sources:
+      - type: dir
+        path: ..
+    build-options:
+      env:
+        CARGO_HOME: /run/build/sidestep/cargo

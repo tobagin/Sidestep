@@ -1,0 +1,16 @@
+name: "Droidian"
+prerequisites:
+  - title: "Pre-requisites"
+    check: "android_version_9"
+    message: "Droidian for Pixel 3a requires Android 9 Stock firmware.\nAre you running Android 9?"
+    on_success: "install"
+    on_failure: "downgrade"
+steps:
+  downgrade:
+    type: "instruction"
+    message: "You need to downgrade to Android 9 before proceeding.\n\nUse the Android Flash Tool to flash build 'PQ3B.190801.002' (Android 9)."
+    link: "https://flash.android.com/build/5770020?target=sargo-user&deviceIds="
+    action_label: "Open Android Flash Tool"
+  install:
+    type: "flash"
+    url: "https://github.com/droidian-images/droidian/releases/download/nightly/droidian-OFFICIAL-phosh-phone-google_sargo-api28-arm64-next_20260111.zip"

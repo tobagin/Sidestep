@@ -1,0 +1,36 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SuccessPage: Adw.NavigationPage {
+    title: _("Success");
+    tag: "success";
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                // menu-model set in code
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: Adw.StatusPage {
+            icon-name: "penguin-symbolic";
+            title: _("Installation Complete!");
+            description: _("Your device is ready to boot into Ubuntu Touch.\nDisconnect the USB cable and restart your device.");
+
+            child: Button restart_button {
+                label: _("Flash Another Device");
+                halign: center;
+                action-name: "page.restart"; // Using action for internal handling
+                styles [
+                    "suggested-action",
+                    "pill",
+                ]
+            };
+        };
+    };
+}

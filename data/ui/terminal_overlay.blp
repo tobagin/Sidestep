@@ -1,0 +1,30 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $TerminalOverlay: Adw.Bin {
+    child: Frame {
+        margin-start: 12;
+        margin-end: 12;
+        margin-bottom: 12;
+
+        child: ScrolledWindow {
+            min-content-height: 150;
+            max-content-height: 200;
+
+            child: TextView terminal_view {
+                editable: false;
+                cursor-visible: false;
+                wrap-mode: word_char;
+                monospace: true;
+                left-margin: 8;
+                right-margin: 8;
+                top-margin: 8;
+                bottom-margin: 8;
+
+                styles [
+                    "terminal",
+                ]
+            };
+        };
+    };
+}

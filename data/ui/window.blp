@@ -1,0 +1,47 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SidestepWindow: Adw.ApplicationWindow {
+  title: _("Sidestep");
+  default-width: 800;
+  default-height: 600;
+
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.NavigationView main_nav {};
+  };
+}
+
+menu primary_menu {
+  section {
+    item {
+      label: _("Show Terminal");
+      action: "win.show-terminal";
+    }
+  }
+
+  section {
+    item {
+      label: _("Preferences");
+      action: "app.preferences";
+    }
+  }
+
+  section {
+    item {
+      label: _("Keyboard Shortcuts");
+      action: "win.show-help-overlay";
+    }
+
+    item {
+      label: _("About Sidestep");
+      action: "app.about";
+    }
+  }
+
+  section {
+    item {
+      label: _("Quit");
+      action: "app.quit";
+    }
+  }
+}

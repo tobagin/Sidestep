@@ -1,0 +1,139 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DeviceDetailsPage: Adw.NavigationPage {
+    title: _("Device Details");
+    tag: "device_details";
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar header_bar {
+            [end]
+            MenuButton main_menu_button {
+                icon-name: "open-menu-symbolic";
+                primary: true;
+                tooltip-text: _("Main Menu");
+            }
+        }
+
+        content: Adw.StatusPage {
+            child: Adw.Clamp {
+                maximum-size: 600;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 12;
+                margin-end: 12;
+
+                child: Box {
+                    orientation: vertical;
+                    spacing: 24;
+                    // Device Header
+                    Box {
+                        orientation: vertical;
+                        spacing: 8;
+                        halign: center;
+
+                        Image {
+                            icon-name: "phone-symbolic"; // Placeholder
+                            pixel-size: 96;
+
+                            styles [
+                                "accent",
+                            ]
+                        }
+
+                        Label device_name_label {
+                            label: "Pixel 3a";
+
+                            styles [
+                                "title-1",
+                            ]
+                        }
+
+                        Label device_codename_label {
+                            label: "google-sargo";
+
+                            styles [
+                                "dim-label",
+                            ]
+                        }
+                    }
+
+                    // Actions
+                    Box {
+                        orientation: vertical;
+                        spacing: 12;
+
+                        Box distro_buttons_box {
+                            orientation: vertical;
+                            spacing: 12;
+
+                            Button btn_droidian {
+                                label: _("Install Droidian");
+
+                                styles [
+                                    "suggested-action",
+                                    "pill",
+                                ]
+
+                                height-request: 50;
+                                action-name: "page.install";
+                                action-target: "'droidian'";
+                            }
+
+                            Button btn_mobian {
+                                label: _("Install Mobian");
+
+                                styles [
+                                    "suggested-action",
+                                    "pill",
+                                ]
+
+                                height-request: 50;
+                                action-name: "page.install";
+                                action-target: "'mobian'";
+                            }
+
+                            Button btn_ubuntutouch {
+                                label: _("Install Ubuntu Touch");
+
+                                styles [
+                                    "suggested-action",
+                                    "pill",
+                                ]
+
+                                height-request: 50;
+                                action-name: "page.install";
+                                action-target: "'ubuntutouch'";
+                            }
+
+                            Button btn_postmarketos {
+                                label: _("Install postmarketOS");
+
+                                styles [
+                                    "suggested-action",
+                                    "pill",
+                                ]
+
+                                height-request: 50;
+                                action-name: "page.install";
+                                action-target: "'postmarketos'";
+                            }
+                        }
+
+                        Button unlock_button {
+                            label: _("Unlock Bootloader");
+
+                            styles [
+                                "pill",
+                            ]
+
+                            height-request: 50;
+                            action-name: "page.unlock";
+                        }
+                    }
+                };
+            };
+        };
+    };
+}
