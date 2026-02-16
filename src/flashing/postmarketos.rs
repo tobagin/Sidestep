@@ -249,7 +249,7 @@ impl PostmarketosInstaller {
     /// Directories follow the pattern `YYYYMMDD-HHMM/`.
     async fn discover_latest_build(&self, listing_url: &str) -> Result<String> {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.1.0")
+            .user_agent("Sidestep/0.2.0")
             .build()?;
 
         let resp = client
@@ -313,7 +313,7 @@ impl PostmarketosInstaller {
         build_url: &str,
     ) -> Result<(String, String, String, String)> {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.1.0")
+            .user_agent("Sidestep/0.2.0")
             .build()?;
 
         let resp = client

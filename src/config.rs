@@ -3,7 +3,7 @@
 
 pub const APP_ID: &str = "io.github.tobagin.Sidestep";
 pub const APP_NAME: &str = "Sidestep";
-pub const VERSION: &str = "0.1.0";
+pub const VERSION: &str = "0.2.0";
 pub const GETTEXT_PACKAGE: &str = "sidestep";
 pub const LOCALEDIR: &str = "/usr/share/locale";
 pub const PKGDATADIR: &str = "/usr/share/sidestep";

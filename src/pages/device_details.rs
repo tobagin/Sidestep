@@ -243,7 +243,7 @@ impl DeviceDetailsPage {
             std::path::PathBuf::from("devices"),
         ];
 
-        let manufacturer = device.maker.to_lowercase();
+        let manufacturer = maker_to_dir(&device.maker);
 
         for dir in possible_dirs {
             let parser = YamlParser::new(&dir);
@@ -408,7 +408,7 @@ impl DeviceDetailsPage {
             .find(|p| p.exists())
             .unwrap_or_else(|| std::path::PathBuf::from("devices"));
 
-        let manufacturer = device.maker.to_lowercase();
+        let manufacturer = maker_to_dir(&device.maker);
 
         let parser = YamlParser::new(devices_path);
         match parser.parse_device_config(&manufacturer, &device.codename) {
@@ -732,7 +732,7 @@ impl DeviceDetailsPage {
         for dir in possible_dirs {
             let config_path = dir
                 .join("devices")
-                .join(device.maker.to_lowercase())
+                .join(maker_to_dir(&device.maker))
                 .join(device.codename.to_lowercase())
                 .join("installers")
                 .join(format!("{}.yml", distro_id));
@@ -1023,7 +1023,7 @@ impl DeviceDetailsPage {
             .find(|p| p.exists())
             .unwrap_or_else(|| std::path::PathBuf::from("devices"));
 
-        let manufacturer = device.maker.to_lowercase();
+        let manufacturer = maker_to_dir(&device.maker);
 
         let parser = YamlParser::new(devices_path);
         let config = match parser.parse_device_config(&manufacturer, &device.codename) {
@@ -1557,6 +1557,17 @@ impl DeviceDetailsPage {
     fn on_unlock_clicked(&self) {
         self.emit_by_name::<()>("unlock-clicked", &[]);
     }
+}
+
+/// Sanitize a manufacturer name for use as a filesystem directory.
+/// Strips characters that aren't alphanumeric, hyphen, or underscore,
+/// then lowercases. e.g. "F(x)tec" → "fxtec".
+fn maker_to_dir(maker: &str) -> String {
+    maker
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
+        .collect::<String>()
+        .to_lowercase()
 }
 
 impl Default for DeviceDetailsPage {

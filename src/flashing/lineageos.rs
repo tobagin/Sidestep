@@ -327,7 +327,7 @@ impl LineageosInstaller {
     /// Fetch the latest build from the LineageOS API v2
     async fn fetch_latest_build(&self) -> Result<LineageBuild> {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.1.0")
+            .user_agent("Sidestep/0.2.0")
             .build()?;
 
         let resp = client
