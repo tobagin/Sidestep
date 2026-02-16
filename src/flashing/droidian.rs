@@ -209,7 +209,7 @@ impl DroidianInstaller {
     /// Query GitHub API for the latest release, returning (zip_url, zip_name, checksums_url).
     async fn fetch_release_info(&self) -> Result<(String, String, String)> {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.2.0")
+            .user_agent(format!("Sidestep/{}", crate::config::VERSION))
             .build()?;
 
         let resp = client

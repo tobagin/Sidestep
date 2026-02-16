@@ -1,0 +1,44 @@
+device:
+  name: "OnePlus 6"
+  codename: "enchilada"
+  release_date: "2018-05-22"
+  specs:
+    soc: "Qualcomm SDM845 Snapdragon 845"
+    ram: "6/8 GB LPDDR4X"
+    cpu: "Octa-core Kryo 385 (4x 2.8 GHz Gold + 4x 1.7 GHz Silver)"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 630"
+    storage: "64/128/256 GB UFS 2.1"
+    battery: "3300 mAh Li-Po"
+    dimensions:
+      height: "155.7 mm"
+      width: "75.4 mm"
+      depth: "7.8 mm"
+  display:
+    size: "6.28 in"
+    resolution: "2280x1080"
+    density: "402 PPI"
+    panel_type: "Optic AMOLED"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0 (A2DP, aptX HD)"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "USB Type-C"
+      - "USB OTG"
+      - "NFC"
+      - "Fingerprint reader"
+      - "Alert slider"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor]
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "16 MP"
+      features: "f/1.7, OIS, PDAF"
+    - label: "Secondary"
+      resolution: "20 MP"
+      features: "f/1.7"
+    - label: "Front"
+      resolution: "16 MP"
+      features: "f/2.0, EIS"

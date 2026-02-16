@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-02-16
+
+### Added
+
+- **New Devices**: OnePlus 6T (fajita), Pocophone F1 (beryllium), Fairphone 4 (FP4), Fairphone 5 (FP5), SHIFT6mq (axolotl).
+- **Mobian Support**: Added Mobian as a distro option for all Qualcomm-based devices (sdm845, sm6350, sc7280 chipsets).
+- **Cross-Distro Coverage**: Each new device includes all applicable distros (postmarketOS, Ubuntu Touch, Droidian, LineageOS, Mobian).
+- **OnePlus 6 Data**: Created missing data directory for enchilada with full distro coverage (Mobian, postmarketOS, Ubuntu Touch, Droidian, LineageOS).
+- **New Manufacturers**: Fairphone and SHIFT added as supported manufacturers.
+
+### Changed
+
+- **Version Source of Truth**: User-agent strings in flashing modules now use `crate::config::VERSION` instead of hardcoded version strings.
+- **Device Count**: 15 → 21 supported devices.
+
 ## [0.2.0] - 2026-02-16
 
 ### Added

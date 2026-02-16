@@ -31,6 +31,17 @@
   </developer>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.3.0" date="2026-02-16">
+      <description>
+        <p>New devices and Mobian support:</p>
+        <ul>
+          <li>6 new devices: OnePlus 6T, Pocophone F1, Fairphone 4, Fairphone 5, SHIFT6mq</li>
+          <li>Mobian support for all Qualcomm-based devices</li>
+          <li>Full cross-distro coverage for every new device</li>
+          <li>21 supported devices across 11 manufacturers</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.0" date="2026-02-16">
       <description>
         <p>Major feature release:</p>

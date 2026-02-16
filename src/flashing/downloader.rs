@@ -19,7 +19,7 @@ pub struct ImageDownloader {
 impl ImageDownloader {
     pub fn new(download_dir: PathBuf) -> Self {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.2.0")
+            .user_agent(format!("Sidestep/{}", crate::config::VERSION))
             .build()
             .expect("Failed to create HTTP client");
 

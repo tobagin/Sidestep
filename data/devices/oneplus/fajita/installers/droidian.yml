@@ -1,0 +1,6 @@
+name: "Droidian"
+prerequisites: []
+steps:
+  install:
+    type: "flash"
+    url: ""

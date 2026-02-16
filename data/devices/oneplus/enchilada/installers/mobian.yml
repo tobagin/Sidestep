@@ -1,0 +1,6 @@
+name: "Mobian"
+prerequisites: []
+steps:
+  install:
+    type: "flash"
+    url: ""

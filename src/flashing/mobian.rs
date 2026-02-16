@@ -242,7 +242,7 @@ impl MobianInstaller {
     /// this chipset + interface combination. Returns (filename, full_url).
     async fn discover_latest_image(&self) -> Result<(String, String)> {
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.2.0")
+            .user_agent(format!("Sidestep/{}", crate::config::VERSION))
             .build()?;
 
         let resp = client

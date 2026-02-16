@@ -8,9 +8,9 @@ A wizard for unlocking Android bootloaders and installing mobile Linux distribut
 
 </div>
 
-## 🎉 Version 0.2.0 - Latest Release
+## 🎉 Version 0.3.0 - Latest Release
 
-**Sidestep 0.2.0** brings a guided, wizard-style experience for flashing mobile Linux to Android devices directly from the GNOME desktop.
+**Sidestep 0.3.0** adds 6 new devices (OnePlus 6T, Pocophone F1, Fairphone 4/5, SHIFT6mq) with Mobian support, and cross-references all distros across the full device catalog.
 
 ### ✨ Key Features
 
@@ -41,8 +41,10 @@ For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md)
 
 ### Supported Devices
 - **Google** - Pixel 3a (sargo)
-- **OnePlus** - OnePlus 6 (enchilada)
-- **Xiaomi** - POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (miatoll)
+- **OnePlus** - OnePlus 6 (enchilada), OnePlus 6T (fajita)
+- **Xiaomi** - POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (miatoll), Pocophone F1 (beryllium)
+- **Fairphone** - Fairphone 4 (FP4), Fairphone 5 (FP5)
+- **SHIFT** - SHIFT6mq (axolotl)
 - **Microsoft** - Surface Duo (zeta) *(experimental)*
 - **Motorola** - Edge 30 (dubai)
 - **F(x)tec** - Pro1 (pro1), Pro1 X (pro1x)

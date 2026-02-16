@@ -329,6 +329,102 @@ impl DeviceDatabase {
             battery_level: None,
         });
 
+        // OnePlus 6T (fajita)
+        self.devices.insert("fajita".to_string(), Device {
+            codename: "fajita".to_string(),
+            name: "OnePlus 6T".to_string(),
+            maker: "OnePlus".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+                "OxygenOS backup recommended before proceeding".to_string(),
+            ],
+            aliases: vec!["OnePlus6T".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Xiaomi Pocophone F1 (beryllium)
+        self.devices.insert("beryllium".to_string(), Device {
+            codename: "beryllium".to_string(),
+            name: "Xiaomi Pocophone F1".to_string(),
+            maker: "Xiaomi".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["POCO F1".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Fairphone 4 (FP4)
+        self.devices.insert("FP4".to_string(), Device {
+            codename: "FP4".to_string(),
+            name: "Fairphone 4".to_string(),
+            maker: "Fairphone".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["fp4".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Fairphone 5 (FP5)
+        self.devices.insert("FP5".to_string(), Device {
+            codename: "FP5".to_string(),
+            name: "Fairphone 5".to_string(),
+            maker: "Fairphone".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["fp5".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // SHIFT6mq (axolotl)
+        self.devices.insert("axolotl".to_string(), Device {
+            codename: "axolotl".to_string(),
+            name: "SHIFT6mq".to_string(),
+            maker: "SHIFT".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["SHIFT 6mq".to_string()],
+            variants: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
         // Load unlocking steps for each device
         self.load_unlocking_steps();
         
@@ -1036,6 +1132,236 @@ impl DeviceDatabase {
                 warning: Some("This will factory reset your device!".to_string()),
             },
         ]);
+
+        // OnePlus 6T (fajita) — same as enchilada
+        self.unlocking_steps.insert("fajita".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Use volume keys to confirm on device.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Xiaomi Pocophone F1 (beryllium) — Xiaomi Mi Unlock pattern
+        self.unlocking_steps.insert("beryllium".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'MIUI version' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Link Mi Account".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options > Mi Unlock status and link your Mi account. Wait for the required unlock period (up to 168 hours).".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command via fastboot".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Fairphone 4 (FP4) — standard fastboot flashing unlock
+        self.unlocking_steps.insert("FP4".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Fairphone 5 (FP5) — standard fastboot flashing unlock
+        self.unlocking_steps.insert("FP5".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // SHIFT6mq (axolotl) — standard fastboot flashing unlock
+        self.unlocking_steps.insert("axolotl".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
     }
 
     fn load_distros(&mut self) {
@@ -1083,6 +1409,141 @@ impl DeviceDatabase {
                     PartitionImage {
                         partition: "system".to_string(),
                         image: "rootfs-oneplus-enchilada.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(550_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // OnePlus 6T (fajita) - postmarketOS
+        self.distros.insert("fajita".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "24.06".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/v24.06/oneplus-fajita/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/oneplus-fajita/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-oneplus-fajita.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(550_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // Pocophone F1 (beryllium) - postmarketOS
+        self.distros.insert("beryllium".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "24.06".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/v24.06/xiaomi-beryllium/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/xiaomi-beryllium/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-xiaomi-beryllium.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(550_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // Fairphone 4 (FP4) - postmarketOS
+        self.distros.insert("FP4".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "24.06".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp4/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp4/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-fairphone-fp4.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(550_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // Fairphone 5 (FP5) - postmarketOS
+        self.distros.insert("FP5".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "24.06".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp5/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp5/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-fairphone-fp5.img.xz".to_string(),
+                        erase_first: true,
+                    },
+                ],
+                homepage: Some("https://postmarketos.org".to_string()),
+                download_size_bytes: Some(550_000_000),
+                requires_unlock: true,
+                post_install_notes: Some("First boot may take several minutes".to_string()),
+            },
+        ]);
+
+        // SHIFT6mq (axolotl) - postmarketOS
+        self.distros.insert("axolotl".to_string(), vec![
+            Distro {
+                name: "postmarketOS".to_string(),
+                version: "24.06".to_string(),
+                description: "Alpine-based mobile Linux distribution".to_string(),
+                download_base_url: "https://images.postmarketos.org/bpo/v24.06/shift-axolotl/".to_string(),
+                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/shift-axolotl/SHA256SUMS".to_string()),
+                partitions: vec![
+                    PartitionImage {
+                        partition: "boot".to_string(),
+                        image: "boot.img".to_string(),
+                        erase_first: false,
+                    },
+                    PartitionImage {
+                        partition: "system".to_string(),
+                        image: "rootfs-shift-axolotl.img.xz".to_string(),
                         erase_first: true,
                     },
                 ],

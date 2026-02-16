@@ -1,0 +1,146 @@
+device_codename: "FP4"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "v25.12"
+        label: "v25.12 (Stable)"
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "gnome-mobile"
+        label: "GNOME Mobile"
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "3D acceleration"
+        - "WiFi"
+        - "Bluetooth"
+        - "USB networking"
+        - "Internal storage"
+        - "Haptics"
+        - "NFC"
+      partial:
+        - "Audio (speaker works, call audio may need configuration)"
+        - "Camera (basic support)"
+        - "GPS"
+      not_working:
+        - "Fingerprint sensor"
+      notes:
+        - "Mainline Linux kernel"
+        - "First boot may take several minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/FP4/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/FP4/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/FP4/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "Camera (rear and front)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "NFC"
+        - "Fingerprint reader"
+      partial: []
+      not_working: []
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"
+
+  # --- Mobian ---
+  - id: "mobian"
+    name: "Mobian"
+    developer: "Mobian Project"
+    discovery_strategy: "mobian_html_scrape"
+    base_url: "https://images.mobian.org/qcom/weekly/"
+    chipset: "sm6350"
+    device_model: "fp4"
+    interfaces:
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+    image_pattern: "mobian-sm6350-{interface}-.*\\.tar\\.xz"
+    flash_method: "fastboot_sparse_image"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "USB networking"
+        - "Vibration"
+      partial:
+        - "Camera (basic support via libcamera)"
+        - "GPS (may need initial cold fix)"
+        - "Sensors (basic support)"
+      not_working:
+        - "Fingerprint reader"
+        - "NFC"
+      notes:
+        - "Debian-based with mainline kernel patches"
+        - "First boot may take up to 5 minutes"
+        - "apt package manager for updates"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/FP4/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"

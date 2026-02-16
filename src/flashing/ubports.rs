@@ -292,7 +292,7 @@ impl UbportsInstaller {
         log::info!("Fetching system-image index from {}", index_url);
 
         let client = reqwest::Client::builder()
-            .user_agent("Sidestep/0.2.0")
+            .user_agent(format!("Sidestep/{}", crate::config::VERSION))
             .build()?;
         let index_text = client.get(&index_url).send().await?.text().await?;
         let index: SystemImageIndex =
