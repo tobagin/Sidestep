@@ -4,3 +4,6 @@ build-dir/
 cargo/
 *.gresource
 build/
+*.log
+build_output.txt
+errors.txt

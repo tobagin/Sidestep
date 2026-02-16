@@ -117,21 +117,25 @@ Sidestep is licensed under the [GPL-3.0-or-later](LICENSE).
 
 ## Screenshots
 
-| Device Detection | Distro Selection |
+| Device Detection | Device Details |
 |:---:|:---:|
-| ![Device Detection](data/screenshots/main.png) | ![Distro Selection](data/screenshots/device-details.png) |
+| ![Device Detection](data/screenshots/main.png) | ![Device Details](data/screenshots/device-details.png) |
 
-| Pre-requisites | Interface Selection |
+| Distro Selection | Channel Selection |
 |:---:|:---:|
-| ![Pre-requisites](data/screenshots/pre-requisites.png) | ![Interface Selection](data/screenshots/select-interface.png) |
+| ![Distro Selection](data/screenshots/distros.png) | ![Channel Selection](data/screenshots/channel.png) |
 
-| Android Firmware | Installing |
+| Compatibility Info | Pre-requisites |
 |:---:|:---:|
-| ![Android Firmware](data/screenshots/android.png) | ![Installing](data/screenshots/installing.png) |
+| ![Compatibility](data/screenshots/compatibility.png) | ![Pre-requisites](data/screenshots/pre-requisites.png) |
 
-| Flashing Progress | Installation Complete |
+| Installing /e/OS | Installing Mobian |
 |:---:|:---:|
-| ![Flashing](data/screenshots/flashing-android.png) | ![Complete](data/screenshots/installation-complete.png) |
+| ![Installing /e/OS](data/screenshots/installing-eos.png) | ![Installing Mobian](data/screenshots/installing-mobian.png) |
+
+| Android Firmware | Installation Complete |
+|:---:|:---:|
+| ![Android Firmware](data/screenshots/android.png) | ![Complete](data/screenshots/installation-complete.png) |
 
 ---
 
