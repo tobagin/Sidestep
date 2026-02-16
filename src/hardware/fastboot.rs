@@ -142,6 +142,61 @@ impl Fastboot {
         Ok(())
     }
 
+    /// Reboot the device back into the bootloader
+    pub async fn reboot_bootloader(&self, serial: &str) -> Result<()> {
+        log::info!("Rebooting device {} into bootloader", serial);
+
+        let output = Command::new(&self.binary_path)
+            .args(["-s", serial, "reboot-bootloader"])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to reboot into bootloader")?;
+
+        if !output.status.success() {
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            anyhow::bail!("Reboot to bootloader failed: {}", stderr);
+        }
+
+        Ok(())
+    }
+
+    /// Run `fastboot update` to flash all partitions from a ZIP
+    ///
+    /// Produces: `fastboot -s SERIAL [-w] update ZIP_PATH`
+    pub async fn update(&self, serial: &str, zip_path: &Path, wipe: bool) -> Result<()> {
+        log::info!(
+            "Running fastboot update {} (wipe={})",
+            zip_path.display(),
+            wipe
+        );
+
+        let mut args = vec!["-s", serial];
+        if wipe {
+            args.push("-w");
+        }
+        args.push("update");
+        args.push(zip_path.to_str().unwrap());
+
+        let output = Command::new(&self.binary_path)
+            .args(&args)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to run fastboot update")?;
+
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        log::debug!("Update output: {}", stderr);
+
+        if !output.status.success() {
+            anyhow::bail!("fastboot update failed: {}", stderr);
+        }
+
+        Ok(())
+    }
+
     /// Reboot the device
     pub async fn reboot(&self, serial: &str) -> Result<()> {
         log::info!("Rebooting device {}", serial);
@@ -247,6 +302,74 @@ impl Fastboot {
 
         if !output.status.success() {
             anyhow::bail!("Flash with flags failed: {}", stderr);
+        }
+
+        Ok(())
+    }
+
+    /// Flash an image with sparse transfer (`-S` flag before `flash`).
+    ///
+    /// Produces: `fastboot -s SERIAL -S 100M flash PARTITION FILE`
+    pub async fn flash_sparse(
+        &self,
+        serial: &str,
+        partition: &str,
+        image: &Path,
+        chunk_size: &str,
+    ) -> Result<()> {
+        log::info!(
+            "Flashing {} to partition {} with -S {}",
+            image.display(),
+            partition,
+            chunk_size
+        );
+
+        let sparse_flag = format!("-S{}", chunk_size);
+        let output = Command::new(&self.binary_path)
+            .args([
+                "-s", serial,
+                &sparse_flag,
+                "flash", partition,
+                image.to_str().unwrap(),
+            ])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to run fastboot flash (sparse)")?;
+
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        log::debug!("Flash sparse output: {}", stderr);
+
+        if !output.status.success() {
+            anyhow::bail!("Sparse flash failed: {}", stderr);
+        }
+
+        Ok(())
+    }
+
+    /// Run an arbitrary `fastboot oem` subcommand.
+    ///
+    /// Example: `oem(serial, &["uart", "enable"])` → `fastboot -s SERIAL oem uart enable`
+    pub async fn oem(&self, serial: &str, args: &[&str]) -> Result<()> {
+        log::info!("Running fastboot oem {:?} on {}", args, serial);
+
+        let mut cmd_args = vec!["-s", serial, "oem"];
+        cmd_args.extend_from_slice(args);
+
+        let output = Command::new(&self.binary_path)
+            .args(&cmd_args)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to run fastboot oem")?;
+
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        log::debug!("OEM output: {}", stderr);
+
+        if !output.status.success() {
+            anyhow::bail!("fastboot oem failed: {}", stderr);
         }
 
         Ok(())

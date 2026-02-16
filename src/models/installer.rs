@@ -28,5 +28,10 @@ pub enum Step {
     Flash {
         url: String,
     },
-    // Add more types as needed, e.g., DownloadAndFlash
+    FlashAndroid {
+        android_version: String,
+        url: String,
+        sha256: String,
+        message: String,
+    },
 }

@@ -3,6 +3,7 @@
 
 use crate::flashing::checksum::ChecksumVerifier;
 use crate::flashing::downloader::ImageDownloader;
+use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
 use crate::models::system_image::SystemImageIndex;
@@ -10,39 +11,6 @@ use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
 use std::time::Duration;
-
-/// Progress messages sent from the installer thread to the UI
-#[derive(Debug, Clone)]
-pub enum InstallProgress {
-    /// File download progress (aggregated across all downloads)
-    DownloadProgress {
-        downloaded: u64,
-        total: u64,
-        file_name: String,
-    },
-    /// Checksum verification progress
-    VerifyProgress {
-        verified: usize,
-        total: usize,
-        file_name: String,
-    },
-    /// Flash/push step progress
-    FlashProgress {
-        current: usize,
-        total: usize,
-        description: String,
-    },
-    /// Status text update
-    StatusChanged(String),
-    /// Waiting for user to select Recovery mode on device
-    WaitingForRecovery,
-    /// Device entered recovery mode
-    RecoveryDetected,
-    /// Installation completed successfully
-    Complete,
-    /// An error occurred
-    Error(String),
-}
 
 /// Firmware image descriptor (hardcoded for sargo MVP)
 struct FirmwareImage {

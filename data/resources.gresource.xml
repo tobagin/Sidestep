@@ -6,12 +6,10 @@
     <file preprocess="xml-stripblanks">ui/preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/safety.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/unlocking.ui</file>
-    <file preprocess="xml-stripblanks">ui/pages/distro_selection.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/device_details.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/flashing.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/waiting.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/success.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/unsupported_device.ui</file>
-    <file preprocess="xml-stripblanks">ui/wizards/install_wizard.ui</file>
   </gresource>
 </gresources>

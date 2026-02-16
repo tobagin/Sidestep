@@ -18,40 +18,17 @@ template $FlashingPage: Adw.NavigationPage {
             }
         }
 
-        content: ScrolledWindow {
+        content: Adw.StatusPage status_page {
+            icon-name: "penguin-symbolic";
+            title: _("Installing Distribution");
+            description: _("Preparing...");
+
             child: Adw.Clamp {
                 maximum-size: 600;
-                margin-top: 24;
-                margin-bottom: 24;
-                margin-start: 12;
-                margin-end: 12;
 
                 child: Box {
                     orientation: vertical;
                     spacing: 24;
-
-                    Box {
-                        orientation: vertical;
-                        spacing: 8;
-
-                        Label {
-                            label: _("Installing Distribution");
-                            xalign: 0;
-
-                            styles [
-                                "title-1",
-                            ]
-                        }
-
-                        Label status_label {
-                            label: _("Preparing...");
-                            xalign: 0;
-
-                            styles [
-                                "dim-label",
-                            ]
-                        }
-                    }
 
                     Adw.PreferencesGroup {
                         title: _("Progress");

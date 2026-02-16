@@ -35,12 +35,27 @@ available_distros:
     # UBports uses a specialized system-image server structure
     api_root: "https://system-image.ubports.com/"
     channels:
-      - id: "daily"
+      - id: "2404-2-daily"
         path: "24.04-2.x/arm64/android9plus/daily/sargo/"
-        label: "24.04 Noble (Daily)"
-      - id: "stable"
+        label: "24.04.2 (Daily)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/sargo/"
+        label: "24.04.1 (Daily)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/sargo/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-stable"
         path: "24.04-1.x/arm64/android9plus/stable/sargo/"
-        label: "24.04 Noble (Stable)"
+        label: "24.04.1 (Stable)"
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/sargo/"
+        label: "20.04 (Devel)"
+      - id: "2004-rc"
+        path: "20.04/arm64/android9plus/rc/sargo/"
+        label: "20.04 (RC)"
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/sargo/"
+        label: "20.04 (Stable)"
     # UBports requires specific firmware check
     firmware_requirement: "PQ3B.190801.002"
     flash_method: "ubports_recovery_flash"
@@ -52,13 +67,15 @@ available_distros:
     discovery_strategy: "mobian_html_scrape"
     # Mobian organizes by architecture/SoC family
     base_url: "https://images.mobian.org/qcom/weekly/"
+    chipset: "sdm670"
+    device_model: "sargo"
     interfaces:
       - id: "phosh"
         label: "Phosh"
       - id: "plasma-mobile"
         label: "Plasma Mobile"
     # Scraper logic: Find latest tarball for the SoC family and interface
-    image_pattern: "mobian-qcom-{interface}-.*\\.tar\\.xz"
+    image_pattern: "mobian-sdm670-{interface}-.*\\.tar\\.xz"
     flash_method: "fastboot_sparse_image"
 
   # --- Droidian ---
@@ -71,6 +88,6 @@ available_distros:
       - id: "nightly"
         label: "Nightly"
         # The specific artifact name for sargo API 28 (Android 9 base)
-        artifact_match: "droidian-OFFICIAL-phosh-phone-google_sargo-api28-arm64-nightly.zip"
+        artifact_match: "google_sargo-api28-arm64"
         release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
     flash_method: "fastboot_zip_orchestrator"

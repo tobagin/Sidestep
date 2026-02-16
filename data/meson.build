@@ -73,13 +73,11 @@ blueprint_sources = files(
   'ui/preferences_dialog.blp',
   'ui/pages/safety.blp',
   'ui/pages/unlocking.blp',
-  'ui/pages/distro_selection.blp',
   'ui/pages/device_details.blp',
   'ui/pages/flashing.blp',
   'ui/pages/waiting.blp',
   'ui/pages/success.blp',
   'ui/pages/unsupported_device.blp',
-  'ui/wizards/install_wizard.blp',
 )
 
 blueprint_ui = custom_target('blueprint-compile',

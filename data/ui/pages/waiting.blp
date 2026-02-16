@@ -62,7 +62,10 @@ template $WaitingPage: Adw.NavigationPage {
                     title: _("Connected Devices");
                     description: _("Select a device to continue.");
 
-                    child: Adw.PreferencesGroup device_list {
+                    child: Box device_list {
+                        orientation: vertical;
+                        spacing: 12;
+                        halign: center;
                     };
                 };
             }

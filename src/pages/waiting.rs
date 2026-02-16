@@ -19,10 +19,10 @@ mod imp {
         #[template_child]
         pub stack: TemplateChild<gtk::Stack>,
         #[template_child]
-        pub device_list: TemplateChild<adw::PreferencesGroup>,
+        pub device_list: TemplateChild<gtk::Box>,
 
         pub devices: RefCell<Vec<Device>>,
-        pub device_rows: RefCell<Vec<adw::ActionRow>>,
+        pub device_buttons: RefCell<Vec<gtk::Button>>,
     }
 
     #[glib::object_subclass]
@@ -95,28 +95,26 @@ impl WaitingPage {
             return;
         }
 
-        // Clear existing rows
-        for row in imp.device_rows.borrow().iter() {
-            imp.device_list.remove(row);
+        // Clear existing buttons
+        for btn in imp.device_buttons.borrow().iter() {
+            imp.device_list.remove(btn);
         }
-        imp.device_rows.borrow_mut().clear();
+        imp.device_buttons.borrow_mut().clear();
 
-        // Add a row per device
+        // Add a button per device
         for (i, device) in devices.iter().enumerate() {
-            let row = adw::ActionRow::builder()
-                .title(&device.name)
-                .subtitle(&format!("{} \u{2022} {}", device.maker, device.codename))
-                .activatable(true)
+            let btn = gtk::Button::builder()
+                .label(&format!("{}\n{} \u{2022} {}", device.name, device.maker, device.codename))
                 .action_name("waiting.select-device")
                 .action_target(&(i as u32).to_variant())
+                .width_request(250)
+                .height_request(50)
                 .build();
+            btn.add_css_class("suggested-action");
+            btn.add_css_class("pill");
 
-            let chevron = gtk::Image::from_icon_name("go-next-symbolic");
-            chevron.add_css_class("dim-label");
-            row.add_suffix(&chevron);
-
-            imp.device_list.add(&row);
-            imp.device_rows.borrow_mut().push(row);
+            imp.device_list.append(&btn);
+            imp.device_buttons.borrow_mut().push(btn);
         }
 
         imp.stack.set_visible_child_name("connected");

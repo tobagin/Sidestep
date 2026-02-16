@@ -9,7 +9,6 @@ mod models;
 mod window;
 mod pages;
 mod wizard;
-mod wizards;
 mod utils;
 
 use application::SidestepApplication;

@@ -1,11 +1,9 @@
 use crate::config;
 use crate::hardware::{DeviceDetector, DeviceEvent};
 use crate::models::Device;
-use crate::pages::distro_selection::DistroSelectionPage;
 use crate::pages::device_details::DeviceDetailsPage;
 use crate::pages::success::SuccessPage;
 use crate::pages::waiting::WaitingPage;
-use crate::pages::flashing::FlashingPage;
 use crate::pages::unsupported_device::UnsupportedDevicePage;
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
@@ -144,6 +142,27 @@ impl SidestepWindow {
             .build()
     }
 
+    pub fn set_installing(&self, installing: bool) {
+        self.imp().installing.set(installing);
+    }
+
+    /// Pause device detection entirely (no events will be sent).
+    /// Also sets the installing flag to prevent any queued events from being handled.
+    pub fn pause_detection(&self) {
+        self.imp().installing.set(true);
+        if let Some(ref detector) = *self.imp().device_detector.borrow() {
+            detector.pause();
+        }
+    }
+
+    /// Resume device detection and clear the installing flag.
+    pub fn resume_detection(&self) {
+        self.imp().installing.set(false);
+        if let Some(ref detector) = *self.imp().device_detector.borrow() {
+            detector.resume();
+        }
+    }
+
     fn setup_actions(&self) {
         let _action_group = gio::SimpleActionGroup::new();
 
@@ -153,7 +172,7 @@ impl SidestepWindow {
             None,
             &false.into()
         );
-        
+
         let imp = self.imp();
         toggle_terminal.set_state(&imp.terminal_visible.get().into());
 
@@ -162,13 +181,13 @@ impl SidestepWindow {
             let Some(window) = window_weak.upgrade() else { return; };
             let state = action.state().unwrap().get::<bool>().unwrap();
             action.set_state(&(!state).into());
-            
+
             let imp = window.imp();
             imp.terminal_visible.set(!state);
             log::debug!("Terminal visibility: {}", !state);
             // TODO: Show/hide terminal overlay
         });
-        
+
         // Register window actions
         self.add_action(&toggle_terminal);
     }
@@ -191,7 +210,7 @@ impl SidestepWindow {
     fn setup_event_polling(&self, receiver: Receiver<DeviceEvent>) {
         // Poll for events every 100ms on the main thread
         let window = self.downgrade();
-        
+
         glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
             let Some(window) = window.upgrade() else {
                 return glib::ControlFlow::Break;
@@ -254,16 +273,16 @@ impl SidestepWindow {
     fn show_unsupported_device(&self) {
         let imp = self.imp();
         let page = UnsupportedDevicePage::new();
-        
+
         let nav_view = imp.main_nav.clone();
         let nav_view_weak = nav_view.downgrade();
-        
+
         page.connect_back_clicked(move |_| {
             if let Some(nav) = nav_view_weak.upgrade() {
                 nav.pop_to_tag("waiting");
             }
         });
-        
+
         nav_view.push(&page);
     }
 
@@ -272,11 +291,11 @@ impl SidestepWindow {
         self.reset_to_waiting();
     }
 
-    fn reset_to_waiting(&self) {
+    pub fn reset_to_waiting(&self) {
         let imp = self.imp();
 
-        // Clear installing flag and current device, serial, and connected devices
-        imp.installing.set(false);
+        // Resume detection (safety net in case it was paused)
+        self.resume_detection();
         *imp.current_device.borrow_mut() = None;
         *imp.device_serial.borrow_mut() = None;
         imp.connected_devices.borrow_mut().clear();
@@ -300,144 +319,26 @@ impl SidestepWindow {
         log::info!("Starting wizard flow for device: {}", device.codename);
         let imp = self.imp();
 
-        // Create Hub Page
         let details_page = DeviceDetailsPage::new(device);
-        
-        let menu_model = imp.primary_menu.clone();
-        details_page.set_menu_model(&menu_model);
-        
-        let nav_view = imp.main_nav.clone();
-        let device_install = device.clone();
-        let menu_model_clone = menu_model.clone();
-        
-        let nav_view_weak = nav_view.downgrade();
-        let window_weak = self.downgrade();
+        details_page.set_menu_model(&imp.primary_menu);
 
-        let device_serial = imp.device_serial.borrow().clone();
-        details_page.connect_install_clicked(move |_| {
-            if let Some(nav_view) = nav_view_weak.upgrade() {
-                Self::navigate_to_distro_selection(&nav_view, &device_install, &menu_model_clone, device_serial.as_deref(), window_weak.clone());
-            }
-        });
-
-        // Connect Unlock Action
         details_page.connect_unlock_clicked(move |_| {
             log::info!("Unlock clicked - unlocking page not implemented yet");
         });
 
-        // Push to main nav
-        nav_view.push(&details_page);
-    }
-
-    fn navigate_to_distro_selection(nav_view: &adw::NavigationView, device: &Device, menu_model: &gio::MenuModel, serial: Option<&str>, window_weak: glib::WeakRef<SidestepWindow>) {
-        let page = DistroSelectionPage::new();
-        page.set_menu_model(menu_model);
-        let nav_view = nav_view.clone(); // Clone for closure capture
-        
-        // Load distros logic...
-        let possible_paths = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-
-        let mut devices_path = None;
-        for path in possible_paths {
-            if path.exists() {
-                devices_path = Some(path);
-                break;
-            }
-        }
-        let devices_path = devices_path.unwrap_or_else(|| std::path::PathBuf::from("devices"));
-
-        let manufacturer = match device.codename.as_str() {
-            "sargo" => "google",
-            "enchilada" => "oneplus",
-            "zeta" => "microsoft",
-            _ => "unknown", 
-        };
-
-        let parser = crate::utils::yaml_parser::YamlParser::new(devices_path);
-        match parser.parse_distros(manufacturer, &device.codename) {
-            Ok(distros) => {
-                 page.set_distros(distros);
-            }
-            Err(e) => {
-                log::error!("Failed to load distros: {:#}", e);
-            }
-        }
-
-        // Connect selection to install
-        let nav_view_clone = nav_view.clone();
-        let menu_model_clone = menu_model.clone();
-        let serial_owned = serial.map(|s| s.to_string());
-        let device_codename = device.codename.clone();
-        let window_weak_distro = window_weak.clone();
-        page.connect_closure(
-            "distro-selected",
-            false,
-            glib::closure_local!(move |_: DistroSelectionPage, name: &str| {
-                // Set installing flag on the window to suppress device events during install
-                if let Some(window) = window_weak_distro.upgrade() {
-                    log::info!("Setting installing flag — device events will be suppressed");
-                    window.imp().installing.set(true);
-                } else {
-                    log::warn!("Could not upgrade window weak ref to set installing flag");
-                }
-                log::info!("Selected distro: {}", name);
-                let progress_page = FlashingPage::new();
-                progress_page.set_menu_model(&menu_model_clone);
-
-                // Detect Ubuntu Touch and use the UBports installer
-                if name == "Ubuntu Touch" {
-                    if let Some(ref serial) = serial_owned {
-                        let channel_path = match device_codename.as_str() {
-                            "sargo" => "24.04-2.x/arm64/android9plus/daily/sargo",
-                            _ => "24.04-2.x/arm64/android9plus/daily/sargo",
-                        };
-                        progress_page.start_ubports_installation(name, serial, channel_path);
-                    } else {
-                        log::error!("No device serial available for UBports installation");
-                        progress_page.start_installation(name);
-                    }
-                } else {
-                    progress_page.start_installation(name);
-                }
-
-                // Connect progress completion
-                let nav_view_weak = nav_view_clone.downgrade();
-                let menu_model_success = menu_model_clone.clone();
-                let window_weak_complete = window_weak_distro.clone();
-                progress_page.connect_closure(
-                    "installation-complete",
-                    false,
-                    glib::closure_local!(move |_: FlashingPage| {
-                         // Clear installing flag
-                         if let Some(window) = window_weak_complete.upgrade() {
-                             log::info!("Clearing installing flag — device events will resume");
-                             window.imp().installing.set(false);
-                         }
-                         if let Some(nav) = nav_view_weak.upgrade() {
-                             Self::show_success(&nav, &menu_model_success);
-                         }
-                    })
-                );
-
-                nav_view_clone.push(&progress_page);
-            }),
-        );
-
-        nav_view.push(&page);
+        imp.main_nav.push(&details_page);
     }
 
     pub fn show_success(nav_view: &adw::NavigationView, menu_model: &gio::MenuModel) {
         let success_page = SuccessPage::new();
         success_page.set_menu_model(menu_model);
-        let nav_view_weak = nav_view.downgrade();
-        
-        success_page.connect_restart_clicked(move |_| {
-            if let Some(nav) = nav_view_weak.upgrade() {
-                 nav.pop_to_tag("waiting");
+
+        success_page.connect_restart_clicked(move |page| {
+            // Reset fully: resume detection, clear stale devices, pop to waiting
+            if let Some(window) = page.root()
+                .and_then(|w| w.downcast::<SidestepWindow>().ok())
+            {
+                window.reset_to_waiting();
             }
         });
 

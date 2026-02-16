@@ -1,8 +1,8 @@
-name: "Droidian"
+name: "Ubuntu Touch"
 prerequisites:
   - title: "Pre-requisites"
     check: "android_version_9"
-    message: "Droidian for Pixel 3a requires Android 9 Stock firmware.\n\nRequired build: PQ3B.190801.002\nCheck: Settings → About phone → Build number\n\nAre you running Android 9?"
+    message: "Ubuntu Touch for Pixel 3a requires Android 9 Stock firmware.\n\nRequired build: PQ3B.190801.002\nCheck: Settings → About phone → Build number\n\nAre you running Android 9?"
     on_success: "install"
     on_failure: "downgrade"
 steps:
@@ -14,4 +14,4 @@ steps:
     message: "This will download and flash Android 9 to your Pixel 3a.\n\nThis will ERASE ALL DATA on the device.\nDownload size: ~1.5 GB."
   install:
     type: "flash"
-    url: "https://github.com/droidian-images/droidian/releases/download/nightly/droidian-OFFICIAL-phosh-phone-google_sargo-api28-arm64-next_20260111.zip"
+    url: ""

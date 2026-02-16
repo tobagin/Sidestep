@@ -24,6 +24,8 @@ pub struct DistroConfig {
     pub image_pattern: Option<String>,
     pub flash_method: String,
     pub firmware_requirement: Option<String>,
+    pub chipset: Option<String>,
+    pub device_model: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

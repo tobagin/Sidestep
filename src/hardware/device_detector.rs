@@ -18,6 +18,7 @@ pub enum DeviceEvent {
 /// Device detector that polls for USB connected Android devices
 pub struct DeviceDetector {
     running: Arc<AtomicBool>,
+    paused: Arc<AtomicBool>,
     sender: Sender<DeviceEvent>,
 }
 
@@ -25,6 +26,7 @@ impl std::fmt::Debug for DeviceDetector {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("DeviceDetector")
             .field("running", &self.running)
+            .field("paused", &self.paused)
             .finish_non_exhaustive()
     }
 }
@@ -33,30 +35,32 @@ impl DeviceDetector {
     /// Create a new detector, returning the detector and event receiver
     pub fn new() -> (Self, Receiver<DeviceEvent>) {
         let (sender, receiver) = mpsc::channel();
-        
+
         let detector = Self {
             running: Arc::new(AtomicBool::new(false)),
+            paused: Arc::new(AtomicBool::new(false)),
             sender,
         };
-        
+
         (detector, receiver)
     }
 
     pub fn start(&self) {
         self.running.store(true, Ordering::SeqCst);
-        
+
         let running = self.running.clone();
+        let paused = self.paused.clone();
         let sender = self.sender.clone();
-        
+
         // Start polling in a background thread
         std::thread::spawn(move || {
             let rt = tokio::runtime::Builder::new_current_thread()
                 .enable_all()
                 .build()
                 .expect("Failed to create tokio runtime");
-            
+
             rt.block_on(async {
-                Self::poll_loop(running, sender).await;
+                Self::poll_loop(running, paused, sender).await;
             });
         });
     }
@@ -65,7 +69,19 @@ impl DeviceDetector {
         self.running.store(false, Ordering::SeqCst);
     }
 
-    async fn poll_loop(running: Arc<AtomicBool>, sender: Sender<DeviceEvent>) {
+    /// Pause detection — the poll loop will skip all device checks and send no events.
+    pub fn pause(&self) {
+        log::info!("Device detection paused");
+        self.paused.store(true, Ordering::SeqCst);
+    }
+
+    /// Resume detection — resets internal state so reconnection is detected fresh.
+    pub fn resume(&self) {
+        log::info!("Device detection resumed");
+        self.paused.store(false, Ordering::SeqCst);
+    }
+
+    async fn poll_loop(running: Arc<AtomicBool>, paused: Arc<AtomicBool>, sender: Sender<DeviceEvent>) {
         let adb = Adb::new();
         let fastboot = Fastboot::new();
         let db = DeviceDatabase::new();
@@ -73,6 +89,14 @@ impl DeviceDetector {
         let mut last_device: Option<String> = None;
 
         while running.load(Ordering::SeqCst) {
+            // When paused, skip all device checks and reset state so
+            // reconnection is detected fresh when we resume.
+            if paused.load(Ordering::SeqCst) {
+                last_device = None;
+                tokio::time::sleep(Duration::from_secs(2)).await;
+                continue;
+            }
+
             let mut found_device = false;
 
             // Check ADB devices first

@@ -1,7 +1,7 @@
 // Flashing Progress Page
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::flashing::{InstallProgress, UbportsInstaller};
+use crate::flashing::{DroidianInstaller, FactoryImageInstaller, InstallProgress, MobianInstaller, UbportsInstaller};
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::prelude::*;
@@ -14,7 +14,7 @@ mod imp {
     #[template(resource = "/io/github/tobagin/Sidestep/ui/pages/flashing.ui")]
     pub struct FlashingPage {
         #[template_child]
-        pub status_label: TemplateChild<gtk::Label>,
+        pub status_page: TemplateChild<adw::StatusPage>,
         #[template_child]
         pub download_row: TemplateChild<adw::ActionRow>,
         #[template_child]
@@ -101,7 +101,8 @@ impl FlashingPage {
         self.set_distro_name(distro_name);
 
         let imp = self.imp();
-        imp.status_label.set_label(&format!("Installing {}...", distro_name));
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
 
         self.mock_progress();
     }
@@ -111,7 +112,8 @@ impl FlashingPage {
         self.set_distro_name(distro_name);
 
         let imp = self.imp();
-        imp.status_label.set_label(&format!("Installing {}...", distro_name));
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
 
         // Repurpose the "Decompress" row for checksum verification
         imp.decompress_row.set_title("Verifying Checksums");
@@ -122,6 +124,130 @@ impl FlashingPage {
         let receiver = installer.spawn();
 
         // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
+    /// Start real Droidian installation with progress from background thread
+    pub fn start_droidian_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        release_url: &str,
+        artifact_pattern: &str,
+    ) {
+        self.set_distro_name(distro_name);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
+
+        // Repurpose the "Decompress" row for ZIP extraction
+        imp.decompress_row.set_title("Extracting");
+        #[allow(deprecated)]
+        imp.decompress_row
+            .set_icon_name(Some("package-x-generic-symbolic"));
+
+        let installer = DroidianInstaller::new(
+            serial.to_string(),
+            release_url.to_string(),
+            artifact_pattern.to_string(),
+        );
+        let receiver = installer.spawn();
+
+        // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
+    /// Start real Mobian installation with progress from background thread
+    pub fn start_mobian_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        base_url: &str,
+        interface: &str,
+        chipset: &str,
+        device_model: &str,
+    ) {
+        self.set_distro_name(distro_name);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
+
+        // Repurpose the "Decompress" row for tar.xz extraction
+        imp.decompress_row.set_title("Extracting");
+        #[allow(deprecated)]
+        imp.decompress_row
+            .set_icon_name(Some("package-x-generic-symbolic"));
+
+        let installer = MobianInstaller::new(
+            serial.to_string(),
+            base_url.to_string(),
+            interface.to_string(),
+            chipset.to_string(),
+            device_model.to_string(),
+        );
+        let receiver = installer.spawn();
+
+        // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
+    /// Start factory image (stock Android) installation with progress from background thread
+    pub fn start_factory_image_installation(
+        &self,
+        android_version: &str,
+        serial: &str,
+        url: &str,
+        sha256: &str,
+    ) {
+        self.set_distro_name(android_version);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Flashing {}", android_version));
+        imp.status_page.set_description(Some("Preparing..."));
+
+        // Repurpose the "Decompress" row for ZIP extraction
+        imp.decompress_row.set_title("Extracting");
+        #[allow(deprecated)]
+        imp.decompress_row
+            .set_icon_name(Some("package-x-generic-symbolic"));
+
+        let installer = FactoryImageInstaller::new(
+            serial.to_string(),
+            url.to_string(),
+            sha256.to_string(),
+            android_version.to_string(),
+        );
+        let receiver = installer.spawn();
+
         let page = self.clone();
         glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
             while let Ok(msg) = receiver.try_recv() {
@@ -192,11 +318,11 @@ impl FlashingPage {
             }
 
             InstallProgress::StatusChanged(status) => {
-                imp.status_label.set_label(&status);
+                imp.status_page.set_description(Some(&status));
             }
 
             InstallProgress::WaitingForRecovery => {
-                imp.status_label.set_label("Waiting for Recovery Mode...");
+                imp.status_page.set_description(Some("Waiting for Recovery Mode..."));
                 imp.error_banner.set_title(
                     "On your phone: use Volume buttons to select \"Recovery mode\", then press Power",
                 );
@@ -207,11 +333,11 @@ impl FlashingPage {
 
             InstallProgress::RecoveryDetected => {
                 imp.error_banner.set_revealed(false);
-                imp.status_label.set_label("Recovery mode detected");
+                imp.status_page.set_description(Some("Recovery mode detected"));
             }
 
             InstallProgress::Complete => {
-                imp.status_label.set_label("Installation Complete!");
+                imp.status_page.set_title("Installation Complete!");
                 imp.download_row.set_subtitle("Complete");
                 imp.decompress_row.set_subtitle("Complete");
                 imp.flash_row.set_subtitle("Complete");
@@ -230,7 +356,7 @@ impl FlashingPage {
 
             InstallProgress::Error(msg) => {
                 log::error!("Installation error: {}", msg);
-                imp.status_label.set_label("Installation Failed");
+                imp.status_page.set_title("Installation Failed");
                 imp.error_banner.set_title(&msg);
                 imp.error_banner.add_css_class("error");
                 imp.error_banner.set_revealed(true);
@@ -271,7 +397,7 @@ impl FlashingPage {
             }
              imp.flash_row.set_subtitle("Complete");
 
-            imp.status_label.set_label("Installation Complete!");
+            imp.status_page.set_title("Installation Complete!");
             imp.verify_icon.set_visible(true);
             imp.verify_row.set_subtitle("Verified");
 

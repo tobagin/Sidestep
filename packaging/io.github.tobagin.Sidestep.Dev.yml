@@ -41,12 +41,20 @@ modules:
       - install -Dm755 adb ${FLATPAK_DEST}/bin/adb
       - install -Dm755 fastboot ${FLATPAK_DEST}/bin/fastboot
       - install -Dm755 mke2fs ${FLATPAK_DEST}/bin/mke2fs
-      - install -Dm644 mke2fs.conf ${FLATPAK_DEST}/etc/mke2fs.conf
+      - test -f mke2fs.conf && install -Dm644 mke2fs.conf ${FLATPAK_DEST}/etc/mke2fs.conf || true
     sources:
       - type: archive
         url: https://dl.google.com/android/repository/platform-tools_r33.0.3-linux.zip
         sha256: ab885c20f1a9cb528eb145b9208f53540efa3d26258ac3ce4363570a0846f8f7
         strip-components: 1
+        only-arches:
+          - x86_64
+      - type: archive
+        url: https://github.com/lzhiyong/android-sdk-tools/releases/download/33.0.3/android-sdk-tools-static-aarch64.zip
+        sha256: 15aa3efa6609ae83a0122147f9940a96583c287922dcce84bff2b19d0b395898
+        strip-components: 2
+        only-arches:
+          - aarch64
 
   # Main application
   - name: sidestep
