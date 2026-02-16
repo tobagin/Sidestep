@@ -3,6 +3,7 @@
 
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
+use adw::prelude::*;
 use adw::subclass::prelude::*;
 
 mod imp {
@@ -11,6 +12,8 @@ mod imp {
     #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "/io/github/tobagin/Sidestep/ui/pages/success.ui")]
     pub struct SuccessPage {
+        #[template_child]
+        pub status_page: TemplateChild<adw::StatusPage>,
         #[template_child]
         pub main_menu_button: TemplateChild<gtk::MenuButton>,
     }
@@ -50,6 +53,12 @@ impl SuccessPage {
 
     pub fn set_menu_model(&self, model: &gio::MenuModel) {
         self.imp().main_menu_button.set_menu_model(Some(model));
+    }
+
+    pub fn set_distro_name(&self, name: &str) {
+        self.imp().status_page.set_description(Some(
+            &format!("Your device is ready to boot into {}.\nDisconnect the USB cable and restart your device.", name),
+        ));
     }
     
     pub fn connect_restart_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> glib::SignalHandlerId {

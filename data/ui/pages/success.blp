@@ -17,10 +17,10 @@ template $SuccessPage: Adw.NavigationPage {
             }
         }
 
-        content: Adw.StatusPage {
+        content: Adw.StatusPage status_page {
             icon-name: "penguin-symbolic";
             title: _("Installation Complete!");
-            description: _("Your device is ready to boot into Ubuntu Touch.\nDisconnect the USB cable and restart your device.");
+            description: _("Disconnect the USB cable and restart your device.");
 
             child: Button restart_button {
                 label: _("Flash Another Device");

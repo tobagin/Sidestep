@@ -204,6 +204,20 @@ impl Adb {
         Ok(())
     }
 
+    pub async fn wait_for_sideload(&self, serial: &str) -> Result<()> {
+        log::info!("Waiting for {} to enter sideload mode", serial);
+
+        Command::new(&self.binary_path)
+            .args(["-s", serial, "wait-for-sideload"])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to wait for sideload")?;
+
+        Ok(())
+    }
+
     /// Reboot into recovery mode
     pub async fn reboot_recovery(&self, serial: &str) -> Result<()> {
         log::info!("Rebooting {} to recovery", serial);

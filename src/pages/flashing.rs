@@ -13,6 +13,7 @@ mod imp {
     #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "/io/github/tobagin/Sidestep/ui/pages/flashing.ui")]
     pub struct FlashingPage {
+        pub distro_name: std::cell::RefCell<String>,
         #[template_child]
         pub status_page: TemplateChild<adw::StatusPage>,
         #[template_child]
@@ -120,6 +121,11 @@ impl FlashingPage {
 
     pub fn set_distro_name(&self, name: &str) {
         log::info!("Starting installation for: {}", name);
+        self.imp().distro_name.replace(name.to_string());
+    }
+
+    pub fn distro_name(&self) -> String {
+        self.imp().distro_name.borrow().clone()
     }
 
     /// Legacy mock-based installation (for non-UBports distros)

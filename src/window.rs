@@ -315,9 +315,10 @@ impl SidestepWindow {
         imp.main_nav.push(&details_page);
     }
 
-    pub fn show_success(nav_view: &adw::NavigationView, menu_model: &gio::MenuModel) {
+    pub fn show_success(nav_view: &adw::NavigationView, menu_model: &gio::MenuModel, distro_name: &str) {
         let success_page = SuccessPage::new();
         success_page.set_menu_model(menu_model);
+        success_page.set_distro_name(distro_name);
 
         success_page.connect_restart_clicked(move |page| {
             // Reset fully: resume detection, clear stale devices, pop to waiting

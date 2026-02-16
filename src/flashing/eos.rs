@@ -185,21 +185,16 @@ impl EosInstaller {
         let _ = sender.send(InstallProgress::RecoveryDetected);
         tokio::time::sleep(Duration::from_secs(3)).await;
 
-        // ── Step 10: Factory reset ──
+        // ── Step 10: Factory reset + Apply from ADB ──
+        // Tell the user everything they need to do, then wait for sideload
+        // mode — that way they have as long as they need.
         let _ = sender.send(InstallProgress::WaitingForUserAction(
-            "On your phone: Select \"Factory reset\" → \"Format data/factory reset\" → confirm, then come back here".into(),
+            "On your phone:\n1. Select \"Factory reset\" → \"Format data/factory reset\" → confirm\n2. Go back, select \"Apply update\" → \"Apply from ADB\"".into(),
         ));
-        tokio::time::sleep(Duration::from_secs(5)).await;
-        adb.wait_for_recovery(&self.serial).await?;
-        tokio::time::sleep(Duration::from_secs(3)).await;
+        adb.wait_for_sideload(&self.serial).await?;
+        tokio::time::sleep(Duration::from_secs(2)).await;
 
-        // ── Step 11: Apply from ADB ──
-        let _ = sender.send(InstallProgress::WaitingForUserAction(
-            "On your phone: Select \"Apply update\" → \"Apply from ADB\"".into(),
-        ));
-        tokio::time::sleep(Duration::from_secs(5)).await;
-
-        // ── Step 12: Sideload ROM ──
+        // ── Step 11: Sideload ROM ──
         let _ = sender.send(InstallProgress::FlashProgress {
             current: 2,
             total: 2,

@@ -1100,10 +1100,11 @@ impl DeviceDetailsPage {
         // On success: show the success page
         let nav_view_weak = nav_view.downgrade();
         let menu_model = self.imp().main_menu_button.menu_model();
-        progress_page.connect_installation_complete(move |_page| {
+        progress_page.connect_installation_complete(move |page| {
             if let Some(nav) = nav_view_weak.upgrade() {
                 if let Some(ref model) = menu_model {
-                    crate::window::SidestepWindow::show_success(&nav, model);
+                    let name = page.distro_name();
+                    crate::window::SidestepWindow::show_success(&nav, model, &name);
                 }
             }
         });
