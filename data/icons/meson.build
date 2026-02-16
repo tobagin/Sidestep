@@ -17,3 +17,33 @@ install_data(
   'hicolor' / 'symbolic' / 'apps' / 'penguin-symbolic.svg',
   install_dir: symbolic_icondir,
 )
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'android-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'lineageos-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'postmarketos-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'mobian-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'ubports-symbolic.svg',
+  install_dir: symbolic_icondir,
+)
+
+install_data(
+  'hicolor' / 'symbolic' / 'apps' / 'droidian-symbolic.svg',
+  install_dir: symbolic_icondir,
+)

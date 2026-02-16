@@ -1,10 +1,10 @@
 use crate::config;
 use crate::hardware::{DeviceDetector, DeviceEvent};
-use crate::models::Device;
+use crate::models::{Device, DeviceDatabase};
+use crate::pages::device_browser::DeviceBrowserPage;
 use crate::pages::device_details::DeviceDetailsPage;
 use crate::pages::success::SuccessPage;
 use crate::pages::waiting::WaitingPage;
-use crate::pages::unsupported_device::UnsupportedDevicePage;
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::subclass::prelude::*;
@@ -93,10 +93,20 @@ mod imp {
                 glib::closure_local!(move |page: WaitingPage, index: u32| {
                     let Some(window) = window_weak.upgrade() else { return };
                     if let Some(device) = page.get_device(index) {
-                        window.start_wizard(&device);
+                        let db = DeviceDatabase::new();
+                        let supported = db.find_by_codename(&device.codename).is_some();
+                        window.start_wizard(&device, supported);
                     }
                 }),
             );
+
+            // Connect browse-requested signal
+            let window_weak = obj.downgrade();
+            waiting_page.connect_browse_requested(move |_| {
+                if let Some(window) = window_weak.upgrade() {
+                    window.show_device_browser();
+                }
+            });
 
             // Start device detection
             obj.start_device_detection();
@@ -245,14 +255,6 @@ impl SidestepWindow {
         log::info!("Device detected: {} ({})", device.name, device.codename);
         let imp = self.imp();
 
-        // Check if device is supported
-        let supported_codenames = ["sargo", "enchilada", "zeta"]; // TODO: externalize this
-        if !supported_codenames.contains(&device.codename.as_str()) {
-             log::warn!("Unsupported device detected: {}", device.codename);
-             self.show_unsupported_device();
-             return;
-        }
-
         // Store current device and serial
         *imp.device_serial.borrow_mut() = device.serial.clone();
         *imp.current_device.borrow_mut() = Some(device.clone());
@@ -266,24 +268,7 @@ impl SidestepWindow {
         }
         self.update_waiting_page();
 
-        // Start wizard flow
-        self.start_wizard(&device);
-    }
-
-    fn show_unsupported_device(&self) {
-        let imp = self.imp();
-        let page = UnsupportedDevicePage::new();
-
-        let nav_view = imp.main_nav.clone();
-        let nav_view_weak = nav_view.downgrade();
-
-        page.connect_back_clicked(move |_| {
-            if let Some(nav) = nav_view_weak.upgrade() {
-                nav.pop_to_tag("waiting");
-            }
-        });
-
-        nav_view.push(&page);
+        // Device is now shown on WaitingPage — user clicks to start wizard
     }
 
     fn on_device_disconnected(&self) {
@@ -315,11 +300,11 @@ impl SidestepWindow {
         }
     }
 
-    fn start_wizard(&self, device: &Device) {
-        log::info!("Starting wizard flow for device: {}", device.codename);
+    fn start_wizard(&self, device: &Device, supported: bool) {
+        log::info!("Starting wizard flow for device: {} (supported: {})", device.codename, supported);
         let imp = self.imp();
 
-        let details_page = DeviceDetailsPage::new(device);
+        let details_page = DeviceDetailsPage::new(device, supported);
         details_page.set_menu_model(&imp.primary_menu);
 
         details_page.connect_unlock_clicked(move |_| {
@@ -343,6 +328,23 @@ impl SidestepWindow {
         });
 
         nav_view.push(&success_page);
+    }
+
+    fn show_device_browser(&self) {
+        let imp = self.imp();
+
+        let browser_page = DeviceBrowserPage::new();
+
+        let window_weak = self.downgrade();
+        browser_page.connect_device_selected(move |_, codename| {
+            let Some(window) = window_weak.upgrade() else { return };
+            let db = DeviceDatabase::new();
+            if let Some(device) = db.find_by_codename(&codename) {
+                window.start_wizard(&device, true);
+            }
+        });
+
+        imp.main_nav.push(&browser_page);
     }
 
     pub fn show_toast(&self, message: &str) {

@@ -1,3 +1,4 @@
+pub mod device_browser;
 pub mod device_details;
 pub mod flashing;
 pub mod safety;

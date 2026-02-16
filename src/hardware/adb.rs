@@ -121,6 +121,39 @@ impl Adb {
         Ok(String::from_utf8_lossy(&output.stdout).to_string())
     }
 
+    /// Get Android version (ro.build.version.release)
+    pub async fn get_android_version(&self, serial: &str) -> Result<String> {
+        self.getprop(serial, "ro.build.version.release").await
+    }
+
+    /// Get build display ID (ro.build.display.id)
+    pub async fn get_build_id(&self, serial: &str) -> Result<String> {
+        self.getprop(serial, "ro.build.display.id").await
+    }
+
+    /// Get battery level (0–100)
+    pub async fn get_battery_level(&self, serial: &str) -> Result<u8> {
+        // Try sysfs first
+        let output = self.shell(serial, "cat /sys/class/power_supply/battery/capacity").await?;
+        let trimmed = output.trim();
+        if let Ok(level) = trimmed.parse::<u8>() {
+            return Ok(level);
+        }
+
+        // Fallback: parse "dumpsys battery" for the "level:" line
+        let dump = self.shell(serial, "dumpsys battery").await?;
+        for line in dump.lines() {
+            let line = line.trim();
+            if let Some(val) = line.strip_prefix("level:") {
+                if let Ok(level) = val.trim().parse::<u8>() {
+                    return Ok(level);
+                }
+            }
+        }
+
+        anyhow::bail!("Could not determine battery level")
+    }
+
     /// Check if device is unlocked
     pub async fn is_unlocked(&self, serial: &str) -> Result<bool> {
         // Method 1: Check ro.boot.flash.locked
@@ -167,6 +200,57 @@ impl Adb {
             .output()
             .await
             .context("Failed to wait for recovery")?;
+
+        Ok(())
+    }
+
+    /// Reboot into recovery mode
+    pub async fn reboot_recovery(&self, serial: &str) -> Result<()> {
+        log::info!("Rebooting {} to recovery", serial);
+
+        Command::new(&self.binary_path)
+            .args(["-s", serial, "reboot", "recovery"])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to reboot to recovery")?;
+
+        Ok(())
+    }
+
+    /// Sideload a zip file via ADB sideload (used in recovery mode)
+    pub async fn sideload(&self, serial: &str, zip_path: &Path) -> Result<()> {
+        log::info!("Sideloading {} to {}", zip_path.display(), serial);
+
+        let output = Command::new(&self.binary_path)
+            .args([
+                "-s", serial,
+                "sideload",
+                zip_path.to_str().unwrap(),
+            ])
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to run adb sideload")?;
+
+        // adb sideload returns exit code 0 on success, but may also return
+        // exit code 1 with "serving" messages that are actually fine.
+        // The real failure indicator is specific error strings.
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        log::debug!("adb sideload stdout: {}", stdout);
+        log::debug!("adb sideload stderr: {}", stderr);
+
+        if !output.status.success() {
+            // "adb: sideload connection failed" is a real error
+            if stderr.contains("sideload connection failed") || stderr.contains("error") {
+                anyhow::bail!("adb sideload failed: {}", stderr);
+            }
+            // Otherwise it likely completed successfully despite non-zero exit
+            log::warn!("adb sideload exited with non-zero status but no error detected");
+        }
 
         Ok(())
     }

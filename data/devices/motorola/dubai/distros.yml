@@ -1,0 +1,36 @@
+device_codename: "dubai"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/dubai/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi (802.11ax)"
+        - "Bluetooth 5.2"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+        - "5G"
+      partial:
+        - "USB OTG (may need manual toggle)"
+      not_working: []
+      notes:
+        - "Android-based custom ROM (Android 16)"
+        - "Kernel 5.4"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"

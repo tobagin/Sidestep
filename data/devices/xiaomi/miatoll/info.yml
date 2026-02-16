@@ -1,0 +1,50 @@
+device:
+  name: "Xiaomi POCO M2 Pro"
+  codename: "miatoll"
+  release_date: "2020-07-14"
+  specs:
+    soc: "Qualcomm SM7125 Snapdragon 720G"
+    ram: "4/6 GB LPDDR4X"
+    cpu: "Octa-core Kryo 465 (2x 2.3 GHz Gold + 6x 1.8 GHz Silver)"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 618"
+    storage: "64/128 GB UFS 2.1"
+    battery: "5000 mAh Li-Po"
+    dimensions:
+      height: "165.8 mm"
+      width: "76.7 mm"
+      depth: "8.8 mm"
+  display:
+    size: "6.67 in"
+    resolution: "1080x2400"
+    density: "395 PPI"
+    panel_type: "IPS LCD"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0 (A2DP, aptX HD)"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "USB Type-C"
+      - "USB OTG"
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "IR blaster"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass]
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "48 MP"
+      features: "f/1.8, PDAF"
+    - label: "Ultrawide"
+      resolution: "8 MP"
+      features: "f/2.2, 119° FOV"
+    - label: "Macro"
+      resolution: "5 MP"
+      features: "f/2.4"
+    - label: "Depth"
+      resolution: "2 MP"
+      features: "f/2.4"
+    - label: "Front"
+      resolution: "16 MP"
+      features: "f/2.5"

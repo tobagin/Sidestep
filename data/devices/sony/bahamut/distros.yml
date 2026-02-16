@@ -1,0 +1,45 @@
+device_codename: "bahamut"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "sony_bahamut-api30-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, microphone, volume control)"
+        - "Camera (photo, flashlight)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Fingerprint reader"
+        - "Vibration"
+        - "GPS"
+        - "SD card"
+        - "Waydroid"
+        - "Encryption"
+      partial:
+        - "Headphones"
+        - "Switch camera"
+        - "Hotspot"
+      not_working:
+        - "Video recording"
+        - "Dual SIM"
+        - "MMS"
+      untested:
+        - "NFC"
+        - "MTP"
+      notes:
+        - "Based on Android 11 (API 30) HAL"
+        - "Requires stock Android 11 firmware (55.2.A.4.332)"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"

@@ -16,7 +16,9 @@ template $DeviceDetailsPage: Adw.NavigationPage {
             }
         }
 
-        content: Adw.StatusPage {
+        content: ScrolledWindow {
+            hscrollbar-policy: never;
+
             child: Adw.Clamp {
                 maximum-size: 600;
                 margin-top: 24;
@@ -27,6 +29,7 @@ template $DeviceDetailsPage: Adw.NavigationPage {
                 child: Box {
                     orientation: vertical;
                     spacing: 24;
+
                     // Device Header
                     Box {
                         orientation: vertical;
@@ -34,12 +37,12 @@ template $DeviceDetailsPage: Adw.NavigationPage {
                         halign: center;
 
                         Image {
-                            icon-name: "phone-symbolic"; // Placeholder
+                            icon-name: "phone-symbolic";
                             pixel-size: 96;
                         }
 
                         Label device_name_label {
-                            label: "Pixel 3a";
+                            label: "Device";
 
                             styles [
                                 "title-1",
@@ -47,7 +50,7 @@ template $DeviceDetailsPage: Adw.NavigationPage {
                         }
 
                         Label device_codename_label {
-                            label: "google-sargo";
+                            label: "";
 
                             styles [
                                 "dim-label",
@@ -55,77 +58,47 @@ template $DeviceDetailsPage: Adw.NavigationPage {
                         }
                     }
 
-                    // Actions
-                    Box {
+                    // Device Status group (populated at runtime)
+                    Adw.PreferencesGroup status_group {
+                        title: _("Device Status");
+                    }
+
+                    // Hardware Specifications group (populated at runtime)
+                    Adw.PreferencesGroup specs_group {
+                        title: _("Specifications");
+                        visible: false;
+                    }
+
+                    // Action area
+                    Box action_box {
                         orientation: vertical;
                         spacing: 12;
+                        halign: center;
+                        margin-top: 12;
+                        margin-bottom: 12;
 
-                        Box distro_buttons_box {
-                            orientation: vertical;
-                            spacing: 12;
-
-                            Button btn_droidian {
-                                label: _("Install Droidian");
-
-                                styles [
-                                    "suggested-action",
-                                    "pill",
-                                ]
-
-                                height-request: 50;
-                                action-name: "page.install";
-                                action-target: "'droidian'";
-                            }
-
-                            Button btn_mobian {
-                                label: _("Install Mobian");
-
-                                styles [
-                                    "suggested-action",
-                                    "pill",
-                                ]
-
-                                height-request: 50;
-                                action-name: "page.install";
-                                action-target: "'mobian'";
-                            }
-
-                            Button btn_ubuntutouch {
-                                label: _("Install Ubuntu Touch");
-
-                                styles [
-                                    "suggested-action",
-                                    "pill",
-                                ]
-
-                                height-request: 50;
-                                action-name: "page.install";
-                                action-target: "'ubuntutouch'";
-                            }
-
-                            Button btn_postmarketos {
-                                label: _("Install postmarketOS");
-
-                                styles [
-                                    "suggested-action",
-                                    "pill",
-                                ]
-
-                                height-request: 50;
-                                action-name: "page.install";
-                                action-target: "'postmarketos'";
-                            }
-                        }
-
-                        Button unlock_button {
-                            label: _("Unlock Bootloader");
+                        Button install_button {
+                            label: _("Install");
+                            halign: center;
+                            width-request: 250;
+                            height-request: 50;
+                            action-name: "page.show-distros";
 
                             styles [
+                                "suggested-action",
                                 "pill",
                             ]
+                        }
 
-                            height-request: 50;
-                            action-name: "page.unlock";
+                        Label unsupported_label {
+                            label: _("This device is not currently supported by Sidestep");
+                            visible: false;
+                            wrap: true;
+                            justify: center;
+
+                            styles [
+                                "dim-label",
+                            ]
                         }
                     }
                 };

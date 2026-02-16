@@ -1,0 +1,46 @@
+device:
+  name: "Volla Phone Quintus"
+  codename: "algiz"
+  release_date: "2024-10-01"
+  specs:
+    soc: "MediaTek Dimensity 7050"
+    ram: "8 GB"
+    cpu: "Octa-core (2x 2.6 GHz Cortex-A78 + 6x 2.0 GHz Cortex-A55)"
+    arch: "arm64"
+    gpu: "ARM Mali-G68 MC4"
+    storage: "256 GB"
+    battery: "4700 mAh Li-Po"
+    dimensions:
+      height: "164.15 mm"
+      width: "74.7 mm"
+      depth: "8.75 mm"
+  display:
+    size: "6.78 in"
+    resolution: "1080x2400"
+    density: "388 PPI"
+    panel_type: "AMOLED"
+    refresh_rate: "120 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE, 5G NR]
+    bluetooth: "5.2 (LE)"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "USB Type-C"
+      - "USB OTG"
+      - "Fingerprint reader"
+      - "NFC"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor]
+    location: [GPS, A-GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "50 MP"
+      features: "Wide angle, PDAF"
+    - label: "Ultrawide"
+      resolution: "8 MP"
+      features: "Ultra-wide angle"
+    - label: "Macro"
+      resolution: "2 MP"
+      features: "Macro lens"
+    - label: "Front"
+      resolution: "16 MP"
+      features: "HD video"

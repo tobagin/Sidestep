@@ -1,0 +1,76 @@
+device_codename: "mimameid"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "volla_mimameid-api32-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "NFC"
+        - "Audio (speaker, microphone, volume control)"
+        - "Camera (photo, video, switch camera, flashlight)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Fingerprint reader"
+        - "Vibration"
+        - "GPS"
+        - "SD card"
+        - "MTP"
+      partial:
+        - "Hotspot"
+      not_working:
+        - "Headphones"
+        - "Dual SIM"
+        - "MMS"
+        - "Encryption"
+      untested:
+        - "Waydroid"
+      notes:
+        - "Based on Android 12L (API 32) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/mimameid/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/mimameid/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "NFC"
+        - "Audio (speaker, earpiece, microphone)"
+        - "Camera (photo, video)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "Fingerprint reader"
+        - "SD card"
+      partial: []
+      not_working: []
+      notes:
+        - "Official Volla partner device"
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

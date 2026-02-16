@@ -1,0 +1,6 @@
+name: "Ubuntu Touch"
+prerequisites: []
+steps:
+  install:
+    type: "flash"
+    url: ""

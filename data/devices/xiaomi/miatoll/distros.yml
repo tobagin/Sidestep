@@ -1,0 +1,104 @@
+device_codename: "miatoll"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "xiaomi_miatoll-api29-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Camera"
+        - "GPS"
+        - "Hotspot"
+        - "Video recording"
+      partial:
+        - "Encryption"
+      not_working:
+        - "Dual SIM"
+        - "MMS"
+      notes:
+        - "Based on Android 10 (API 29) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/curtana/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/miatoll/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/miatoll/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/miatoll/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "Camera (rear and front)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "NFC"
+        - "Fingerprint reader"
+      partial: []
+      not_working: []
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

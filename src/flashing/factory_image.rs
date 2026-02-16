@@ -129,9 +129,10 @@ impl FactoryImageInstaller {
         log::info!("Image ZIP: {}", image_zip.display());
 
         // ── Step 5: Flash bootloader ──
+        let total_steps = 7;
         let _ = sender.send(InstallProgress::FlashProgress {
             current: 1,
-            total: 3,
+            total: total_steps,
             description: "Flashing bootloader...".into(),
         });
         fastboot
@@ -139,16 +140,25 @@ impl FactoryImageInstaller {
             .await
             .context("Failed to flash bootloader")?;
 
-        let _ = sender.send(InstallProgress::StatusChanged(
-            "Rebooting to bootloader...".into(),
-        ));
-        fastboot.reboot_bootloader(&self.serial).await?;
-        self.wait_for_fastboot(&fastboot).await?;
-
-        // ── Step 6: Flash radio ──
+        // ── Step 6: Reboot bootloader after bootloader flash ──
         let _ = sender.send(InstallProgress::FlashProgress {
             current: 2,
-            total: 3,
+            total: total_steps,
+            description: "Restarting bootloader...".into(),
+        });
+        fastboot.reboot_bootloader(&self.serial).await?;
+
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 3,
+            total: total_steps,
+            description: "Waiting for device...".into(),
+        });
+        self.wait_for_fastboot(&fastboot).await?;
+
+        // ── Step 7: Flash radio ──
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 4,
+            total: total_steps,
             description: "Flashing radio...".into(),
         });
         fastboot
@@ -156,17 +166,26 @@ impl FactoryImageInstaller {
             .await
             .context("Failed to flash radio")?;
 
-        let _ = sender.send(InstallProgress::StatusChanged(
-            "Rebooting to bootloader...".into(),
-        ));
+        // ── Step 8: Reboot bootloader after radio flash ──
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 5,
+            total: total_steps,
+            description: "Restarting bootloader...".into(),
+        });
         fastboot.reboot_bootloader(&self.serial).await?;
+
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 6,
+            total: total_steps,
+            description: "Waiting for device...".into(),
+        });
         self.wait_for_fastboot(&fastboot).await?;
 
-        // ── Step 7: Flash all system partitions + wipe ──
+        // ── Step 9: Flash all system partitions + wipe ──
         let _ = sender.send(InstallProgress::FlashProgress {
-            current: 3,
-            total: 3,
-            description: "Flashing system partitions...".into(),
+            current: 7,
+            total: total_steps,
+            description: "Flashing system partitions (this may take a while)...".into(),
         });
         fastboot
             .update(&self.serial, &image_zip, true)

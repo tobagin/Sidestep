@@ -1,0 +1,78 @@
+device_codename: "algiz"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "volla_algiz-api33-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, microphone, volume control)"
+        - "Sensors (brightness, rotation, proximity)"
+        - "Vibration"
+        - "GPS"
+        - "MTP"
+      partial: []
+      not_working:
+        - "Camera (photo, switch camera, flashlight)"
+        - "Fingerprint reader"
+        - "Auto brightness"
+        - "Dual SIM"
+        - "MMS"
+        - "Encryption"
+      untested:
+        - "Headphones"
+        - "Hotspot"
+        - "NFC"
+        - "Waydroid"
+      notes:
+        - "Based on Android 13 (API 33) HAL"
+        - "Camera is currently non-functional on this device"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/algiz/"
+        label: "20.04 (Stable)"
+      - id: "2004-rc"
+        path: "20.04/arm64/android9plus/rc/algiz/"
+        label: "20.04 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/algiz/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "Fingerprint reader"
+      partial:
+        - "Camera"
+      not_working: []
+      notes:
+        - "UBports promoted device"
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

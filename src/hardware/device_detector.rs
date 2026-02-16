@@ -125,11 +125,25 @@ impl DeviceDetector {
 
                             log::info!("Detected device via ADB: {} ({})", dev.serial, codename);
                             
+                            // Query additional device info via ADB
+                            let android_version = match adb.get_android_version(&dev.serial).await {
+                                Ok(v) if !v.is_empty() => Some(v),
+                                _ => None,
+                            };
+                            let build_id = match adb.get_build_id(&dev.serial).await {
+                                Ok(v) if !v.is_empty() => Some(v),
+                                _ => None,
+                            };
+                            let battery_level = adb.get_battery_level(&dev.serial).await.ok();
+
                             // Look up device in database
                             if let Some(mut device) = db.find_by_codename(&codename) {
                                 log::info!("Found device in database: {}", device.name);
 
                                 device.serial = Some(dev.serial.clone());
+                                device.android_version = android_version;
+                                device.build_id = build_id;
+                                device.battery_level = battery_level;
 
                                 // Check lock status
                                 match adb.is_unlocked(&dev.serial).await {
@@ -151,6 +165,9 @@ impl DeviceDetector {
                                     aliases: vec![],
                                     is_locked: None,
                                     serial: Some(dev.serial.clone()),
+                                    android_version,
+                                    build_id,
+                                    battery_level,
                                 };
                                 let _ = sender.send(DeviceEvent::Connected(unknown_device));
                             }
@@ -199,6 +216,9 @@ impl DeviceDetector {
                                         aliases: vec![],
                                         is_locked: None,
                                         serial: Some(dev.serial.clone()),
+                                        android_version: None,
+                                        build_id: None,
+                                        battery_level: None,
                                     };
                                     let _ = sender.send(DeviceEvent::Connected(unknown_device));
                                 }
@@ -218,6 +238,9 @@ impl DeviceDetector {
                                     aliases: vec![],
                                     is_locked: None,
                                     serial: Some(dev.serial.clone()),
+                                    android_version: None,
+                                    build_id: None,
+                                    battery_level: None,
                                 };
                                 let _ = sender.send(DeviceEvent::Connected(unknown_device));
                             }

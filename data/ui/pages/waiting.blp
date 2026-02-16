@@ -11,7 +11,7 @@ template $WaitingPage: Adw.NavigationPage {
             [title]
             Adw.WindowTitle {
                 title: _("Sidestep");
-                subtitle: _("Install Linux on mobile");
+                subtitle: _("Free your phone");
             }
 
             [end]
@@ -51,6 +51,17 @@ template $WaitingPage: Adw.NavigationPage {
                                 "dim-label",
                             ]
                         }
+
+                        Button browse_button {
+                            label: _("Browse Supported Devices");
+                            halign: center;
+                            margin-top: 24;
+                            action-name: "waiting.browse-devices";
+
+                            styles [
+                                "pill",
+                            ]
+                        }
                     };
                 };
             }
@@ -62,10 +73,27 @@ template $WaitingPage: Adw.NavigationPage {
                     title: _("Connected Devices");
                     description: _("Select a device to continue.");
 
-                    child: Box device_list {
+                    child: Box {
                         orientation: vertical;
                         spacing: 12;
                         halign: center;
+
+                        Box device_list {
+                            orientation: vertical;
+                            spacing: 12;
+                            halign: center;
+                        }
+
+                        Button {
+                            label: _("Browse Supported Devices");
+                            halign: center;
+                            margin-top: 24;
+                            action-name: "waiting.browse-devices";
+
+                            styles [
+                                "pill",
+                            ]
+                        }
                     };
                 };
             }

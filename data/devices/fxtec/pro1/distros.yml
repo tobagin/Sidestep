@@ -1,0 +1,73 @@
+device_codename: "pro1"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "fxtec_pro1-api28-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope)"
+        - "Fingerprint reader"
+        - "Camera"
+        - "GPS"
+        - "Encryption"
+      partial:
+        - "Switch camera"
+        - "Hotspot"
+      not_working:
+        - "Video recording"
+        - "Dual SIM"
+        - "MMS"
+      untested:
+        - "NFC"
+        - "MTP"
+      notes:
+        - "Based on Android 9 (API 28) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "Physical slide-out keyboard supported"
+        - "First boot may take up to 5 minutes"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/pro1/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Physical slide-out keyboard supported"
+        - "Monthly security patches"

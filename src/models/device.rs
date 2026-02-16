@@ -38,6 +38,18 @@ pub struct Device {
     /// USB serial number (set at runtime by device detection, not from config)
     #[serde(skip)]
     pub serial: Option<String>,
+
+    /// Android version (e.g. "12") — set at runtime via ADB
+    #[serde(skip)]
+    pub android_version: Option<String>,
+
+    /// Build ID (e.g. "SP2A.220505.008") — set at runtime via ADB
+    #[serde(skip)]
+    pub build_id: Option<String>,
+
+    /// Battery level (0–100) — set at runtime via ADB
+    #[serde(skip)]
+    pub battery_level: Option<u8>,
 }
 
 fn default_battery_min() -> u8 {

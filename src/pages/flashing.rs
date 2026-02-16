@@ -1,7 +1,7 @@
 // Flashing Progress Page
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::flashing::{DroidianInstaller, FactoryImageInstaller, InstallProgress, MobianInstaller, UbportsInstaller};
+use crate::flashing::{DroidianInstaller, FactoryImageInstaller, InstallProgress, LineageosInstaller, MobianInstaller, PostmarketosInstaller, UbportsInstaller};
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::prelude::*;
@@ -36,6 +36,10 @@ mod imp {
         #[template_child]
         pub cancel_button: TemplateChild<gtk::Button>,
         #[template_child]
+        pub restart_box: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub restart_button: TemplateChild<gtk::Button>,
+        #[template_child]
         pub main_menu_button: TemplateChild<gtk::MenuButton>,
     }
 
@@ -58,9 +62,21 @@ mod imp {
         fn signals() -> &'static [glib::subclass::Signal] {
             static SIGNALS: once_cell::sync::Lazy<Vec<glib::subclass::Signal>> =
                 once_cell::sync::Lazy::new(|| {
-                    vec![glib::subclass::Signal::builder("installation-complete").build()]
+                    vec![
+                        glib::subclass::Signal::builder("installation-complete").build(),
+                        glib::subclass::Signal::builder("installation-failed").build(),
+                    ]
                 });
             &SIGNALS
+        }
+
+        fn constructed(&self) {
+            self.parent_constructed();
+
+            let obj = self.obj().clone();
+            self.restart_button.connect_clicked(move |_| {
+                obj.emit_by_name::<()>("installation-failed", &[]);
+            });
         }
     }
     impl WidgetImpl for FlashingPage {}
@@ -85,6 +101,16 @@ impl FlashingPage {
     pub fn connect_installation_complete<F: Fn(&Self) + 'static>(&self, f: F) -> glib::SignalHandlerId {
         self.connect_closure(
             "installation-complete",
+            false,
+            glib::closure_local!(move |obj: Self| {
+                f(&obj);
+            }),
+        )
+    }
+
+    pub fn connect_installation_failed<F: Fn(&Self) + 'static>(&self, f: F) -> glib::SignalHandlerId {
+        self.connect_closure(
+            "installation-failed",
             false,
             glib::closure_local!(move |obj: Self| {
                 f(&obj);
@@ -220,6 +246,84 @@ impl FlashingPage {
         });
     }
 
+    /// Start real postmarketOS installation with progress from background thread
+    pub fn start_postmarketos_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        base_url: &str,
+        channel: &str,
+        interface: &str,
+        device: &str,
+    ) {
+        self.set_distro_name(distro_name);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
+
+        let installer = PostmarketosInstaller::new(
+            serial.to_string(),
+            base_url.to_string(),
+            channel.to_string(),
+            interface.to_string(),
+            device.to_string(),
+        );
+        let receiver = installer.spawn();
+
+        // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
+    /// Start real LineageOS installation with progress from background thread
+    pub fn start_lineageos_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        api_url: &str,
+        update_only: bool,
+    ) {
+        self.set_distro_name(distro_name);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
+        imp.status_page.set_icon_name(Some("lineageos-symbolic"));
+
+        // Repurpose the "Decompress" row for checksum verification
+        imp.decompress_row.set_title("Verifying Checksums");
+        #[allow(deprecated)]
+        imp.decompress_row.set_icon_name(Some("channel-secure-symbolic"));
+
+        let installer = LineageosInstaller::new(
+            serial.to_string(),
+            api_url.to_string(),
+            update_only,
+        );
+        let receiver = installer.spawn();
+
+        // Poll receiver on the main thread
+        let page = self.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
+            while let Ok(msg) = receiver.try_recv() {
+                let should_stop = page.handle_progress(msg);
+                if should_stop {
+                    return glib::ControlFlow::Break;
+                }
+            }
+            glib::ControlFlow::Continue
+        });
+    }
+
     /// Start factory image (stock Android) installation with progress from background thread
     pub fn start_factory_image_installation(
         &self,
@@ -233,6 +337,7 @@ impl FlashingPage {
         let imp = self.imp();
         imp.status_page.set_title(&format!("Flashing {}", android_version));
         imp.status_page.set_description(Some("Preparing..."));
+        imp.status_page.set_icon_name(Some("android-symbolic"));
 
         // Repurpose the "Decompress" row for ZIP extraction
         imp.decompress_row.set_title("Extracting");
@@ -336,6 +441,13 @@ impl FlashingPage {
                 imp.status_page.set_description(Some("Recovery mode detected"));
             }
 
+            InstallProgress::WaitingForUserAction(msg) => {
+                imp.error_banner.set_title(&msg);
+                imp.error_banner.remove_css_class("error");
+                imp.error_banner.set_revealed(true);
+                imp.status_page.set_description(Some("Waiting for user action..."));
+            }
+
             InstallProgress::Complete => {
                 imp.status_page.set_title("Installation Complete!");
                 imp.download_row.set_subtitle("Complete");
@@ -357,9 +469,11 @@ impl FlashingPage {
             InstallProgress::Error(msg) => {
                 log::error!("Installation error: {}", msg);
                 imp.status_page.set_title("Installation Failed");
+                imp.status_page.set_icon_name(Some("dialog-error-symbolic"));
                 imp.error_banner.set_title(&msg);
                 imp.error_banner.add_css_class("error");
                 imp.error_banner.set_revealed(true);
+                imp.restart_box.set_visible(true);
                 return true;
             }
         }

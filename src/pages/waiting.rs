@@ -20,6 +20,8 @@ mod imp {
         pub stack: TemplateChild<gtk::Stack>,
         #[template_child]
         pub device_list: TemplateChild<gtk::Box>,
+        #[template_child]
+        pub browse_button: TemplateChild<gtk::Button>,
 
         pub devices: RefCell<Vec<Device>>,
         pub device_buttons: RefCell<Vec<gtk::Button>>,
@@ -33,6 +35,10 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
+
+            klass.install_action("waiting.browse-devices", None, |page, _, _| {
+                page.emit_by_name::<()>("browse-requested", &[]);
+            });
 
             klass.install_action("waiting.select-device", Some(glib::VariantTy::UINT32), |page, _, param| {
                 if let Some(index) = param.and_then(|v| v.get::<u32>()) {
@@ -58,6 +64,8 @@ mod imp {
                 vec![
                     glib::subclass::Signal::builder("device-selected")
                         .param_types([u32::static_type()])
+                        .build(),
+                    glib::subclass::Signal::builder("browse-requested")
                         .build(),
                 ]
             })
@@ -124,5 +132,15 @@ impl WaitingPage {
     pub fn get_device(&self, index: u32) -> Option<Device> {
         let devices = self.imp().devices.borrow();
         devices.get(index as usize).cloned()
+    }
+
+    pub fn connect_browse_requested<F: Fn(&Self) + 'static>(&self, f: F) -> glib::SignalHandlerId {
+        self.connect_closure(
+            "browse-requested",
+            false,
+            glib::closure_local!(move |obj: Self| {
+                f(&obj);
+            }),
+        )
     }
 }

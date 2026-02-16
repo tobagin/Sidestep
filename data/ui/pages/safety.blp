@@ -102,6 +102,21 @@ template $SafetyPage: Adw.NavigationPage {
                         }
                     }
 
+                    Adw.PreferencesGroup {
+                        title: _("Disclaimer");
+
+                        Adw.ActionRow risk_row {
+                            icon-name: "computer-fail-symbolic";
+                            title: _("Risk of Bricking");
+                            subtitle: _("Installing custom software carries risk. Your device could become temporarily or permanently unusable (bricked). By continuing, you accept full responsibility.");
+
+                            [suffix]
+                            CheckButton risk_check {
+                                valign: center;
+                            }
+                        }
+                    }
+
                     Adw.PreferencesGroup warnings_group {
                         title: _("Device-Specific Warnings");
                     }

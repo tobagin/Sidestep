@@ -49,6 +49,9 @@ impl DeviceDatabase {
             aliases: vec!["Pixel 3a".to_string()],
             is_locked: None,
             serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
         });
 
         // OnePlus 6 (enchilada)
@@ -65,6 +68,27 @@ impl DeviceDatabase {
             aliases: vec!["OnePlus6".to_string()],
             is_locked: None,
             serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Motorola Edge 30 (dubai)
+        self.devices.insert("dubai".to_string(), Device {
+            codename: "dubai".to_string(),
+            name: "Motorola Edge 30".to_string(),
+            maker: "Motorola".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["moto edge 30".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
         });
 
         // Surface Duo (zeta)
@@ -81,6 +105,213 @@ impl DeviceDatabase {
             aliases: vec!["surfaceduo".to_string()],
             is_locked: None,
             serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Xiaomi POCO M2 Pro / Redmi Note 9 Pro (miatoll)
+        self.devices.insert("miatoll".to_string(), Device {
+            codename: "miatoll".to_string(),
+            name: "Xiaomi POCO M2 Pro".to_string(),
+            maker: "Xiaomi".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec![
+                "Redmi Note 9 Pro".to_string(),
+                "Redmi Note 9 Pro Max".to_string(),
+                "Redmi Note 9S".to_string(),
+                "POCO M2 Pro".to_string(),
+            ],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // F(x)tec Pro1 (pro1)
+        self.devices.insert("pro1".to_string(), Device {
+            codename: "pro1".to_string(),
+            name: "F(x)tec Pro1".to_string(),
+            maker: "F(x)tec".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["Pro1".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // F(x)tec Pro1 X (pro1x)
+        self.devices.insert("pro1x".to_string(), Device {
+            codename: "pro1x".to_string(),
+            name: "F(x)tec Pro1 X".to_string(),
+            maker: "F(x)tec".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["Pro1X".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Sony Xperia 5 (bahamut)
+        self.devices.insert("bahamut".to_string(), Device {
+            codename: "bahamut".to_string(),
+            name: "Sony Xperia 5".to_string(),
+            maker: "Sony".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+                "Sony DRM keys will be permanently lost after unlocking".to_string(),
+            ],
+            aliases: vec!["Xperia 5".to_string(), "J9210".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Phone (yggdrasil)
+        self.devices.insert("yggdrasil".to_string(), Device {
+            codename: "yggdrasil".to_string(),
+            name: "Volla Phone".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["GS290".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Phone X (yggdrasilx)
+        self.devices.insert("yggdrasilx".to_string(), Device {
+            codename: "yggdrasilx".to_string(),
+            name: "Volla Phone X".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Phone 22 (mimameid)
+        self.devices.insert("mimameid".to_string(), Device {
+            codename: "mimameid".to_string(),
+            name: "Volla Phone 22".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Phone X23 (vidofnir)
+        self.devices.insert("vidofnir".to_string(), Device {
+            codename: "vidofnir".to_string(),
+            name: "Volla Phone X23".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Phone Quintus (algiz)
+        self.devices.insert("algiz".to_string(), Device {
+            codename: "algiz".to_string(),
+            name: "Volla Phone Quintus".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["Volla 5".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Lenovo ThinkPhone by Motorola (bronco)
+        self.devices.insert("bronco".to_string(), Device {
+            codename: "bronco".to_string(),
+            name: "Lenovo ThinkPhone".to_string(),
+            maker: "Lenovo".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec!["ThinkPhone".to_string()],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
+        });
+
+        // Volla Tablet (mimir)
+        self.devices.insert("mimir".to_string(), Device {
+            codename: "mimir".to_string(),
+            name: "Volla Tablet".to_string(),
+            maker: "Volla".to_string(),
+            experimental: false,
+            battery_min: 50,
+            warnings: vec![
+                "Unlocking will factory reset the device".to_string(),
+            ],
+            aliases: vec![],
+            is_locked: None,
+            serial: None,
+            android_version: None,
+            build_id: None,
+            battery_level: None,
         });
 
         // Load unlocking steps for each device
@@ -179,6 +410,60 @@ impl DeviceDatabase {
             },
         ]);
 
+        // Motorola Edge 30 steps
+        self.unlocking_steps.insert("dubai".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'. Note: this option may take up to a week to appear after first setup.".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Get Unlock Code from Motorola".to_string(),
+                description: "Visit the Motorola bootloader unlock page to request an unlock code for your device".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run OEM unlock command with the code from Motorola".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock <code>".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
         // Surface Duo steps
         self.unlocking_steps.insert("zeta".to_string(), vec![
             UnlockingStep {
@@ -215,6 +500,520 @@ impl DeviceDatabase {
                 order: 4,
                 title: "Unlock Bootloader".to_string(),
                 description: "Run unlock command via fastboot".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Xiaomi POCO M2 Pro (miatoll) — Xiaomi requires Mi Unlock tool
+        self.unlocking_steps.insert("miatoll".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'MIUI version' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Link Mi Account".to_string(),
+                description: "Go to Settings > Additional Settings > Developer Options > Mi Unlock status and link your Mi account. Wait for the required unlock period (up to 168 hours).".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command via fastboot".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // F(x)tec Pro1 (pro1) — standard OEM unlock
+        self.unlocking_steps.insert("pro1".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // F(x)tec Pro1 X (pro1x) — standard OEM unlock
+        self.unlocking_steps.insert("pro1x".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Sony Xperia 5 (bahamut) — Sony requires unlock code from website
+        self.unlocking_steps.insert("bahamut".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Get Unlock Code from Sony".to_string(),
+                description: "Visit Sony's bootloader unlock page to request an unlock code for your device. You will need your IMEI number.".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("Unlocking will permanently void DRM keys (camera quality may be affected)".to_string()),
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run OEM unlock command with the code from Sony".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock 0x<code>".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Phone (yggdrasil) — MediaTek, standard OEM unlock
+        self.unlocking_steps.insert("yggdrasil".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Phone X (yggdrasilx) — same as Volla Phone
+        self.unlocking_steps.insert("yggdrasilx".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Phone 22 (mimameid)
+        self.unlocking_steps.insert("mimameid".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Phone X23 (vidofnir)
+        self.unlocking_steps.insert("vidofnir".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Phone Quintus (algiz)
+        self.unlocking_steps.insert("algiz".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot flashing unlock".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Lenovo ThinkPhone (bronco) — Motorola unlock process
+        self.unlocking_steps.insert("bronco".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'. Note: this option may take up to a week to appear after first setup.".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Get Unlock Code from Motorola".to_string(),
+                description: "Visit the Motorola bootloader unlock page to request an unlock code for your device".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 5,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run OEM unlock command with the code from Motorola".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("fastboot oem unlock <code>".to_string()),
+                duration_secs: Some(30),
+                optional: false,
+                warning: Some("This will factory reset your device!".to_string()),
+            },
+        ]);
+
+        // Volla Tablet (mimir)
+        self.unlocking_steps.insert("mimir".to_string(), vec![
+            UnlockingStep {
+                order: 1,
+                title: "Enable Developer Options".to_string(),
+                description: "Go to Settings > About Phone and tap 'Build Number' 7 times".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 2,
+                title: "Enable OEM Unlocking".to_string(),
+                description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'".to_string(),
+                step_type: crate::models::StepType::Manual,
+                command: None,
+                duration_secs: None,
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 3,
+                title: "Reboot to Bootloader".to_string(),
+                description: "Reboot the device into fastboot mode".to_string(),
+                step_type: crate::models::StepType::Automated,
+                command: Some("adb reboot bootloader".to_string()),
+                duration_secs: Some(10),
+                optional: false,
+                warning: None,
+            },
+            UnlockingStep {
+                order: 4,
+                title: "Unlock Bootloader".to_string(),
+                description: "Run unlock command. Confirm on device screen.".to_string(),
                 step_type: crate::models::StepType::Automated,
                 command: Some("fastboot flashing unlock".to_string()),
                 duration_secs: Some(30),
@@ -335,6 +1134,11 @@ impl DeviceDatabase {
     /// Get all supported device codenames
     pub fn all_codenames(&self) -> Vec<String> {
         self.devices.keys().cloned().collect()
+    }
+
+    /// Get all supported devices
+    pub fn all_devices(&self) -> Vec<Device> {
+        self.devices.values().cloned().collect()
     }
 }
 

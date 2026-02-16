@@ -28,6 +28,8 @@ pub enum InstallProgress {
     WaitingForRecovery,
     /// Device entered recovery mode
     RecoveryDetected,
+    /// Waiting for user to perform an action on the device (shown as info banner)
+    WaitingForUserAction(String),
     /// Installation completed successfully
     Complete,
     /// An error occurred

@@ -26,6 +26,19 @@ pub struct DistroConfig {
     pub firmware_requirement: Option<String>,
     pub chipset: Option<String>,
     pub device_model: Option<String>,
+    pub compatibility: Option<CompatibilityInfo>,
+}
+
+#[derive(Debug, Clone, Deserialize, Default)]
+pub struct CompatibilityInfo {
+    #[serde(default)]
+    pub working: Vec<String>,
+    #[serde(default)]
+    pub partial: Vec<String>,
+    #[serde(default)]
+    pub not_working: Vec<String>,
+    #[serde(default)]
+    pub notes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

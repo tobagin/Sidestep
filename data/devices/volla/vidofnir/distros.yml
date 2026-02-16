@@ -1,0 +1,77 @@
+device_codename: "vidofnir"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "volla_vidofnir-api32-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, microphone)"
+        - "Camera (photo, video, switch camera, flashlight)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Vibration"
+      partial:
+        - "Volume control"
+        - "GPS"
+      not_working:
+        - "Headphones"
+        - "Fingerprint reader"
+        - "Hotspot"
+        - "Dual SIM"
+        - "MMS"
+        - "MTP"
+        - "Encryption"
+      untested:
+        - "NFC"
+        - "SD card"
+        - "Waydroid"
+      notes:
+        - "Based on Android 12L (API 32) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/vidofnir/"
+        label: "20.04 (Stable)"
+      - id: "2004-rc"
+        path: "20.04/arm64/android9plus/rc/vidofnir/"
+        label: "20.04 (RC)"
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/vidofnir/"
+        label: "20.04 (Devel)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial:
+        - "Camera"
+      not_working: []
+      notes:
+        - "Official Volla partner device"
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

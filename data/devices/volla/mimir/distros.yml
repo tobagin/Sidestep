@@ -1,0 +1,74 @@
+device_codename: "mimir"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "volla_mimir-api33-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, microphone, headphones, volume control)"
+        - "Camera (photo, switch camera, flashlight)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Vibration"
+        - "GPS"
+        - "MTP"
+        - "Encryption"
+      partial: []
+      not_working:
+        - "Dual SIM"
+        - "MMS"
+        - "Waydroid"
+      untested:
+        - "Hotspot"
+      notes:
+        - "Based on Android 13 (API 33) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "Tablet form factor"
+        - "First boot may take up to 5 minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/mimir/"
+        label: "20.04 (Stable)"
+      - id: "2004-rc"
+        path: "20.04/arm64/android9plus/rc/mimir/"
+        label: "20.04 (RC)"
+      - id: "2404-2-daily"
+        path: "24.04-2.x/arm64/android9plus/daily/mimir/"
+        label: "24.04.2 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "Camera (photo, video)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial: []
+      not_working: []
+      notes:
+        - "UBports promoted device"
+        - "Tablet form factor"
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

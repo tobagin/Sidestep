@@ -1,0 +1,11 @@
+name: "Droidian"
+prerequisites:
+  - title: "Pre-requisites"
+    check: "android_version_13"
+    message: "Droidian for Volla Phone Quintus requires Android 13 stock firmware.\n\nCheck: Settings > About phone > Android version\n\nAre you running Android 13?"
+    on_success: "install"
+    on_failure: "abort"
+steps:
+  install:
+    type: "flash"
+    url: "https://github.com/droidian-images/droidian/releases/latest"

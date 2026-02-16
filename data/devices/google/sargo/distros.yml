@@ -1,5 +1,5 @@
 device_codename: "sargo"
-last_updated: "2026-01-18"
+last_updated: "2026-02-16"
 
 available_distros:
   # --- postmarketOS ---
@@ -8,7 +8,7 @@ available_distros:
     developer: "pmOS Team"
     discovery_strategy: "pmos_html_scrape"
     # Root of the image server for the specific hardware
-    base_url: "https://images.postmarketos.org/bpo/{channel}/{device}/"
+    base_url: "https://images.postmarketos.org/bpo/"
     channels:
       - id: "v25.12"
         label: "v25.12 (Stable)"
@@ -26,6 +26,35 @@ available_distros:
     # Scraper logic: Look for the most recent file matching this pattern
     image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
     flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "3D acceleration"
+        - "Bluetooth"
+        - "SMS"
+        - "Mobile data"
+        - "USB networking"
+        - "Internal storage"
+        - "Full disk encryption"
+        - "Sensors (accelerometer, ambient light, proximity)"
+        - "Haptics"
+        - "Camera flash"
+      partial:
+        - "Battery (overcurrent protection driver missing)"
+        - "Audio (call volume control limitations)"
+        - "Camera (rear has purple tint, both cameras supported)"
+        - "WiFi (5 GHz problematic in Europe)"
+        - "GPS (no A-GPS, requires manual intervention)"
+        - "NFC (card detection works, secure element unsupported)"
+        - "Calls (experimental VoLTE, may not work reliably)"
+        - "Magnetometer"
+      not_working:
+        - "USB OTG"
+        - "Fingerprint sensor"
+      notes:
+        - "Mainline Linux kernel"
+        - "First boot may take several minutes"
+        - "MMS may require manual APN configuration"
 
   # --- UBports (Ubuntu Touch) ---
   - id: "ubports"
@@ -59,6 +88,32 @@ available_distros:
     # UBports requires specific firmware check
     firmware_requirement: "PQ3B.190801.002"
     flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, MMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "NFC"
+        - "Audio (speaker, earpiece, headphones, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Torchlight"
+        - "Camera (photo, video, flashlight, front/rear switching)"
+        - "Sensors (rotation, proximity, fingerprint, auto brightness, double tap to wake)"
+        - "GPU (hardware video playback)"
+        - "Battery (24+ hours, offline/online charging)"
+        - "USB (MTP, ADB)"
+        - "Hotspot"
+        - "Flight mode"
+        - "Waydroid"
+        - "Wireless external monitor"
+      partial: []
+      not_working:
+        - "LTE calling (VoLTE)"
+      notes:
+        - "Based on Android 9 (Halium) HAL"
+        - "Requires Android 9 vendor firmware"
+        - "OTA updates available via system settings"
 
   # --- Mobian ---
   - id: "mobian"
@@ -77,6 +132,58 @@ available_distros:
     # Scraper logic: Find latest tarball for the SoC family and interface
     image_pattern: "mobian-sdm670-{interface}-.*\\.tar\\.xz"
     flash_method: "fastboot_sparse_image"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "USB networking"
+        - "Vibration"
+      partial:
+        - "Camera (rear only, via libcamera)"
+        - "GPS (may need initial cold fix)"
+        - "Sensors (basic support)"
+      not_working:
+        - "NFC"
+        - "Fingerprint reader"
+        - "eSIM"
+      notes:
+        - "Debian-based with mainline kernel patches"
+        - "First boot may take up to 5 minutes"
+        - "apt package manager for updates"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/sargo/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial:
+        - "eSIM (limited carrier support)"
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"
 
   # --- Droidian ---
   - id: "droidian"
@@ -91,3 +198,24 @@ available_distros:
         artifact_match: "google_sargo-api28-arm64"
         release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
     flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Camera"
+        - "GPS"
+      partial: []
+      not_working:
+        - "Dual SIM"
+        - "MMS"
+      notes:
+        - "Based on Android 9 (API 28) HAL"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"

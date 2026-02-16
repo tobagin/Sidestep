@@ -1,0 +1,70 @@
+device_codename: "bronco"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "lenovo_bronco-api32-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Hotspot"
+        - "Audio (speaker, microphone, volume control)"
+        - "Camera (photo, switch camera, flashlight)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Vibration"
+        - "GPS"
+      partial: []
+      not_working:
+        - "Video recording"
+        - "Fingerprint reader"
+        - "MMS"
+        - "Waydroid"
+        - "Encryption"
+      untested:
+        - "NFC"
+        - "MTP"
+      notes:
+        - "Based on Android 12L (API 32) HAL"
+        - "Requires Android 13 stock firmware"
+        - "Uses fastbootd flashing method"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/bronco/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece)"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"

@@ -1,0 +1,73 @@
+device_codename: "yggdrasilx"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Droidian ---
+  - id: "droidian"
+    name: "Droidian"
+    developer: "Droidian Team"
+    discovery_strategy: "github_release_latest"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        artifact_match: "volla_yggdrasilx-api29-arm64"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+    flash_method: "fastboot_zip_orchestrator"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data, carrier info)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, microphone, headphones, volume control)"
+        - "Sensors (brightness, rotation, auto brightness, proximity)"
+        - "Fingerprint reader"
+        - "Vibration"
+        - "GPS"
+        - "MTP"
+      partial: []
+      not_working:
+        - "Camera (photo, video, switch camera, flashlight)"
+        - "Dual SIM"
+        - "MMS"
+        - "Encryption"
+      untested:
+        - "Hotspot"
+        - "NFC"
+        - "SD card"
+        - "Waydroid"
+      notes:
+        - "Based on Android 10 (API 29) HAL"
+        - "Camera is currently non-functional on this device"
+        - "Debian-based with Halium abstraction layer"
+        - "First boot may take up to 5 minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/yggdrasilx/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/yggdrasilx/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial:
+        - "Camera"
+      not_working: []
+      notes:
+        - "Official Volla partner device"
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

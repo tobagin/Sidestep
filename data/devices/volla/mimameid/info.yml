@@ -1,0 +1,44 @@
+device:
+  name: "Volla Phone 22"
+  codename: "mimameid"
+  release_date: "2022-07-01"
+  specs:
+    soc: "MediaTek Helio G85 MT6769Z"
+    ram: "4 GB LPDDR4X"
+    cpu: "Octa-core (2x 2.0 GHz Cortex-A75 + 6x 1.8 GHz Cortex-A55)"
+    arch: "arm64"
+    gpu: "ARM Mali-G52 MC2"
+    storage: "128 GB"
+    battery: "4500 mAh Li-Po"
+    dimensions:
+      height: "157.5 mm"
+      width: "75.0 mm"
+      depth: "9.0 mm"
+  display:
+    size: "6.3 in"
+    resolution: "1080x2340"
+    density: "410 PPI"
+    panel_type: "IPS"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "USB Type-C"
+      - "USB OTG"
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "NFC"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor]
+    location: [GPS, A-GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "48 MP"
+      features: "PDAF"
+    - label: "Ultrawide"
+      resolution: "8 MP"
+      features: "Ultra-wide angle, Macro"
+    - label: "Front"
+      resolution: "16 MP"
+      features: "V-Notch"

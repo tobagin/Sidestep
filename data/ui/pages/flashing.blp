@@ -104,6 +104,22 @@ template $FlashingPage: Adw.NavigationPage {
                             ]
                         }
                     }
+
+                    Box restart_box {
+                        halign: center;
+                        visible: false;
+
+                        Button restart_button {
+                            label: _("Start Over");
+
+                            styles [
+                                "suggested-action",
+                                "pill",
+                            ]
+
+                            height-request: 50;
+                        }
+                    }
                 };
             };
         };
