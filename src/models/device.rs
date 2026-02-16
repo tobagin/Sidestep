@@ -31,6 +31,10 @@ pub struct Device {
     #[serde(default)]
     pub aliases: Vec<String>,
 
+    /// User-facing variant names (e.g. miatoll covers POCO M2 Pro, Redmi Note 9S, etc.)
+    #[serde(default)]
+    pub variants: Vec<String>,
+
     /// Whether the bootloader is known to be locked
     #[serde(skip)]
     pub is_locked: Option<bool>,

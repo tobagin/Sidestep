@@ -125,32 +125,38 @@ impl DeviceBrowserPage {
                 .build();
 
             for device in devices {
-                let subtitle = if device.experimental {
-                    format!("{} (Experimental)", device.codename)
-                } else {
-                    device.codename.clone()
-                };
+                // Collect all display names: primary name + variants
+                let mut display_names = vec![device.name.clone()];
+                display_names.extend(device.variants.iter().cloned());
 
-                let row = adw::ActionRow::builder()
-                    .title(&device.name)
-                    .subtitle(&subtitle)
-                    .activatable(true)
-                    .build();
+                for display_name in &display_names {
+                    let subtitle = if device.experimental {
+                        format!("{} (Experimental)", device.codename)
+                    } else {
+                        device.codename.clone()
+                    };
 
-                let icon = gtk::Image::from_icon_name("phone-symbolic");
-                icon.set_pixel_size(32);
-                row.add_prefix(&icon);
+                    let row = adw::ActionRow::builder()
+                        .title(display_name)
+                        .subtitle(&subtitle)
+                        .activatable(true)
+                        .build();
 
-                let chevron = gtk::Image::from_icon_name("go-next-symbolic");
-                row.add_suffix(&chevron);
+                    let icon = gtk::Image::from_icon_name("phone-symbolic");
+                    icon.set_pixel_size(32);
+                    row.add_prefix(&icon);
 
-                let page_clone = self.clone();
-                let codename = device.codename.clone();
-                row.connect_activated(move |_| {
-                    page_clone.emit_by_name::<()>("device-selected", &[&codename]);
-                });
+                    let chevron = gtk::Image::from_icon_name("go-next-symbolic");
+                    row.add_suffix(&chevron);
 
-                group.add(&row);
+                    let page_clone = self.clone();
+                    let codename = device.codename.clone();
+                    row.connect_activated(move |_| {
+                        page_clone.emit_by_name::<()>("device-selected", &[&codename]);
+                    });
+
+                    group.add(&row);
+                }
             }
 
             content_box.append(&group);

@@ -123,6 +123,17 @@ impl DeviceInfoPage {
             .build();
         header_box.append(&subtitle_label);
 
+        if !device.variants.is_empty() {
+            let aka_text = format!("Also known as: {}", device.variants.join(", "));
+            let aka_label = gtk::Label::builder()
+                .label(&aka_text)
+                .css_classes(vec!["dim-label".to_string(), "caption".to_string()])
+                .wrap(true)
+                .justify(gtk::Justification::Center)
+                .build();
+            header_box.append(&aka_label);
+        }
+
         if device.experimental {
             let badge = gtk::Label::builder()
                 .label("Experimental")
@@ -521,7 +532,7 @@ impl DeviceInfoPage {
             std::path::PathBuf::from("devices"),
         ];
 
-        let manufacturer = device.maker.to_lowercase();
+        let manufacturer = maker_to_dir(&device.maker);
 
         for dir in possible_dirs {
             let parser = YamlParser::new(&dir);
@@ -546,17 +557,28 @@ impl DeviceInfoPage {
             .find(|p| p.exists())
             .unwrap_or_else(|| std::path::PathBuf::from("devices"));
 
-        let manufacturer = device.maker.to_lowercase();
+        let manufacturer = maker_to_dir(&device.maker);
 
         let parser = YamlParser::new(devices_path);
         match parser.parse_device_config(&manufacturer, &device.codename) {
             Ok(config) => config.available_distros,
             Err(e) => {
-                log::error!("Failed to load distros.yml for {}: {:#}", device.codename, e);
+                log::debug!("No distros.yml for {}: {:#}", device.codename, e);
                 Vec::new()
             }
         }
     }
+}
+
+/// Sanitize a manufacturer name for use as a filesystem directory.
+/// Strips characters that aren't alphanumeric, hyphen, or underscore,
+/// then lowercases. e.g. "F(x)tec" → "fxtec".
+fn maker_to_dir(maker: &str) -> String {
+    maker
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
+        .collect::<String>()
+        .to_lowercase()
 }
 
 fn make_info_row(title: &str, value: &str) -> adw::ActionRow {
