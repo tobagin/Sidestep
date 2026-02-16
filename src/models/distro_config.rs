@@ -38,6 +38,8 @@ pub struct CompatibilityInfo {
     #[serde(default)]
     pub not_working: Vec<String>,
     #[serde(default)]
+    pub untested: Vec<String>,
+    #[serde(default)]
     pub notes: Vec<String>,
 }
 

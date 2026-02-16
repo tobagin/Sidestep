@@ -3,6 +3,7 @@ use crate::hardware::{DeviceDetector, DeviceEvent};
 use crate::models::{Device, DeviceDatabase};
 use crate::pages::device_browser::DeviceBrowserPage;
 use crate::pages::device_details::DeviceDetailsPage;
+use crate::pages::device_info::DeviceInfoPage;
 use crate::pages::success::SuccessPage;
 use crate::pages::waiting::WaitingPage;
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
@@ -340,11 +341,17 @@ impl SidestepWindow {
             let Some(window) = window_weak.upgrade() else { return };
             let db = DeviceDatabase::new();
             if let Some(device) = db.find_by_codename(&codename) {
-                window.start_wizard(&device, true);
+                window.show_device_info(&device);
             }
         });
 
         imp.main_nav.push(&browser_page);
+    }
+
+    fn show_device_info(&self, device: &Device) {
+        let imp = self.imp();
+        let info_page = DeviceInfoPage::new(device);
+        imp.main_nav.push(&info_page);
     }
 
     pub fn show_toast(&self, message: &str) {

@@ -365,7 +365,7 @@ impl DeviceDetailsPage {
             row.connect_activated(move |_| {
                 // Check for compatibility data
                 if let Some(ref compat) = distro_clone.compatibility {
-                    if !compat.working.is_empty() || !compat.partial.is_empty() || !compat.not_working.is_empty() {
+                    if !compat.working.is_empty() || !compat.partial.is_empty() || !compat.not_working.is_empty() || !compat.untested.is_empty() {
                         self_clone.show_compatibility_page(
                             &nav_clone,
                             &device_clone,
@@ -517,6 +517,23 @@ impl DeviceDetailsPage {
                     .build();
                 let icon = gtk::Image::from_icon_name("process-stop-symbolic");
                 icon.add_css_class("error");
+                row.add_prefix(&icon);
+                group.add(&row);
+            }
+            content_box.append(&group);
+        }
+
+        // Untested
+        if !compat.untested.is_empty() {
+            let group = adw::PreferencesGroup::builder()
+                .title("Untested")
+                .build();
+            for item in &compat.untested {
+                let row = adw::ActionRow::builder()
+                    .title(item)
+                    .build();
+                let icon = gtk::Image::from_icon_name("dialog-question-symbolic");
+                icon.add_css_class("dim-label");
                 row.add_prefix(&icon);
                 group.add(&row);
             }

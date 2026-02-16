@@ -1,5 +1,6 @@
 pub mod device_browser;
 pub mod device_details;
+pub mod device_info;
 pub mod flashing;
 pub mod safety;
 pub mod success;
