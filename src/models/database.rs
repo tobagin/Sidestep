@@ -117,7 +117,7 @@ impl DeviceDatabase {
         // Xiaomi POCO M2 Pro / Redmi Note 9 Pro (miatoll)
         self.devices.insert("miatoll".to_string(), Device {
             codename: "miatoll".to_string(),
-            name: "Xiaomi POCO M2 Pro".to_string(),
+            name: "POCO M2 Pro".to_string(),
             maker: "Xiaomi".to_string(),
             experimental: false,
             battery_min: 50,
@@ -352,7 +352,7 @@ impl DeviceDatabase {
         // Xiaomi Pocophone F1 (beryllium)
         self.devices.insert("beryllium".to_string(), Device {
             codename: "beryllium".to_string(),
-            name: "Xiaomi Pocophone F1".to_string(),
+            name: "Pocophone F1".to_string(),
             maker: "Xiaomi".to_string(),
             experimental: false,
             battery_min: 50,
@@ -470,7 +470,7 @@ impl DeviceDatabase {
         // Xiaomi Redmi Note 7 Pro (violet)
         self.devices.insert("violet".to_string(), Device {
             codename: "violet".to_string(),
-            name: "Xiaomi Redmi Note 7 Pro".to_string(),
+            name: "Redmi Note 7 Pro".to_string(),
             maker: "Xiaomi".to_string(),
             experimental: false,
             battery_min: 50,
