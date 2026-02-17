@@ -1,0 +1,34 @@
+device_codename: "hero2lte"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/hero2lte/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+      partial:
+        - "Camera"
+        - "Sensors"
+        - "NFC"
+      not_working:
+        - "Fingerprint reader"
+        - "MST (Samsung Pay)"
+      notes:
+        - "Development channel — may have bugs"
+        - "Exynos platform — experimental support"
+        - "Based on Halium abstraction layer"

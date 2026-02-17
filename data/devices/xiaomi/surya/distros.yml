@@ -1,0 +1,146 @@
+device_codename: "surya"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "v25.12"
+        label: "v25.12 (Stable)"
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "gnome-mobile"
+        label: "GNOME Mobile"
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "3D acceleration"
+        - "WiFi"
+        - "Bluetooth"
+        - "USB networking"
+        - "Internal storage"
+        - "Haptics"
+      partial:
+        - "Audio (speaker works, call audio may need configuration)"
+        - "Camera (basic support)"
+        - "GPS (may require manual cold fix)"
+      not_working:
+        - "Fingerprint sensor"
+        - "NFC"
+        - "IR blaster"
+      notes:
+        - "Mainline Linux kernel"
+        - "First boot may take several minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/surya/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/surya/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/surya/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "Camera (rear and front)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "Fingerprint reader"
+      partial:
+        - "NFC"
+      not_working:
+        - "IR blaster"
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/surya/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "GPU acceleration"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "Android-based custom ROM"
+        - "Full hardware support via stock kernel"
+        - "Monthly security patches"
+
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/surya/"
+    channels:
+      - id: "a14"
+        label: "Android 14 (Community)"
+      - id: "t"
+        label: "Android 13 (Community)"
+    image_pattern: "e-.*-{channel}-.*-community-surya\\.zip"
+    recovery_pattern: "recovery-e-.*-{channel}-.*-community-surya\\.img"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "De-Googled Android-based OS focused on privacy"
+        - "Community build — maintained by /e/OS Build Team"
+        - "OTA updates available via system settings"
+    homepage: "https://e.foundation"

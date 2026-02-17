@@ -1,0 +1,113 @@
+device_codename: "lancelot"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "v25.12"
+        label: "v25.12 (Stable)"
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "gnome-mobile"
+        label: "GNOME Mobile"
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "WiFi"
+        - "Bluetooth"
+        - "USB networking"
+        - "Internal storage"
+      partial:
+        - "Audio (basic support)"
+        - "Camera (basic support)"
+        - "GPS"
+      not_working:
+        - "Fingerprint sensor"
+        - "NFC"
+        - "IR blaster"
+      notes:
+        - "Mainline Linux kernel"
+        - "MediaTek platform — limited mainline support"
+        - "First boot may take several minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/lancelot/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/lancelot/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/lancelot/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial:
+        - "Camera"
+        - "Fingerprint reader"
+      not_working:
+        - "IR blaster"
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"
+
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/lancelot/"
+    channels:
+      - id: "a14"
+        label: "Android 14 (Community)"
+      - id: "t"
+        label: "Android 13 (Community)"
+    image_pattern: "e-.*-{channel}-.*-community-lancelot\\.zip"
+    recovery_pattern: "recovery-e-.*-{channel}-.*-community-lancelot\\.img"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "De-Googled Android-based OS focused on privacy"
+        - "Community build — maintained by /e/OS Build Team"
+        - "OTA updates available via system settings"
+    homepage: "https://e.foundation"

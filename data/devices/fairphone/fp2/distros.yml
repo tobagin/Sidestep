@@ -1,0 +1,70 @@
+device_codename: "fp2"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "v25.12"
+        label: "v25.12 (Stable)"
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "gnome-mobile"
+        label: "GNOME Mobile"
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "WiFi"
+        - "USB networking"
+      partial:
+        - "Audio (basic support)"
+        - "Bluetooth"
+      not_working:
+        - "Camera"
+        - "GPS"
+        - "NFC"
+      notes:
+        - "Mainline Linux kernel"
+        - "First boot may take several minutes"
+        - "Older hardware, limited mainline support"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/fp2/"
+        label: "20.04 (Devel)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+      partial:
+        - "Bluetooth"
+        - "Camera"
+      not_working:
+        - "NFC"
+      notes:
+        - "Development channel — may have bugs"
+        - "Based on Halium abstraction layer"
+        - "Older hardware with limited support"

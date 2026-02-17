@@ -1,0 +1,37 @@
+device_codename: "citrus"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/citrus/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/citrus/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/citrus/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+      partial:
+        - "Camera"
+        - "Sensors"
+      not_working:
+        - "IR blaster"
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"

@@ -1,0 +1,41 @@
+device:
+  name: "Mi A2"
+  codename: "jasmine_sprout"
+  release_date: "2018-07-24"
+  specs:
+    soc: "Qualcomm SDM660 Snapdragon 660"
+    ram: "4/6 GB LPDDR4X"
+    cpu: "Octa-core Kryo 260 (4x 2.2 GHz + 4x 1.8 GHz)"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 512"
+    storage: "32/64/128 GB eMMC 5.1"
+    battery: "3010 mAh Li-Po"
+    dimensions:
+      height: "158.7 mm"
+      width: "75.4 mm"
+      depth: "7.3 mm"
+  display:
+    size: "5.99 in"
+    resolution: "2160x1080"
+    density: "403 PPI"
+    panel_type: "IPS LCD"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0 (A2DP, aptX)"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "USB Type-C"
+      - "Fingerprint reader (rear)"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor]
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "12 MP"
+      features: "f/1.75, Dual Pixel PDAF"
+    - label: "Secondary"
+      resolution: "20 MP"
+      features: "f/1.75"
+    - label: "Front"
+      resolution: "20 MP"
+      features: "f/2.2"

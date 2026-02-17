@@ -1,0 +1,75 @@
+device_codename: "herolte"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- postmarketOS ---
+  - id: "postmarketos"
+    name: "postmarketOS"
+    developer: "pmOS Team"
+    discovery_strategy: "pmos_html_scrape"
+    base_url: "https://images.postmarketos.org/bpo/"
+    channels:
+      - id: "v25.12"
+        label: "v25.12 (Stable)"
+      - id: "edge"
+        label: "Edge (Rolling)"
+    interfaces:
+      - id: "gnome-mobile"
+        label: "GNOME Mobile"
+      - id: "phosh"
+        label: "Phosh"
+      - id: "plasma-mobile"
+        label: "Plasma Mobile"
+      - id: "sxmo-de-sway"
+        label: "Sxmo (Sway)"
+    image_pattern: "*-postmarketOS-{channel}-{interface}-*-{device}.img.xz"
+    flash_method: "direct_fastboot"
+    compatibility:
+      working:
+        - "Display and touchscreen"
+        - "WiFi"
+        - "Bluetooth"
+        - "USB networking"
+      partial:
+        - "Audio (basic support)"
+        - "3D acceleration"
+      not_working:
+        - "Camera"
+        - "GPS"
+        - "NFC"
+        - "Fingerprint sensor"
+      notes:
+        - "Mainline Linux kernel"
+        - "Exynos platform — limited mainline support"
+        - "First boot may take several minutes"
+
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/herolte/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+      partial:
+        - "Camera"
+        - "Sensors"
+        - "NFC"
+      not_working:
+        - "Fingerprint reader"
+        - "MST (Samsung Pay)"
+      notes:
+        - "Development channel — may have bugs"
+        - "Exynos platform — experimental support"
+        - "Based on Halium abstraction layer"

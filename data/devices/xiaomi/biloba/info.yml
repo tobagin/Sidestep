@@ -1,0 +1,45 @@
+device:
+  name: "Redmi Note 8 (2021)"
+  codename: "biloba"
+  release_date: "2021-05-28"
+  specs:
+    soc: "MediaTek Helio G85"
+    ram: "4 GB LPDDR4X"
+    cpu: "Octa-core (2x 2.0 GHz A75 + 6x 1.8 GHz A55)"
+    arch: "arm64"
+    gpu: "ARM Mali-G52 MC2"
+    storage: "64/128 GB eMMC 5.1"
+    battery: "4000 mAh Li-Po"
+    dimensions:
+      height: "158.3 mm"
+      width: "76.3 mm"
+      depth: "8.4 mm"
+  display:
+    size: "6.3 in"
+    resolution: "2340x1080"
+    density: "409 PPI"
+    panel_type: "IPS LCD"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0 (A2DP)"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "USB Type-C"
+      - "Fingerprint reader (rear)"
+      - "3.5mm jack"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor]
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "48 MP"
+      features: "f/1.8, PDAF"
+    - label: "Ultrawide"
+      resolution: "8 MP"
+      features: "f/2.2, 120° FOV"
+    - label: "Macro"
+      resolution: "2 MP"
+      features: "f/2.4"
+    - label: "Front"
+      resolution: "13 MP"
+      features: "f/2.0"

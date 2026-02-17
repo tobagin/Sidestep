@@ -1,0 +1,39 @@
+device_codename: "suzu"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2004-stable"
+        path: "20.04/arm64/android9plus/stable/suzu/"
+        label: "20.04 (Stable)"
+      - id: "2004-rc"
+        path: "20.04/arm64/android9plus/rc/suzu/"
+        label: "20.04 (RC)"
+      - id: "2004-devel"
+        path: "20.04/arm64/android9plus/devel/suzu/"
+        label: "20.04 (Devel)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+        - "Fingerprint reader"
+      partial:
+        - "Camera"
+        - "NFC"
+      not_working: []
+      notes:
+        - "Based on Halium abstraction layer"
+        - "One of the first UBports reference devices"
+        - "OTA updates available via system settings"

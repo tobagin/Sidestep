@@ -67,7 +67,7 @@ Device configs live in `data/devices/{manufacturer}/{codename}/`:
 - `distros.yml` — Available distributions
 - `installers/{distro}.yml` — Distro-specific installer config
 
-Currently supported: `google/sargo` (Pixel 3a), `oneplus/enchilada` (OnePlus 6), `oneplus/fajita` (OnePlus 6T), `xiaomi/beryllium` (Pocophone F1), `fairphone/FP4` (Fairphone 4), `fairphone/FP5` (Fairphone 5), `shift/axolotl` (SHIFT6mq), `microsoft/zeta` (Surface Duo), and others.
+Currently supported: 47 devices across 11 manufacturers including ASUS, Fairphone, F(x)tec, Google, Lenovo, Microsoft, Motorola, OnePlus, Samsung, SHIFT, Sony, Volla, and Xiaomi.
 
 ## Android Flashing Notes
 

@@ -9,18 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **New Devices**: OnePlus 6T (fajita), Pocophone F1 (beryllium), Fairphone 4 (FP4), Fairphone 5 (FP5), SHIFT6mq (axolotl), Moto Z (griffin), OnePlus 3/3T (oneplus3), Redmi Note 7 Pro (violet), Xperia 5 II (pdx206).
-- **Droidian Community Devices**: Added griffin, oneplus3, violet, pdx206 with Droidian community support and cross-referenced distros (postmarketOS, Ubuntu Touch, LineageOS where applicable).
+- **22 New UBports Devices**: Added all Ubuntu Touch Noble (24.04) and Focal (20.04) devices with full cross-distro coverage:
+  - **ASUS**: ZenFone Max Pro M1 (x00td) — new manufacturer
+  - **Fairphone**: Fairphone 2 (fp2), Fairphone 3/3+ (fp3)
+  - **Google**: Pixel 3a XL (bonito)
+  - **OnePlus**: OnePlus One (bacon), OnePlus 5 (cheeseburger), OnePlus 5T (dumpling), Nord N10 5G (billie), Nord N100 (billie2), Nord 2 5G (denniz)
+  - **Samsung**: Galaxy S7 Exynos (herolte), Galaxy S7 Edge Exynos (hero2lte) — new manufacturer
+  - **Sony**: Xperia X (suzu)
+  - **Xiaomi**: Mi 6 (sagit), Mi A2 (jasmine_sprout), POCO M3 (citrus), POCO X3 NFC (surya), Redmi 9 (lancelot), Redmi Note 7 (lavender), Redmi Note 8 Pro (begonia), Redmi Note 8 2021 (biloba), Redmi Note 9 (merlin)
+- **Cross-Distro Coverage**: Each device includes applicable distros from postmarketOS, LineageOS, and /e/OS in addition to Ubuntu Touch.
+- **Previous Devices**: OnePlus 6T (fajita), Pocophone F1 (beryllium), Fairphone 4 (FP4), Fairphone 5 (FP5), SHIFT6mq (axolotl), Moto Z (griffin), OnePlus 3/3T (oneplus3), Redmi Note 7 Pro (violet), Xperia 5 II (pdx206).
+- **Droidian Community Devices**: Added griffin, oneplus3, violet, pdx206 with Droidian community support.
 - **Mobian Support**: Added Mobian as a distro option for all Qualcomm-based devices (sdm845, sm6350, sc7280 chipsets).
-- **/e/OS Support**: Added /e/OS community builds for Pixel 3a (sargo) and Motorola Edge 30 (dubai) with Android 13/14/15 channels and recovery sideload method.
-- **Cross-Distro Coverage**: Each new device includes all applicable distros (postmarketOS, Ubuntu Touch, Droidian, LineageOS, Mobian, /e/OS).
-- **OnePlus 6 Data**: Created missing data directory for enchilada with full distro coverage (Mobian, postmarketOS, Ubuntu Touch, Droidian, LineageOS).
-- **New Manufacturers**: Fairphone and SHIFT added as supported manufacturers.
+- **/e/OS Support**: Added /e/OS community builds for multiple devices with Android 13/14/15 channels.
+- **OnePlus 6 Data**: Created missing data directory for enchilada with full distro coverage.
+- **New Manufacturers**: ASUS, Samsung, Fairphone, and SHIFT added as supported manufacturers.
 
 ### Changed
 
 - **Version Source of Truth**: User-agent strings in flashing modules now use `crate::config::VERSION` instead of hardcoded version strings.
-- **Device Count**: 15 → 25 supported devices.
+- **Device Count**: 15 → 47 supported devices.
 
 ## [0.2.0] - 2026-02-16
 

@@ -10,7 +10,7 @@ A wizard for unlocking Android bootloaders and installing mobile Linux distribut
 
 ## 🎉 Version 0.3.0 - Latest Release
 
-**Sidestep 0.3.0** adds 10 new devices with Mobian and Droidian community support, and cross-references all distros across the full 25-device catalog.
+**Sidestep 0.3.0** brings the catalog to 47 devices across 11 manufacturers, with full cross-distro coverage including Ubuntu Touch, postmarketOS, LineageOS, and /e/OS.
 
 ### ✨ Key Features
 
@@ -39,18 +39,20 @@ For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md)
 - **Channel Selection** - Pick stable, development, or edge release channels per distro
 - **Terminal Output** - Expandable log view for troubleshooting
 
-### Supported Devices
-- **Google** - Pixel 3a (sargo)
-- **OnePlus** - OnePlus 6 (enchilada), OnePlus 6T (fajita), OnePlus 3 / 3T (oneplus3)
-- **Xiaomi** - POCO M2 Pro / Redmi Note 9S / Redmi Note 9 Pro / Redmi Note 9 Pro Max / Redmi Note 10 Lite (miatoll), Pocophone F1 (beryllium), Redmi Note 7 Pro (violet)
-- **Fairphone** - Fairphone 4 (FP4), Fairphone 5 (FP5)
-- **SHIFT** - SHIFT6mq (axolotl)
+### Supported Devices (47)
+- **ASUS** - ZenFone Max Pro M1 (x00td)
+- **Fairphone** - Fairphone 2 (fp2) *(experimental)*, Fairphone 3/3+ (fp3), Fairphone 4 (FP4), Fairphone 5 (FP5)
+- **F(x)tec** - Pro1 (pro1), Pro1 X (pro1x)
+- **Google** - Pixel 3a (sargo), Pixel 3a XL (bonito)
+- **Lenovo** - ThinkPhone (bronco)
 - **Microsoft** - Surface Duo (zeta) *(experimental)*
 - **Motorola** - Edge 30 (dubai), Moto Z (griffin)
-- **F(x)tec** - Pro1 (pro1), Pro1 X (pro1x)
-- **Sony** - Xperia 5 (bahamut), Xperia 5 II (pdx206)
+- **OnePlus** - OnePlus One (bacon) *(experimental)*, OnePlus 3 / 3T (oneplus3), OnePlus 5 (cheeseburger), OnePlus 5T (dumpling), OnePlus 6 (enchilada), OnePlus 6T (fajita), Nord N10 5G (billie), Nord N100 (billie2), Nord 2 5G (denniz) *(experimental)*
+- **Samsung** - Galaxy S7 Exynos (herolte) *(experimental)*, Galaxy S7 Edge Exynos (hero2lte) *(experimental)*
+- **SHIFT** - SHIFT6mq (axolotl)
+- **Sony** - Xperia X (suzu), Xperia 5 (bahamut), Xperia 5 II (pdx206)
 - **Volla** - Phone (yggdrasil), Phone X (yggdrasilx), Phone 22 (mimameid), Phone X23 (vidofnir), Quintus (algiz), Tablet (mimir)
-- **Lenovo** - ThinkPhone (bronco)
+- **Xiaomi** - Mi 6 (sagit) *(experimental)*, Mi A2 (jasmine_sprout), POCO M3 (citrus), POCO X3 NFC (surya), Pocophone F1 (beryllium), Redmi 9 (lancelot), Redmi Note 7 (lavender), Redmi Note 7 Pro (violet), Redmi Note 8 Pro (begonia), Redmi Note 8 2021 (biloba) *(experimental)*, Redmi Note 9 (merlin), POCO M2 Pro / Redmi Note 9S family (miatoll)
 
 ## Building from Source
 

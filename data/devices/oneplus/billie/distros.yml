@@ -1,0 +1,72 @@
+device_codename: "billie"
+last_updated: "2026-02-16"
+
+available_distros:
+  # --- Ubuntu Touch (UBports) ---
+  - id: "ubports"
+    name: "Ubuntu Touch"
+    developer: "UBports Foundation"
+    discovery_strategy: "ubports_json_v1"
+    api_root: "https://system-image.ubports.com/"
+    channels:
+      - id: "2404-1-stable"
+        path: "24.04-1.x/arm64/android9plus/stable/billie/"
+        label: "24.04.1 (Stable)"
+      - id: "2404-1-rc"
+        path: "24.04-1.x/arm64/android9plus/rc/billie/"
+        label: "24.04.1 (RC)"
+      - id: "2404-1-daily"
+        path: "24.04-1.x/arm64/android9plus/daily/billie/"
+        label: "24.04.1 (Daily)"
+    flash_method: "ubports_recovery_flash"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "Audio (speaker, earpiece, microphone)"
+        - "GPS"
+        - "Vibration"
+        - "Sensors (accelerometer, gyroscope, proximity)"
+      partial:
+        - "Camera"
+        - "Fingerprint reader"
+      not_working:
+        - "NFC"
+      notes:
+        - "Based on Halium abstraction layer"
+        - "OTA updates available via system settings"
+
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/billie/"
+    channels:
+      - id: "a14"
+        label: "Android 14 (Community)"
+      - id: "t"
+        label: "Android 13 (Community)"
+    image_pattern: "e-.*-{channel}-.*-community-billie\\.zip"
+    recovery_pattern: "recovery-e-.*-{channel}-.*-community-billie\\.img"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Cellular (calls, SMS, data)"
+        - "WiFi"
+        - "Bluetooth"
+        - "GPS"
+        - "Camera (rear and front)"
+        - "Audio (speaker, earpiece, headphone jack)"
+        - "NFC"
+        - "Fingerprint reader"
+        - "Sensors (all)"
+        - "Vibration"
+      partial: []
+      not_working: []
+      notes:
+        - "De-Googled Android-based OS focused on privacy"
+        - "Community build — maintained by /e/OS Build Team"
+        - "OTA updates available via system settings"
+    homepage: "https://e.foundation"

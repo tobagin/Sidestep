@@ -1,0 +1,42 @@
+device:
+  name: "Galaxy S7 (Exynos)"
+  codename: "herolte"
+  release_date: "2016-03-11"
+  specs:
+    soc: "Samsung Exynos 8890 Octa"
+    ram: "4 GB LPDDR4"
+    cpu: "Octa-core (4x 2.3 GHz Mongoose M1 + 4x 1.6 GHz Cortex-A53)"
+    arch: "arm64"
+    gpu: "ARM Mali-T880 MP12"
+    storage: "32/64 GB UFS 2.0"
+    battery: "3000 mAh Li-Ion"
+    dimensions:
+      height: "142.4 mm"
+      width: "69.6 mm"
+      depth: "7.9 mm"
+  display:
+    size: "5.1 in"
+    resolution: "2560x1440"
+    density: "577 PPI"
+    panel_type: "Super AMOLED"
+    refresh_rate: "60 Hz"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.2 (A2DP, aptX)"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "Micro USB"
+      - "NFC"
+      - "Fingerprint reader (front)"
+      - "3.5mm jack"
+      - "MST (Samsung Pay)"
+      - "IP68 water resistance"
+    sensors: [Accelerometer, Gyroscope, Proximity sensor, Compass, Light sensor, Barometer, SpO2]
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "12 MP"
+      features: "f/1.7, OIS, Dual Pixel PDAF"
+    - label: "Front"
+      resolution: "5 MP"
+      features: "f/1.7"
