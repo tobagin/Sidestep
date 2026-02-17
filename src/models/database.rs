@@ -1,16 +1,19 @@
 // Device database - loads device data from YAML files
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::models::{Device, Distro, UnlockingStep};
+use crate::config;
+use crate::models::Device;
+use crate::models::UnlockingStep;
+use crate::models::distro_config::DistroConfig;
+use crate::utils::yaml_parser::YamlParser;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use crate::models::PartitionImage;
 
 /// In-memory database of supported devices
 pub struct DeviceDatabase {
     devices: HashMap<String, Device>,
     unlocking_steps: HashMap<String, Vec<UnlockingStep>>,
-    distros: HashMap<String, Vec<Distro>>,
+    #[allow(dead_code)]
     data_dir: PathBuf,
 }
 
@@ -24,7 +27,6 @@ impl DeviceDatabase {
         let mut db = Self {
             devices: HashMap::new(),
             unlocking_steps: HashMap::new(),
-            distros: HashMap::new(),
             data_dir,
         };
 
@@ -940,9 +942,6 @@ impl DeviceDatabase {
 
         // Load unlocking steps for each device
         self.load_unlocking_steps();
-
-        // Load distros for each device
-        self.load_distros();
     }
 
     fn load_unlocking_steps(&mut self) {
@@ -3131,683 +3130,6 @@ impl DeviceDatabase {
         ]);
     }
 
-    fn load_distros(&mut self) {
-        // postmarketOS for Pixel 3a
-        self.distros.insert("sargo".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/google-sargo/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/google-sargo/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-google-sargo.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-            Distro {
-                name: "/e/OS".to_string(),
-                version: "3.4".to_string(),
-                description: "De-Googled Android-based mobile OS focused on privacy".to_string(),
-                download_base_url: "https://images.ecloud.global/community/sargo/".to_string(),
-                checksum_url: None,
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "recovery-e-community-sargo.img".to_string(),
-                        erase_first: false,
-                    },
-                ],
-                homepage: Some("https://e.foundation".to_string()),
-                download_size_bytes: Some(1_500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("Flash recovery, then sideload ROM zip via adb sideload".to_string()),
-            },
-        ]);
-
-        // postmarketOS for OnePlus 6
-        self.distros.insert("enchilada".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/oneplus-enchilada/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/oneplus-enchilada/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-enchilada.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // OnePlus 6T (fajita) - postmarketOS
-        self.distros.insert("fajita".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/oneplus-fajita/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/oneplus-fajita/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-fajita.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Pocophone F1 (beryllium) - postmarketOS
-        self.distros.insert("beryllium".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/xiaomi-beryllium/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/xiaomi-beryllium/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-beryllium.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Fairphone 4 (FP4) - postmarketOS
-        self.distros.insert("FP4".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp4/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp4/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-fairphone-fp4.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Fairphone 5 (FP5) - postmarketOS
-        self.distros.insert("FP5".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp5/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp5/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-fairphone-fp5.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // SHIFT6mq (axolotl) - postmarketOS
-        self.distros.insert("axolotl".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/shift-axolotl/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/shift-axolotl/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-shift-axolotl.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // postmarketOS for Surface Duo
-        self.distros.insert("zeta".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux (experimental)".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/microsoft-zeta/".to_string(),
-                checksum_url: None,
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(400_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("Dual screen support is experimental".to_string()),
-            },
-        ]);
-
-        // OnePlus 3 (oneplus3) - postmarketOS
-        self.distros.insert("oneplus3".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/oneplus-oneplus3/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/oneplus-oneplus3/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-oneplus3.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Motorola Edge 30 (dubai) - /e/OS
-        self.distros.insert("dubai".to_string(), vec![
-            Distro {
-                name: "/e/OS".to_string(),
-                version: "3.4".to_string(),
-                description: "De-Googled Android-based mobile OS focused on privacy".to_string(),
-                download_base_url: "https://images.ecloud.global/community/dubai/".to_string(),
-                checksum_url: None,
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "recovery-IMG-e-community-dubai.zip".to_string(),
-                        erase_first: false,
-                    },
-                ],
-                homepage: Some("https://e.foundation".to_string()),
-                download_size_bytes: Some(2_000_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("Flash recovery (dtbo + vendor_boot), then sideload ROM zip via adb sideload".to_string()),
-            },
-        ]);
-
-        // Fairphone 3/3+ (fp3) - postmarketOS
-        self.distros.insert("fp3".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp3/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp3/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-fairphone-fp3.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Fairphone 2 (fp2) - postmarketOS
-        self.distros.insert("fp2".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/fairphone-fp2/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/fairphone-fp2/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-fairphone-fp2.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Google Pixel 3a XL (bonito) - postmarketOS
-        self.distros.insert("bonito".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/google-bonito/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/google-bonito/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-google-bonito.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // OnePlus Nord N10 5G (billie) — UBports only in load_distros
-        self.distros.insert("billie".to_string(), vec![]);
-
-        // OnePlus Nord N100 (billie2) — UBports only
-        self.distros.insert("billie2".to_string(), vec![]);
-
-        // OnePlus 5 (cheeseburger) - postmarketOS
-        self.distros.insert("cheeseburger".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/oneplus-cheeseburger/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/oneplus-cheeseburger/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-cheeseburger.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // OnePlus 5T (dumpling) - postmarketOS
-        self.distros.insert("dumpling".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/oneplus-dumpling/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/oneplus-dumpling/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-dumpling.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // OnePlus Nord 2 5G (denniz) — UBports only
-        self.distros.insert("denniz".to_string(), vec![]);
-
-        // OnePlus One (bacon) - postmarketOS
-        self.distros.insert("bacon".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/oneplus-bacon/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/oneplus-bacon/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-oneplus-bacon.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(500_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // POCO X3 NFC (surya) - postmarketOS
-        self.distros.insert("surya".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "24.06".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/v24.06/xiaomi-surya/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/v24.06/xiaomi-surya/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-surya.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Redmi Note 8 Pro (begonia) - postmarketOS
-        self.distros.insert("begonia".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/xiaomi-begonia/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/xiaomi-begonia/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-begonia.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Redmi Note 7 (lavender) - postmarketOS
-        self.distros.insert("lavender".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/xiaomi-lavender/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/xiaomi-lavender/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-lavender.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // POCO M3 (citrus) — UBports only
-        self.distros.insert("citrus".to_string(), vec![]);
-
-        // Redmi 9 (lancelot) - postmarketOS
-        self.distros.insert("lancelot".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/xiaomi-lancelot/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/xiaomi-lancelot/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-lancelot.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Redmi Note 9 (merlin) — UBports only
-        self.distros.insert("merlin".to_string(), vec![]);
-
-        // Mi A2 (jasmine_sprout) - postmarketOS
-        self.distros.insert("jasmine_sprout".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/xiaomi-jasmine_sprout/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/xiaomi-jasmine_sprout/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-jasmine_sprout.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Mi 6 (sagit) - postmarketOS
-        self.distros.insert("sagit".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/xiaomi-sagit/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/xiaomi-sagit/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-xiaomi-sagit.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Redmi Note 8 2021 (biloba) — UBports only
-        self.distros.insert("biloba".to_string(), vec![]);
-
-        // ZenFone Max Pro M1 (x00td) - postmarketOS
-        self.distros.insert("x00td".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux distribution".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/asus-x00td/".to_string(),
-                checksum_url: Some("https://images.postmarketos.org/bpo/edge/asus-x00td/SHA256SUMS".to_string()),
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                    PartitionImage {
-                        partition: "system".to_string(),
-                        image: "rootfs-asus-x00td.img.xz".to_string(),
-                        erase_first: true,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(550_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("First boot may take several minutes".to_string()),
-            },
-        ]);
-
-        // Galaxy S7 Exynos (herolte) - postmarketOS
-        self.distros.insert("herolte".to_string(), vec![
-            Distro {
-                name: "postmarketOS".to_string(),
-                version: "edge".to_string(),
-                description: "Alpine-based mobile Linux (experimental)".to_string(),
-                download_base_url: "https://images.postmarketos.org/bpo/edge/samsung-herolte/".to_string(),
-                checksum_url: None,
-                partitions: vec![
-                    PartitionImage {
-                        partition: "boot".to_string(),
-                        image: "boot.img".to_string(),
-                        erase_first: false,
-                    },
-                ],
-                homepage: Some("https://postmarketos.org".to_string()),
-                download_size_bytes: Some(400_000_000),
-                requires_unlock: true,
-                post_install_notes: Some("Exynos platform — experimental support".to_string()),
-            },
-        ]);
-
-        // Galaxy S7 Edge Exynos (hero2lte) — UBports only
-        self.distros.insert("hero2lte".to_string(), vec![]);
-
-        // Sony Xperia X (suzu) — UBports only (no pOS stable)
-        self.distros.insert("suzu".to_string(), vec![]);
-    }
-
     /// Find a device by its codename
     pub fn find_by_codename(&self, codename: &str) -> Option<Device> {
         // Direct lookup
@@ -3826,6 +3148,7 @@ impl DeviceDatabase {
     }
 
     /// Get unlocking steps for a device
+    #[allow(dead_code)]
     pub fn get_unlocking_steps(&self, codename: &str) -> Vec<UnlockingStep> {
         self.unlocking_steps
             .get(codename)
@@ -3833,12 +3156,54 @@ impl DeviceDatabase {
             .unwrap_or_default()
     }
 
-    /// Get available distros for a device
-    pub fn get_distros(&self, codename: &str) -> Vec<Distro> {
-        self.distros.get(codename).cloned().unwrap_or_default()
+    /// Resolve the devices data directory, checking common install paths.
+    pub fn devices_data_dir() -> PathBuf {
+        let candidates = vec![
+            PathBuf::from(config::PKGDATADIR).join("devices"),
+            PathBuf::from("/app/share/sidestep/devices"),
+            PathBuf::from("data/devices"),
+            PathBuf::from("devices"),
+        ];
+        candidates
+            .into_iter()
+            .find(|p| p.exists())
+            .unwrap_or_else(|| PathBuf::from("devices"))
+    }
+
+    /// Sanitize a manufacturer name for use as a filesystem directory.
+    /// Strips characters that aren't alphanumeric, hyphen, or underscore,
+    /// then lowercases. e.g. "F(x)tec" → "fxtec".
+    pub fn maker_to_dir(maker: &str) -> String {
+        maker
+            .chars()
+            .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
+            .collect::<String>()
+            .to_lowercase()
+    }
+
+    /// Load all distro configs for a device from distros.yml.
+    pub fn get_distro_configs(&self, device: &Device) -> Vec<DistroConfig> {
+        let devices_dir = Self::devices_data_dir();
+        let manufacturer = Self::maker_to_dir(&device.maker);
+        let parser = YamlParser::new(devices_dir);
+        match parser.parse_device_config(&manufacturer, &device.codename) {
+            Ok(config) => config.available_distros,
+            Err(e) => {
+                log::debug!("No distros.yml for {}: {:#}", device.codename, e);
+                Vec::new()
+            }
+        }
+    }
+
+    /// Load a single distro config by ID from distros.yml.
+    pub fn get_distro_config(&self, device: &Device, distro_id: &str) -> Option<DistroConfig> {
+        self.get_distro_configs(device)
+            .into_iter()
+            .find(|d| d.id == distro_id)
     }
 
     /// Get all supported device codenames
+    #[allow(dead_code)]
     pub fn all_codenames(&self) -> Vec<String> {
         self.devices.keys().cloned().collect()
     }

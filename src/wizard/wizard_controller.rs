@@ -1,9 +1,10 @@
 // Wizard controller - state machine for installation wizard
 // SPDX-License-Identifier: GPL-3.0-or-later
+#![allow(dead_code)]
 
-use crate::flashing::{ChecksumVerifier, Decompressor, FlashExecutor, ImageDownloader};
 use crate::hardware::{Adb, Fastboot};
-use crate::models::{Device, DeviceDatabase, Distro, UnlockingStep};
+use crate::models::{Device, DeviceDatabase, UnlockingStep};
+use crate::models::distro_config::DistroConfig;
 use anyhow::Result;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -62,13 +63,11 @@ pub struct WizardController {
     database: DeviceDatabase,
     adb: Adb,
     fastboot: Fastboot,
-    downloader: ImageDownloader,
-    executor: FlashExecutor,
-    
+
     state: Arc<Mutex<WizardState>>,
     unlocking_steps: Vec<UnlockingStep>,
-    available_distros: Vec<Distro>,
-    selected_distro: Option<Distro>,
+    available_distros: Vec<DistroConfig>,
+    selected_distro: Option<DistroConfig>,
     device_serial: String,
     download_dir: PathBuf,
 }
@@ -77,7 +76,7 @@ impl WizardController {
     pub fn new(device: Device, serial: String) -> Self {
         let database = DeviceDatabase::new();
         let unlocking_steps = database.get_unlocking_steps(&device.codename);
-        let available_distros = database.get_distros(&device.codename);
+        let available_distros = database.get_distro_configs(&device);
 
         let download_dir = dirs::download_dir()
             .unwrap_or_else(|| PathBuf::from("/tmp"))
@@ -89,8 +88,6 @@ impl WizardController {
             database,
             adb: Adb::new(),
             fastboot: Fastboot::new(),
-            downloader: ImageDownloader::new(download_dir.clone()),
-            executor: FlashExecutor::new(),
             state: Arc::new(Mutex::new(WizardState::SafetyWarnings)),
             unlocking_steps,
             available_distros,
@@ -121,7 +118,7 @@ impl WizardController {
     }
 
     /// Get available distros
-    pub fn available_distros(&self) -> &[Distro] {
+    pub fn available_distros(&self) -> &[DistroConfig] {
         &self.available_distros
     }
 
@@ -174,68 +171,19 @@ impl WizardController {
     }
 
     /// Select a distro
-    pub fn select_distro(&mut self, distro: Distro) {
+    pub fn select_distro(&mut self, distro: DistroConfig) {
         self.selected_distro = Some(distro);
     }
 
     /// Start the installation process
+    ///
+    /// NOTE: This method is not currently used — the active install flow goes
+    /// through `DeviceDetailsPage` → `FlashingPage` directly. It will need to
+    /// be rewritten to work with `DistroConfig` + installer YAML when enabled.
     pub async fn start_installation(&self) -> Result<()> {
-        let distro = self.selected_distro.as_ref()
+        let _distro = self.selected_distro.as_ref()
             .ok_or_else(|| anyhow::anyhow!("No distro selected"))?;
 
-        // Download images
-        for partition in &distro.partitions {
-            let url = format!("{}{}", distro.download_base_url, partition.image);
-            
-            self.set_state(WizardState::Downloading {
-                file: partition.image.clone(),
-                progress: 0.0,
-            }).await;
-
-            self.downloader.download(&url, &partition.image, None).await?;
-        }
-
-        // Decompress images
-        for partition in &distro.partitions {
-            let image_path = self.download_dir.join(&partition.image);
-
-            if partition.image.ends_with(".xz") || partition.image.ends_with(".gz") {
-                self.set_state(WizardState::Decompressing {
-                    file: partition.image.clone(),
-                    progress: 0.0,
-                }).await;
-
-                Decompressor::decompress(&image_path, None, None)?;
-            }
-        }
-
-        // Verify checksums if available
-        if let Some(ref checksum_url) = distro.checksum_url {
-            self.set_state(WizardState::Verifying).await;
-            
-            let checksums = self.downloader.download_checksums(checksum_url).await?;
-            ChecksumVerifier::verify_all(&self.download_dir, &checksums)?;
-        }
-
-        // Flash images
-        self.set_state(WizardState::Flashing {
-            partition: "starting".to_string(),
-            current: 0,
-            total: distro.partitions.len(),
-        }).await;
-
-        self.executor.flash_distro(
-            &self.device_serial,
-            distro,
-            &self.download_dir,
-            None,
-        ).await?;
-
-        // Reboot
-        self.executor.reboot(&self.device_serial).await?;
-
-        self.set_state(WizardState::Success).await;
-
-        Ok(())
+        todo!("Rewrite to use DistroConfig + installer YAML pipeline")
     }
 }

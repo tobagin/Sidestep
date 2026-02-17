@@ -34,6 +34,7 @@ impl Adb {
         Self { binary_path }
     }
 
+    #[allow(dead_code)]
     pub fn with_path(path: String) -> Self {
         Self { binary_path: path }
     }
@@ -89,6 +90,7 @@ impl Adb {
     }
 
     /// Get device manufacturer
+    #[allow(dead_code)]
     pub async fn get_manufacturer(&self, serial: &str) -> Result<String> {
         self.getprop(serial, "ro.product.manufacturer").await
     }
@@ -177,6 +179,7 @@ impl Adb {
     }
 
     /// Wait for device to be connected
+    #[allow(dead_code)]
     pub async fn wait_for_device(&self, serial: &str) -> Result<()> {
         Command::new(&self.binary_path)
             .args(["-s", serial, "wait-for-device"])

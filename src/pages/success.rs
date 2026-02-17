@@ -3,7 +3,6 @@
 
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
-use adw::prelude::*;
 use adw::subclass::prelude::*;
 
 mod imp {

@@ -4,6 +4,7 @@
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct DeviceDistroConfig {
     pub device_codename: String,
     pub last_updated: String,
@@ -11,6 +12,7 @@ pub struct DeviceDistroConfig {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct DistroConfig {
     pub id: String,
     pub name: String,

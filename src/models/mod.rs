@@ -12,5 +12,5 @@ pub mod system_image;
 
 pub use device::Device;
 pub use unlocking_step::{UnlockingStep, StepType};
-pub use distro::{Distro, PartitionImage, DistroTreeNode};
+pub use distro::{Distro, PartitionImage};
 pub use database::DeviceDatabase;

@@ -15,6 +15,7 @@ pub enum StepType {
 
 /// A step in the bootloader unlocking process
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct UnlockingStep {
     /// Step order (1-based)
     pub order: u8,
@@ -46,6 +47,7 @@ pub struct UnlockingStep {
     pub warning: Option<String>,
 }
 
+#[allow(dead_code)]
 impl UnlockingStep {
     pub fn is_manual(&self) -> bool {
         self.step_type == StepType::Manual

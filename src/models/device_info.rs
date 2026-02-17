@@ -9,6 +9,7 @@ pub struct DeviceInfo {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct DeviceInfoData {
     pub name: String,
     pub codename: String,
@@ -20,6 +21,7 @@ pub struct DeviceInfoData {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct DeviceSpecs {
     pub soc: String,
     pub ram: String,
@@ -32,6 +34,7 @@ pub struct DeviceSpecs {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct Dimensions {
     pub height: String,
     pub width: String,

@@ -7,13 +7,16 @@ use anyhow::{Context, Result};
 use std::path::Path;
 
 /// Callback for flash progress
+#[allow(dead_code)]
 pub type FlashProgressCallback = Box<dyn Fn(&str, usize, usize) + Send + Sync>;
 
 /// Executes the flashing sequence
+#[allow(dead_code)]
 pub struct FlashExecutor {
     fastboot: Fastboot,
 }
 
+#[allow(dead_code)]
 impl FlashExecutor {
     pub fn new() -> Self {
         Self {

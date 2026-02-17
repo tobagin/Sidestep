@@ -5,6 +5,7 @@ use serde::Deserialize;
 
 /// A partition image to flash
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct PartitionImage {
     /// Partition name (e.g., "boot", "system", "userdata")
     pub partition: String,
@@ -19,6 +20,7 @@ pub struct PartitionImage {
 
 /// A mobile Linux distribution available for a device
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct Distro {
     /// Distribution name (e.g., "postmarketOS")
     pub name: String,
@@ -57,10 +59,12 @@ pub struct Distro {
     pub post_install_notes: Option<String>,
 }
 
+#[allow(dead_code)]
 fn default_requires_unlock() -> bool {
     true
 }
 
+#[allow(dead_code)]
 impl Distro {
     /// Get formatted download size string
     pub fn download_size_string(&self) -> String {
@@ -80,6 +84,7 @@ impl Distro {
 /// A node in the distribution selection tree
 #[derive(Debug, Clone, Deserialize)]
 #[serde(untagged)]
+#[allow(dead_code)]
 pub enum DistroTreeNode {
     Group {
         name: String,
@@ -89,6 +94,7 @@ pub enum DistroTreeNode {
     Item(Distro),
 }
 
+#[allow(dead_code)]
 impl DistroTreeNode {
     pub fn name(&self) -> &str {
         match self {

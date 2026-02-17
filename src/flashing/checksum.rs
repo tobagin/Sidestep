@@ -59,6 +59,7 @@ impl ChecksumVerifier {
     }
 
     /// Verify files against a checksum map
+    #[allow(dead_code)]
     pub fn verify_all(
         files_dir: &Path,
         checksums: &std::collections::HashMap<String, String>,

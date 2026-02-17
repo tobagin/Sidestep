@@ -4,7 +4,6 @@
 use crate::models::Device;
 use gtk::{glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
-use adw::prelude::*;
 use adw::subclass::prelude::*;
 use std::cell::RefCell;
 

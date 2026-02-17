@@ -1,8 +1,8 @@
 // Device Info Page — read-only device information for the browse flow
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-use crate::config;
 use crate::models::Device;
+use crate::models::DeviceDatabase;
 use crate::models::device_info::DeviceInfo;
 use crate::models::distro_config::{CompatibilityInfo, DistroConfig};
 use crate::utils::yaml_parser::YamlParser;
@@ -249,7 +249,8 @@ impl DeviceInfoPage {
     // ────────────────────────────────────────────────────────────────
 
     fn build_distros_section(&self, content_box: &gtk::Box, device: &Device) {
-        let distros = self.load_all_distros(device);
+        let db = DeviceDatabase::new();
+        let distros = db.get_distro_configs(device);
         if distros.is_empty() {
             return;
         }
@@ -525,60 +526,18 @@ impl DeviceInfoPage {
     // ────────────────────────────────────────────────────────────────
 
     fn load_device_info(&self, device: &Device) -> Option<DeviceInfo> {
-        let possible_dirs = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("data/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-
-        let manufacturer = maker_to_dir(&device.maker);
-
-        for dir in possible_dirs {
-            let parser = YamlParser::new(&dir);
-            if let Ok(info) = parser.parse_device_info(&manufacturer, &device.codename) {
-                return Some(info);
-            }
-        }
-
-        log::debug!("No info.yml found for {}/{}", device.maker, device.codename);
-        None
-    }
-
-    fn load_all_distros(&self, device: &Device) -> Vec<DistroConfig> {
-        let possible_paths = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("data/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-        let devices_path = possible_paths
-            .into_iter()
-            .find(|p| p.exists())
-            .unwrap_or_else(|| std::path::PathBuf::from("devices"));
-
-        let manufacturer = maker_to_dir(&device.maker);
-
-        let parser = YamlParser::new(devices_path);
-        match parser.parse_device_config(&manufacturer, &device.codename) {
-            Ok(config) => config.available_distros,
-            Err(e) => {
-                log::debug!("No distros.yml for {}: {:#}", device.codename, e);
-                Vec::new()
+        let devices_dir = DeviceDatabase::devices_data_dir();
+        let manufacturer = DeviceDatabase::maker_to_dir(&device.maker);
+        let parser = YamlParser::new(&devices_dir);
+        match parser.parse_device_info(&manufacturer, &device.codename) {
+            Ok(info) => Some(info),
+            Err(_) => {
+                log::debug!("No info.yml found for {}/{}", device.maker, device.codename);
+                None
             }
         }
     }
-}
 
-/// Sanitize a manufacturer name for use as a filesystem directory.
-/// Strips characters that aren't alphanumeric, hyphen, or underscore,
-/// then lowercases. e.g. "F(x)tec" → "fxtec".
-fn maker_to_dir(maker: &str) -> String {
-    maker
-        .chars()
-        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
-        .collect::<String>()
-        .to_lowercase()
 }
 
 fn make_info_row(title: &str, value: &str) -> adw::ActionRow {

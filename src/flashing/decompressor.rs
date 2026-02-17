@@ -11,8 +11,10 @@ use std::path::{Path, PathBuf};
 pub type ProgressCallback = Box<dyn Fn(u64, u64) + Send + Sync>;
 
 /// Decompresses .xz and .gz images
+#[allow(dead_code)]
 pub struct Decompressor;
 
+#[allow(dead_code)]
 impl Decompressor {
     /// Decompress a file, auto-detecting format from extension
     pub fn decompress(
@@ -62,7 +64,6 @@ impl Decompressor {
             .context("Failed to create output file")?;
 
         let mut buffer = [0u8; 64 * 1024]; // 64KB buffer
-        let _total_read: u64 = 0;
         let mut total_written: u64 = 0;
 
         loop {

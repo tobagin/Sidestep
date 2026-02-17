@@ -8,6 +8,7 @@ use tokio::process::Command;
 
 /// Represents a device in fastboot mode
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct FastbootDevice {
     pub serial: String,
     pub product: Option<String>,
@@ -34,6 +35,7 @@ impl Fastboot {
         Self { binary_path }
     }
 
+    #[allow(dead_code)]
     pub fn with_path(path: String) -> Self {
         Self { binary_path: path }
     }
@@ -95,6 +97,7 @@ impl Fastboot {
     }
 
     /// Unlock the bootloader (OEM unlock)
+    #[allow(dead_code)]
     pub async fn oem_unlock(&self, serial: &str) -> Result<()> {
         log::info!("Attempting OEM unlock on {}", serial);
         
@@ -253,6 +256,7 @@ impl Fastboot {
     }
 
     /// Set active slot (for A/B devices)
+    #[allow(dead_code)]
     pub async fn set_active(&self, serial: &str, slot: &str) -> Result<()> {
         log::info!("Setting active slot to {} on {}", slot, serial);
 

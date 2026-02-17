@@ -40,6 +40,7 @@ impl YamlParser {
         Ok(config)
     }
 
+    #[allow(dead_code)]
     pub fn parse_distros(&self, manufacturer: &str, codename: &str) -> Result<Vec<DistroTreeNode>> {
         let path = self.devices_dir.join(manufacturer).join(codename).join("distros.yml");
         let content = fs::read_to_string(&path)

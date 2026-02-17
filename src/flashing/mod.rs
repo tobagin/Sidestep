@@ -14,9 +14,6 @@ pub mod lineageos;
 pub mod eos;
 pub mod factory_image;
 
-pub use downloader::ImageDownloader;
-pub use decompressor::Decompressor;
-pub use executor::FlashExecutor;
 pub use checksum::ChecksumVerifier;
 pub use progress::InstallProgress;
 pub use ubports::UbportsInstaller;

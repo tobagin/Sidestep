@@ -5,6 +5,7 @@ use serde::Deserialize;
 
 /// Top-level index.json structure from the UBports system-image server
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct SystemImageIndex {
     pub global: Option<serde_json::Value>,
     pub images: Vec<SystemImageEntry>,
@@ -21,6 +22,7 @@ pub struct SystemImageEntry {
 
 /// A file within a system-image entry
 #[derive(Debug, Clone, Deserialize)]
+#[allow(dead_code)]
 pub struct SystemImageFile {
     /// Relative path on the server (e.g., "/pool/ubports-foo.tar.xz")
     pub path: String,

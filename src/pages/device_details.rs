@@ -3,6 +3,7 @@
 
 use crate::config;
 use crate::models::Device;
+use crate::models::DeviceDatabase;
 use crate::models::device_info::DeviceInfo;
 use crate::models::distro_config::{ChannelConfig, CompatibilityInfo, DistroConfig, InterfaceConfig};
 use crate::models::installer::{InstallerConfig, Step};
@@ -236,24 +237,16 @@ impl DeviceDetailsPage {
     }
 
     fn load_device_info(&self, device: &Device) -> Option<DeviceInfo> {
-        let possible_dirs = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("data/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-
-        let manufacturer = maker_to_dir(&device.maker);
-
-        for dir in possible_dirs {
-            let parser = YamlParser::new(&dir);
-            if let Ok(info) = parser.parse_device_info(&manufacturer, &device.codename) {
-                return Some(info);
+        let devices_dir = DeviceDatabase::devices_data_dir();
+        let manufacturer = DeviceDatabase::maker_to_dir(&device.maker);
+        let parser = YamlParser::new(&devices_dir);
+        match parser.parse_device_info(&manufacturer, &device.codename) {
+            Ok(info) => Some(info),
+            Err(_) => {
+                log::debug!("No info.yml found for {}/{}", device.maker, device.codename);
+                None
             }
         }
-
-        log::debug!("No info.yml found for {}/{}", device.maker, device.codename);
-        None
     }
 
     fn make_action_row(&self, title: &str, value: &str) -> adw::ActionRow {
@@ -285,7 +278,8 @@ impl DeviceDetailsPage {
             return;
         };
 
-        let distros = self.load_all_distros(&device);
+        let db = DeviceDatabase::new();
+        let distros = db.get_distro_configs(&device);
         if distros.is_empty() {
             log::error!("No distros found for {}", device.codename);
             return;
@@ -394,30 +388,6 @@ impl DeviceDetailsPage {
             .build();
 
         nav_view.push(&page);
-    }
-
-    fn load_all_distros(&self, device: &Device) -> Vec<DistroConfig> {
-        let possible_paths = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("data/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-        let devices_path = possible_paths
-            .into_iter()
-            .find(|p| p.exists())
-            .unwrap_or_else(|| std::path::PathBuf::from("devices"));
-
-        let manufacturer = maker_to_dir(&device.maker);
-
-        let parser = YamlParser::new(devices_path);
-        match parser.parse_device_config(&manufacturer, &device.codename) {
-            Ok(config) => config.available_distros,
-            Err(e) => {
-                log::error!("Failed to load distros.yml for {}: {:#}", device.codename, e);
-                Vec::new()
-            }
-        }
     }
 
     // ────────────────────────────────────────────────────────────────
@@ -732,7 +702,7 @@ impl DeviceDetailsPage {
         for dir in possible_dirs {
             let config_path = dir
                 .join("devices")
-                .join(maker_to_dir(&device.maker))
+                .join(DeviceDatabase::maker_to_dir(&device.maker))
                 .join(device.codename.to_lowercase())
                 .join("installers")
                 .join(format!("{}.yml", distro_id));
@@ -1009,32 +979,7 @@ impl DeviceDetailsPage {
 
     /// Load the full DistroConfig for a given distro_id from distros.yml.
     fn load_distro_config(&self, device: &Device, distro_id: &str) -> Option<DistroConfig> {
-        let possible_paths = vec![
-            std::path::PathBuf::from(config::PKGDATADIR).join("devices"),
-            std::path::PathBuf::from("/app/share/sidestep/devices"),
-            std::path::PathBuf::from("data/devices"),
-            std::path::PathBuf::from("devices"),
-        ];
-        let devices_path = possible_paths
-            .into_iter()
-            .find(|p| p.exists())
-            .unwrap_or_else(|| std::path::PathBuf::from("devices"));
-
-        let manufacturer = maker_to_dir(&device.maker);
-
-        let parser = YamlParser::new(devices_path);
-        let config = match parser.parse_device_config(&manufacturer, &device.codename) {
-            Ok(c) => c,
-            Err(e) => {
-                log::error!("Failed to load distros.yml for {}: {:#}", device.codename, e);
-                return None;
-            }
-        };
-
-        config
-            .available_distros
-            .into_iter()
-            .find(|d| d.id == distro_id)
+        DeviceDatabase::new().get_distro_config(device, distro_id)
     }
 
     fn show_interface_selection_page(
@@ -1600,17 +1545,6 @@ impl DeviceDetailsPage {
     fn on_unlock_clicked(&self) {
         self.emit_by_name::<()>("unlock-clicked", &[]);
     }
-}
-
-/// Sanitize a manufacturer name for use as a filesystem directory.
-/// Strips characters that aren't alphanumeric, hyphen, or underscore,
-/// then lowercases. e.g. "F(x)tec" → "fxtec".
-fn maker_to_dir(maker: &str) -> String {
-    maker
-        .chars()
-        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_')
-        .collect::<String>()
-        .to_lowercase()
 }
 
 impl Default for DeviceDetailsPage {
