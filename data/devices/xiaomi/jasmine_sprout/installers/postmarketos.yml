@@ -1,0 +1,6 @@
+name: "postmarketOS"
+prerequisites: []
+steps:
+  install:
+    type: "flash"
+    url: ""

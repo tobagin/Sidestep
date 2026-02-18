@@ -1,0 +1,17 @@
+name: "Ubuntu Touch"
+prerequisites:
+  - title: "Pre-requisites"
+    check: "android_version_9"
+    message: "Ubuntu Touch for Pixel 3a XL requires Android 9 Stock firmware.\n\nRequired build: PQ3B.190801.002\nCheck: Settings → About phone → Build number\n\nAre you running Android 9?"
+    on_success: "install"
+    on_failure: "downgrade"
+steps:
+  downgrade:
+    type: "flash_android"
+    android_version: "Android 9 (PQ3B.190801.002)"
+    url: "https://dl.google.com/dl/android/aosp/bonito-pq3b.190801.002-factory-61a2836d.zip"
+    sha256: "61a2836d098d640e0d7b79a4630f386f5e4d82a7d6a0e91289f141dab99541a5"
+    message: "This will download and flash Android 9 to your Pixel 3a XL.\n\nThis will ERASE ALL DATA on the device.\nDownload size: ~1.6 GB."
+  install:
+    type: "flash"
+    url: ""

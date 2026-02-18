@@ -1,0 +1,6 @@
+name: "/e/OS"
+prerequisites: []
+steps:
+  install:
+    type: "flash"
+    url: ""
