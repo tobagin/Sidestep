@@ -11,12 +11,11 @@ use std::path::{Path, PathBuf};
 pub type ProgressCallback = Box<dyn Fn(u64, u64) + Send + Sync>;
 
 /// Decompresses .xz and .gz images
-#[allow(dead_code)]
 pub struct Decompressor;
 
-#[allow(dead_code)]
 impl Decompressor {
     /// Decompress a file, auto-detecting format from extension
+    #[allow(dead_code)]
     pub fn decompress(
         input_path: &Path,
         output_path: Option<&Path>,
@@ -92,6 +91,7 @@ impl Decompressor {
     }
 
     /// Decompress a .gz file
+    #[allow(dead_code)]
     pub fn decompress_gz(
         input_path: &Path,
         output_path: Option<&Path>,

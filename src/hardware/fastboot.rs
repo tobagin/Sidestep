@@ -8,10 +8,8 @@ use tokio::process::Command;
 
 /// Represents a device in fastboot mode
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub struct FastbootDevice {
     pub serial: String,
-    pub product: Option<String>,
 }
 
 /// Fastboot command wrapper
@@ -35,11 +33,6 @@ impl Fastboot {
         Self { binary_path }
     }
 
-    #[allow(dead_code)]
-    pub fn with_path(path: String) -> Self {
-        Self { binary_path: path }
-    }
-
     /// List connected fastboot devices
     pub async fn devices(&self) -> Result<Vec<FastbootDevice>> {
         let output = Command::new(&self.binary_path)
@@ -58,7 +51,6 @@ impl Fastboot {
             if !parts.is_empty() && parts.last() == Some(&"fastboot") {
                 devices.push(FastbootDevice {
                     serial: parts[0].to_string(),
-                    product: None,
                 });
             }
         }
@@ -94,29 +86,6 @@ impl Fastboot {
     pub async fn is_unlocked(&self, serial: &str) -> Result<bool> {
         let value = self.getvar(serial, "unlocked").await?;
         Ok(value == "yes")
-    }
-
-    /// Unlock the bootloader (OEM unlock)
-    #[allow(dead_code)]
-    pub async fn oem_unlock(&self, serial: &str) -> Result<()> {
-        log::info!("Attempting OEM unlock on {}", serial);
-        
-        let output = Command::new(&self.binary_path)
-            .args(["-s", serial, "oem", "unlock"])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to run fastboot oem unlock")?;
-
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        log::debug!("OEM unlock output: {}", stderr);
-
-        if !output.status.success() {
-            anyhow::bail!("OEM unlock failed: {}", stderr);
-        }
-
-        Ok(())
     }
 
     /// Flash an image to a partition
@@ -251,22 +220,6 @@ impl Fastboot {
             let stderr = String::from_utf8_lossy(&output.stderr);
             anyhow::bail!("Erase failed: {}", stderr);
         }
-
-        Ok(())
-    }
-
-    /// Set active slot (for A/B devices)
-    #[allow(dead_code)]
-    pub async fn set_active(&self, serial: &str, slot: &str) -> Result<()> {
-        log::info!("Setting active slot to {} on {}", slot, serial);
-
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "set_active", slot])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to set active slot")?;
 
         Ok(())
     }

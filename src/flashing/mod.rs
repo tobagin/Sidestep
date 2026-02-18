@@ -3,7 +3,6 @@
 
 pub mod downloader;
 pub mod decompressor;
-pub mod executor;
 pub mod checksum;
 pub mod progress;
 pub mod ubports;

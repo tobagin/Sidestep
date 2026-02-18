@@ -8,7 +8,6 @@ mod hardware;
 mod models;
 mod window;
 mod pages;
-mod wizard;
 mod utils;
 
 use application::SidestepApplication;

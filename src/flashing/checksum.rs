@@ -58,25 +58,4 @@ impl ChecksumVerifier {
         Ok(matches)
     }
 
-    /// Verify files against a checksum map
-    #[allow(dead_code)]
-    pub fn verify_all(
-        files_dir: &Path,
-        checksums: &std::collections::HashMap<String, String>,
-    ) -> Result<Vec<(String, bool)>> {
-        let mut results = Vec::new();
-
-        for (filename, expected) in checksums {
-            let path = files_dir.join(filename);
-            if path.exists() {
-                let ok = Self::verify(&path, expected)?;
-                results.push((filename.clone(), ok));
-            } else {
-                log::warn!("File not found for checksum: {}", filename);
-                results.push((filename.clone(), false));
-            }
-        }
-
-        Ok(results)
-    }
 }

@@ -34,11 +34,6 @@ impl Adb {
         Self { binary_path }
     }
 
-    #[allow(dead_code)]
-    pub fn with_path(path: String) -> Self {
-        Self { binary_path: path }
-    }
-
     /// List connected ADB devices
     pub async fn devices(&self) -> Result<Vec<AdbDevice>> {
         let output = Command::new(&self.binary_path)
@@ -87,12 +82,6 @@ impl Adb {
     /// Get device model name
     pub async fn get_model(&self, serial: &str) -> Result<String> {
         self.getprop(serial, "ro.product.model").await
-    }
-
-    /// Get device manufacturer
-    #[allow(dead_code)]
-    pub async fn get_manufacturer(&self, serial: &str) -> Result<String> {
-        self.getprop(serial, "ro.product.manufacturer").await
     }
 
     /// Reboot into bootloader mode
@@ -176,20 +165,6 @@ impl Adb {
         }
 
         Ok(false)
-    }
-
-    /// Wait for device to be connected
-    #[allow(dead_code)]
-    pub async fn wait_for_device(&self, serial: &str) -> Result<()> {
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "wait-for-device"])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to wait for device")?;
-
-        Ok(())
     }
 
     /// Wait for device to enter recovery mode
