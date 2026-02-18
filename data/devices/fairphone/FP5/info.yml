@@ -1,6 +1,10 @@
 device:
   name: "Fairphone 5"
   codename: "FP5"
+  maker: "Fairphone"
+  aliases: ["fp5"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2023-09-14"
   specs:
     soc: "Qualcomm QCM6490"

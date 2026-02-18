@@ -1,6 +1,9 @@
 device:
   name: "Volla Phone X23"
   codename: "vidofnir"
+  maker: "Volla"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2023-05-01"
   specs:
     soc: "MediaTek Helio G99 MT6789"

@@ -1,6 +1,10 @@
 device:
   name: "Fairphone 4"
   codename: "FP4"
+  maker: "Fairphone"
+  aliases: ["fp4"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2021-10-25"
   specs:
     soc: "Qualcomm SM7225 Snapdragon 750G"

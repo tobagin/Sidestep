@@ -1,6 +1,10 @@
 device:
   name: "Redmi Note 7 Pro"
   codename: "violet"
+  maker: "Xiaomi"
+  aliases: ["Redmi Note 7 Pro"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-02-28"
   specs:
     soc: "Qualcomm SM6150 Snapdragon 675"

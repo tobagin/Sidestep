@@ -1,6 +1,10 @@
 device:
   name: "Volla Phone"
   codename: "yggdrasil"
+  maker: "Volla"
+  aliases: ["GS290"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-09-01"
   specs:
     soc: "MediaTek Helio P23 MT6763"

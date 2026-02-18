@@ -1,6 +1,11 @@
 device:
   name: "OnePlus 6"
   codename: "enchilada"
+  maker: "OnePlus"
+  aliases: ["OnePlus6"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2018-05-22"
   specs:
     soc: "Qualcomm SDM845 Snapdragon 845"

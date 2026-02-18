@@ -1,6 +1,10 @@
 device:
   name: "Motorola Edge 30"
   codename: "dubai"
+  maker: "Motorola"
+  aliases: ["moto edge 30"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2022-05-01"
   specs:
     soc: "Qualcomm SM7325-AE Snapdragon 778G+ 5G"

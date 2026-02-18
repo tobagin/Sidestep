@@ -1,6 +1,10 @@
 device:
   name: "Mi A2"
   codename: "jasmine_sprout"
+  maker: "Xiaomi"
+  aliases: ["Mi 6X"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2018-07-24"
   specs:
     soc: "Qualcomm SDM660 Snapdragon 660"

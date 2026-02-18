@@ -1,6 +1,9 @@
 device:
   name: "Redmi Note 7"
   codename: "lavender"
+  maker: "Xiaomi"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-01-10"
   specs:
     soc: "Qualcomm SDM660 Snapdragon 660"

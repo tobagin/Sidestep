@@ -1,6 +1,10 @@
 device:
   name: "Volla Phone Quintus"
   codename: "algiz"
+  maker: "Volla"
+  aliases: ["Volla 5"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2024-10-01"
   specs:
     soc: "MediaTek Dimensity 7050"

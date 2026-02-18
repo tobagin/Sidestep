@@ -1,6 +1,10 @@
 device:
   name: "Redmi 9 / 9 Prime"
   codename: "lancelot"
+  maker: "Xiaomi"
+  variants: ["Redmi 9 Prime"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-06-10"
   specs:
     soc: "MediaTek Helio G80"

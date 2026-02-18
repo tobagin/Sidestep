@@ -1,10 +1,18 @@
 // YAML Parser
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+use crate::models::Device;
 use crate::models::distro_config::DeviceDistroConfig;
 use anyhow::{Context, Result};
+use serde::Deserialize;
 use std::fs;
 use std::path::{Path, PathBuf};
+
+/// Wrapper for deserializing the `device:` key from info.yml into a Device.
+#[derive(Deserialize)]
+struct DeviceYaml {
+    device: Device,
+}
 
 pub struct YamlParser {
     devices_dir: PathBuf,
@@ -26,6 +34,18 @@ impl YamlParser {
             .with_context(|| "Failed to parse info.yml")?;
 
         Ok(info)
+    }
+
+    /// Parse a Device from info.yml.
+    pub fn parse_device(&self, manufacturer: &str, codename: &str) -> Result<Device> {
+        let path = self.devices_dir.join(manufacturer).join(codename).join("info.yml");
+        let content = fs::read_to_string(&path)
+            .with_context(|| format!("Failed to read info.yml at {:?}", path))?;
+
+        let wrapper: DeviceYaml = serde_yaml::from_str(&content)
+            .with_context(|| format!("Failed to parse info.yml at {:?}", path))?;
+
+        Ok(wrapper.device)
     }
 
     pub fn parse_device_config(&self, manufacturer: &str, codename: &str) -> Result<DeviceDistroConfig> {

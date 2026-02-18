@@ -1,6 +1,9 @@
 device:
   name: "Volla Phone 22"
   codename: "mimameid"
+  maker: "Volla"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2022-07-01"
   specs:
     soc: "MediaTek Helio G85 MT6769Z"

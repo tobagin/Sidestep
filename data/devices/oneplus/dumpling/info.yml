@@ -1,6 +1,11 @@
 device:
   name: "OnePlus 5T"
   codename: "dumpling"
+  maker: "OnePlus"
+  aliases: ["OnePlus5T"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2017-11-21"
   specs:
     soc: "Qualcomm MSM8998 Snapdragon 835"

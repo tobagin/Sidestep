@@ -1,6 +1,9 @@
 device:
   name: "Volla Tablet"
   codename: "mimir"
+  maker: "Volla"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2024-12-01"
   specs:
     soc: "MediaTek Helio G99 MT8781"

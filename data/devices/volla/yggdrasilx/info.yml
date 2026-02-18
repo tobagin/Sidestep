@@ -1,6 +1,9 @@
 device:
   name: "Volla Phone X"
   codename: "yggdrasilx"
+  maker: "Volla"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2021-10-01"
   specs:
     soc: "MediaTek Helio P23 MT6763"

@@ -1,6 +1,10 @@
 device:
   name: "Google Pixel 3a XL"
   codename: "bonito"
+  maker: "Google"
+  aliases: ["Pixel 3a XL"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-05-07"
   specs:
     soc: "Qualcomm SDM670 Snapdragon 670"

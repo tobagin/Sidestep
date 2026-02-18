@@ -1,6 +1,10 @@
 device:
   name: "F(x)tec Pro1"
   codename: "pro1"
+  maker: "F(x)tec"
+  aliases: ["Pro1"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-12-01"
   specs:
     soc: "Qualcomm MSM8998 Snapdragon 835"

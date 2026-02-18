@@ -1,6 +1,10 @@
 device:
   name: "SHIFT6mq"
   codename: "axolotl"
+  maker: "SHIFT"
+  aliases: ["SHIFT 6mq"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-09-01"
   specs:
     soc: "Qualcomm SDM845 Snapdragon 845"

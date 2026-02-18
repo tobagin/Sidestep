@@ -1,6 +1,10 @@
 device:
   name: "Google Pixel 3a"
   codename: "sargo"
+  maker: "Google"
+  aliases: ["Pixel 3a"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-04-01"
   specs:
     soc: "Qualcomm SDM670 Snapdragon 670"

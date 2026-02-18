@@ -1,6 +1,11 @@
 device:
   name: "OnePlus Nord N100"
   codename: "billie2"
+  maker: "OnePlus"
+  aliases: ["Nord N100"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2020-10-26"
   specs:
     soc: "Qualcomm SM4250 Snapdragon 460"

@@ -1,6 +1,9 @@
 device:
   name: "Redmi Note 9"
   codename: "merlin"
+  maker: "Xiaomi"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-04-30"
   specs:
     soc: "MediaTek Helio G85"

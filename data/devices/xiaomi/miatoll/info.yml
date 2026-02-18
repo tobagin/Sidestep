@@ -1,6 +1,10 @@
 device:
   name: "POCO M2 Pro"
   codename: "miatoll"
+  maker: "Xiaomi"
+  variants: ["Redmi Note 9S", "Redmi Note 9 Pro", "Redmi Note 9 Pro Max", "Redmi Note 10 Lite"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-07-14"
   specs:
     soc: "Qualcomm SM7125 Snapdragon 720G"

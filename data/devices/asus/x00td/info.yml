@@ -1,6 +1,10 @@
 device:
   name: "ZenFone Max Pro M1"
   codename: "x00td"
+  maker: "ASUS"
+  aliases: ["ZB601KL", "ZB602KL"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2018-04-23"
   specs:
     soc: "Qualcomm SDM636 Snapdragon 636"

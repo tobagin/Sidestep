@@ -1,6 +1,11 @@
 device:
   name: "OnePlus Nord N10 5G"
   codename: "billie"
+  maker: "OnePlus"
+  aliases: ["Nord N10"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2020-10-26"
   specs:
     soc: "Qualcomm SM6350 Snapdragon 690"

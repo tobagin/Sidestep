@@ -1,6 +1,11 @@
 device:
   name: "OnePlus 6T"
   codename: "fajita"
+  maker: "OnePlus"
+  aliases: ["OnePlus6T"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2018-11-06"
   specs:
     soc: "Qualcomm SDM845 Snapdragon 845"

@@ -1,6 +1,12 @@
 device:
   name: "Galaxy S7 Edge (Exynos)"
   codename: "hero2lte"
+  maker: "Samsung"
+  experimental: true
+  aliases: ["SM-G935F"]
+  warnings:
+    - "Exynos variant only — Snapdragon variant is not supported"
+    - "Samsung devices use Odin/Heimdall for flashing, not standard fastboot"
   release_date: "2016-03-11"
   specs:
     soc: "Samsung Exynos 8890 Octa"

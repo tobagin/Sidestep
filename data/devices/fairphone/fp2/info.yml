@@ -1,6 +1,12 @@
 device:
   name: "Fairphone 2"
   codename: "fp2"
+  maker: "Fairphone"
+  experimental: true
+  aliases: ["FP2"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Older device with limited Linux distribution support"
   release_date: "2015-12-21"
   specs:
     soc: "Qualcomm MSM8974AB Snapdragon 801"

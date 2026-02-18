@@ -1,6 +1,11 @@
 device:
   name: "OnePlus 5"
   codename: "cheeseburger"
+  maker: "OnePlus"
+  aliases: ["OnePlus5"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2017-06-20"
   specs:
     soc: "Qualcomm MSM8998 Snapdragon 835"

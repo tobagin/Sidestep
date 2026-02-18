@@ -1,6 +1,10 @@
 device:
   name: "Lenovo ThinkPhone by Motorola"
   codename: "bronco"
+  maker: "Lenovo"
+  aliases: ["ThinkPhone"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2023-01-29"
   specs:
     soc: "Qualcomm SM8475 Snapdragon 8+ Gen 1"

@@ -1,6 +1,11 @@
 device:
   name: "Motorola Moto Z"
   codename: "griffin"
+  maker: "Motorola"
+  aliases: ["moto z"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Verizon Droid Edition may have bootloader unlock restrictions"
   release_date: "2016-06-09"
   specs:
     soc: "Qualcomm MSM8996 Snapdragon 820"

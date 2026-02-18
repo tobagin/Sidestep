@@ -1,6 +1,10 @@
 device:
   name: "Pocophone F1"
   codename: "beryllium"
+  maker: "Xiaomi"
+  aliases: ["POCO F1"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2018-08-22"
   specs:
     soc: "Qualcomm SDM845 Snapdragon 845"

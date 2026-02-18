@@ -1,6 +1,12 @@
 device:
   name: "OnePlus One"
   codename: "bacon"
+  maker: "OnePlus"
+  experimental: true
+  aliases: ["OnePlus1", "A0001"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Older device with limited Linux distribution support"
   release_date: "2014-04-23"
   specs:
     soc: "Qualcomm MSM8974AC Snapdragon 801"

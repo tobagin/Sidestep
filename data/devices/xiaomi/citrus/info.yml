@@ -1,6 +1,9 @@
 device:
   name: "POCO M3"
   codename: "citrus"
+  maker: "Xiaomi"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-11-24"
   specs:
     soc: "Qualcomm SM6115 Snapdragon 662"

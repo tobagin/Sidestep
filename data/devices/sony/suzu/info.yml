@@ -1,6 +1,11 @@
 device:
   name: "Sony Xperia X"
   codename: "suzu"
+  maker: "Sony"
+  aliases: ["Xperia X", "F5121"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Sony DRM keys will be permanently lost after unlocking"
   release_date: "2016-06-01"
   specs:
     soc: "Qualcomm MSM8956 Snapdragon 650"

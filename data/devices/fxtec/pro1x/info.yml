@@ -1,6 +1,10 @@
 device:
   name: "F(x)tec Pro1 X"
   codename: "pro1x"
+  maker: "F(x)tec"
+  aliases: ["Pro1X"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2022-08-01"
   specs:
     soc: "Qualcomm SM6115 Snapdragon 662"

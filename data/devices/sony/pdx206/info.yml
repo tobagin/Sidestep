@@ -1,6 +1,11 @@
 device:
   name: "Sony Xperia 5 II"
   codename: "pdx206"
+  maker: "Sony"
+  aliases: ["Xperia 5 II"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Sony DRM keys will be permanently lost after unlocking"
   release_date: "2020-09-17"
   specs:
     soc: "Qualcomm SM8250 Snapdragon 865"

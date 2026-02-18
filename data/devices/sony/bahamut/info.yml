@@ -1,6 +1,11 @@
 device:
   name: "Sony Xperia 5"
   codename: "bahamut"
+  maker: "Sony"
+  aliases: ["Xperia 5", "J9210"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "Sony DRM keys will be permanently lost after unlocking"
   release_date: "2019-10-05"
   specs:
     soc: "Qualcomm SM8150 Snapdragon 855"

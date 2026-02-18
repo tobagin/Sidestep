@@ -1,6 +1,12 @@
 device:
   name: "OnePlus Nord 2 5G"
   codename: "denniz"
+  maker: "OnePlus"
+  experimental: true
+  aliases: ["Nord 2"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2021-07-22"
   specs:
     soc: "MediaTek MT6893 Dimensity 1200"

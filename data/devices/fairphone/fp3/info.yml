@@ -1,6 +1,11 @@
 device:
   name: "Fairphone 3/3+"
   codename: "fp3"
+  maker: "Fairphone"
+  aliases: ["FP3", "Fairphone 3"]
+  variants: ["Fairphone 3+"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-09-03"
   specs:
     soc: "Qualcomm SDM632 Snapdragon 632"

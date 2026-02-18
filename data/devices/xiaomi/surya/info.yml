@@ -1,6 +1,10 @@
 device:
   name: "POCO X3 NFC"
   codename: "surya"
+  maker: "Xiaomi"
+  aliases: ["POCO X3"]
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2020-09-07"
   specs:
     soc: "Qualcomm SM7150 Snapdragon 732G"

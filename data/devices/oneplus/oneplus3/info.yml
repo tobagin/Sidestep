@@ -1,6 +1,12 @@
 device:
   name: "OnePlus 3"
   codename: "oneplus3"
+  maker: "OnePlus"
+  aliases: ["OnePlus3"]
+  variants: ["OnePlus 3T"]
+  warnings:
+    - "Unlocking will factory reset the device"
+    - "OxygenOS backup recommended before proceeding"
   release_date: "2016-06-14"
   specs:
     soc: "Qualcomm MSM8996 Snapdragon 820"

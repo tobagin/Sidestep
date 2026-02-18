@@ -1,6 +1,9 @@
 device:
   name: "Redmi Note 8 Pro"
   codename: "begonia"
+  maker: "Xiaomi"
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2019-08-29"
   specs:
     soc: "MediaTek Helio G90T"

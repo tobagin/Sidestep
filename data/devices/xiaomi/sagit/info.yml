@@ -1,6 +1,10 @@
 device:
   name: "Mi 6"
   codename: "sagit"
+  maker: "Xiaomi"
+  experimental: true
+  warnings:
+    - "Unlocking will factory reset the device"
   release_date: "2017-04-28"
   specs:
     soc: "Qualcomm MSM8998 Snapdragon 835"
