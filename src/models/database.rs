@@ -957,6 +957,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -967,6 +969,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -977,6 +981,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -987,6 +993,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1001,6 +1009,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1011,6 +1021,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1021,6 +1033,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1031,6 +1045,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1045,6 +1061,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1055,6 +1073,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1065,6 +1085,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1075,6 +1097,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1085,6 +1109,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1099,6 +1125,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1109,6 +1137,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Microsoft may detect this and void warranty".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1119,6 +1149,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1129,6 +1161,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1143,6 +1177,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1153,6 +1189,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1163,6 +1201,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1173,6 +1213,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1183,6 +1225,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1197,6 +1241,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1207,6 +1253,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1217,6 +1265,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1227,6 +1277,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1241,6 +1293,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1251,6 +1305,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1261,6 +1317,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1271,6 +1329,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1285,6 +1345,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1295,6 +1357,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1305,6 +1369,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Unlocking will permanently void DRM keys (camera quality may be affected)".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1315,6 +1381,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1325,6 +1393,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1339,6 +1409,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1349,6 +1421,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1359,6 +1433,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1369,6 +1445,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1383,6 +1461,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1393,6 +1473,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1403,6 +1485,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1413,6 +1497,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1427,6 +1513,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1437,6 +1525,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1447,6 +1537,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1457,6 +1549,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1471,6 +1565,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1481,6 +1577,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1491,6 +1589,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1501,6 +1601,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1515,6 +1617,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1525,6 +1629,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1535,6 +1641,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1545,6 +1653,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1559,6 +1669,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1569,6 +1681,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1579,6 +1693,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1589,6 +1705,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1599,6 +1717,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1613,6 +1733,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1623,6 +1745,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1633,6 +1757,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1643,6 +1769,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1657,6 +1785,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1667,6 +1797,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1677,6 +1809,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1687,6 +1821,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1701,6 +1837,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1711,6 +1849,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1721,6 +1861,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1731,6 +1873,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1741,6 +1885,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1755,6 +1901,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1765,6 +1913,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1775,6 +1925,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1785,6 +1937,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1799,6 +1953,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1809,6 +1965,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1819,6 +1977,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1829,6 +1989,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1843,6 +2005,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1853,6 +2017,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1863,6 +2029,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1873,6 +2041,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1887,6 +2057,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1897,6 +2069,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("OEM Unlock may take up to one week to become available".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1907,6 +2081,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1917,6 +2093,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -1927,6 +2105,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1941,6 +2121,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1951,6 +2133,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -1961,6 +2145,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -1971,6 +2157,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -1985,6 +2173,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -1995,6 +2185,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2005,6 +2197,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2015,6 +2209,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2025,6 +2221,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2039,6 +2237,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2049,6 +2249,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2059,6 +2261,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Unlocking will permanently void DRM keys (camera quality may be affected)".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2069,6 +2273,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2079,6 +2285,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2093,6 +2301,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2103,6 +2313,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2113,6 +2325,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2123,6 +2337,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2137,6 +2353,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2147,6 +2365,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2157,6 +2377,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2167,6 +2389,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2181,6 +2405,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2191,6 +2417,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2201,6 +2429,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2211,6 +2441,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2225,6 +2457,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2235,6 +2469,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2245,6 +2481,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2255,6 +2493,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2269,6 +2509,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2279,6 +2521,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2289,6 +2533,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2299,6 +2545,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2313,6 +2561,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2323,6 +2573,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2333,6 +2585,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2343,6 +2597,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2357,6 +2613,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2367,6 +2625,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2377,6 +2637,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2387,6 +2649,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2401,6 +2665,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2411,6 +2677,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2421,6 +2689,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2431,6 +2701,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2445,6 +2717,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2455,6 +2729,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2465,6 +2741,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2475,6 +2753,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2489,6 +2769,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2499,6 +2781,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2509,6 +2793,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2519,6 +2805,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2529,6 +2817,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2543,6 +2833,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2553,6 +2845,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2563,6 +2857,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2573,6 +2869,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2583,6 +2881,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2597,6 +2897,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2607,6 +2909,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2617,6 +2921,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2627,6 +2933,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2637,6 +2945,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2651,6 +2961,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2661,6 +2973,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2671,6 +2985,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2681,6 +2997,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2691,6 +3009,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2705,6 +3025,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2715,6 +3037,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2725,6 +3049,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2735,6 +3061,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2745,6 +3073,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2759,6 +3089,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2769,6 +3101,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2779,6 +3113,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2789,6 +3125,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2799,6 +3137,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2813,6 +3153,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2823,6 +3165,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2833,6 +3177,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2843,6 +3189,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2853,6 +3201,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2867,6 +3217,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2877,6 +3229,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2887,6 +3241,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2897,6 +3253,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2907,6 +3265,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2921,6 +3281,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2931,6 +3293,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2941,6 +3305,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Xiaomi enforces a waiting period before unlocking".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -2951,6 +3317,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -2961,6 +3329,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -2975,6 +3345,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -2985,6 +3357,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -2995,6 +3369,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -3005,6 +3381,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -3019,6 +3397,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -3029,6 +3409,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Samsung Exynos devices use Odin/Heimdall, not standard fastboot".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -3039,6 +3421,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -3053,6 +3437,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -3063,6 +3449,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Samsung Exynos devices use Odin/Heimdall, not standard fastboot".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -3073,6 +3461,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
         ]);
 
@@ -3087,6 +3477,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 2,
@@ -3097,6 +3489,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 3,
@@ -3107,6 +3501,8 @@ impl DeviceDatabase {
                 duration_secs: None,
                 optional: false,
                 warning: Some("Unlocking will permanently void DRM keys (camera quality may be affected)".to_string()),
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 4,
@@ -3117,6 +3513,8 @@ impl DeviceDatabase {
                 duration_secs: Some(10),
                 optional: false,
                 warning: None,
+                link: None,
+                link_label: None,
             },
             UnlockingStep {
                 order: 5,
@@ -3127,6 +3525,8 @@ impl DeviceDatabase {
                 duration_secs: Some(30),
                 optional: false,
                 warning: Some("This will factory reset your device!".to_string()),
+                link: None,
+                link_label: None,
             },
         ]);
     }
