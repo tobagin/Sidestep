@@ -410,6 +410,16 @@ impl FlashingPage {
         });
     }
 
+    /// Forward a line of output to the window's terminal overlay.
+    fn log_to_terminal(&self, line: &str) {
+        if let Some(window) = self
+            .root()
+            .and_then(|w| w.downcast::<crate::window::SidestepWindow>().ok())
+        {
+            window.append_terminal_log(line);
+        }
+    }
+
     /// Handle a progress message from the installer. Returns true if polling should stop.
     fn handle_progress(&self, msg: InstallProgress) -> bool {
         let imp = self.imp();
@@ -464,11 +474,13 @@ impl FlashingPage {
                         "{} ({}/{})",
                         description, current, total
                     ));
+                    self.log_to_terminal(&format!("[{}/{}] {}", current, total, description));
                 }
             }
 
             InstallProgress::StatusChanged(status) => {
                 imp.status_page.set_description(Some(&status));
+                self.log_to_terminal(&status);
             }
 
             InstallProgress::WaitingForRecovery => {
@@ -494,6 +506,7 @@ impl FlashingPage {
             }
 
             InstallProgress::Complete => {
+                self.log_to_terminal("Installation complete");
                 imp.status_page.set_title("Installation Complete!");
                 imp.download_row.set_subtitle("Complete");
                 imp.decompress_row.set_subtitle("Complete");
@@ -513,6 +526,7 @@ impl FlashingPage {
 
             InstallProgress::Error(msg) => {
                 log::error!("Installation error: {}", msg);
+                self.log_to_terminal(&format!("Error: {}", msg));
                 imp.status_page.set_title("Installation Failed");
                 imp.status_page.set_icon_name(Some("dialog-error-symbolic"));
                 imp.error_banner.set_title(&msg);

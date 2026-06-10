@@ -6,6 +6,8 @@ mod config;
 mod flashing;
 mod hardware;
 mod models;
+mod preferences;
+mod terminal_overlay;
 mod window;
 mod pages;
 mod wizard;
