@@ -5,7 +5,9 @@ use crate::pages::device_browser::DeviceBrowserPage;
 use crate::pages::device_details::DeviceDetailsPage;
 use crate::pages::device_info::DeviceInfoPage;
 use crate::pages::success::SuccessPage;
+use crate::pages::unlocking::UnlockingPage;
 use crate::pages::waiting::WaitingPage;
+use crate::terminal_overlay::TerminalOverlay;
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::subclass::prelude::*;
@@ -21,8 +23,11 @@ mod imp {
         #[template_child]
         pub toast_overlay: TemplateChild<adw::ToastOverlay>,
         #[template_child]
+        pub content_box: TemplateChild<gtk::Box>,
+        #[template_child]
         pub main_nav: TemplateChild<adw::NavigationView>,
 
+        pub terminal_overlay: RefCell<Option<TerminalOverlay>>,
         pub settings: once_cell::sync::OnceCell<gio::Settings>,
         pub device_detector: RefCell<Option<DeviceDetector>>,
         pub current_device: RefCell<Option<Device>>,
@@ -80,6 +85,16 @@ mod imp {
 
             // Setup actions
             obj.setup_actions();
+
+            // Create the terminal overlay and react to the setting changing
+            // (e.g. from the Preferences dialog).
+            obj.setup_terminal_overlay();
+            let obj_weak = obj.downgrade();
+            settings.connect_changed(Some("show-terminal"), move |s, _| {
+                if let Some(obj) = obj_weak.upgrade() {
+                    obj.set_terminal_visible(s.boolean("show-terminal"));
+                }
+            });
 
             // Initialize Navigation
             let waiting_page = WaitingPage::new();
@@ -191,16 +206,62 @@ impl SidestepWindow {
         toggle_terminal.connect_activate(move |action, _| {
             let Some(window) = window_weak.upgrade() else { return; };
             let state = action.state().unwrap().get::<bool>().unwrap();
-            action.set_state(&(!state).into());
-
-            let imp = window.imp();
-            imp.terminal_visible.set(!state);
-            log::debug!("Terminal visibility: {}", !state);
-            // TODO: Show/hide terminal overlay
+            // Persist to settings; the settings-changed handler updates the
+            // action state and the overlay so menu and Preferences stay in sync.
+            if let Some(settings) = window.imp().settings.get() {
+                let _ = settings.set_boolean("show-terminal", !state);
+            } else {
+                window.set_terminal_visible(!state);
+            }
         });
 
         // Register window actions
         self.add_action(&toggle_terminal);
+    }
+
+    /// Build the terminal overlay and append it below the navigation view.
+    fn setup_terminal_overlay(&self) {
+        let imp = self.imp();
+        let overlay = TerminalOverlay::new();
+        overlay.set_visible(imp.terminal_visible.get());
+        imp.content_box.append(&overlay);
+        *imp.terminal_overlay.borrow_mut() = Some(overlay);
+    }
+
+    /// Show or hide the terminal overlay and sync the toggle action state.
+    fn set_terminal_visible(&self, visible: bool) {
+        let imp = self.imp();
+        imp.terminal_visible.set(visible);
+
+        if let Some(ref overlay) = *imp.terminal_overlay.borrow() {
+            overlay.set_visible(visible);
+        }
+
+        if let Some(action) = self.lookup_action("show-terminal") {
+            if let Some(action) = action.downcast_ref::<gio::SimpleAction>() {
+                action.set_state(&visible.into());
+            }
+        }
+
+        log::debug!("Terminal visibility: {}", visible);
+    }
+
+    /// Push the bootloader unlocking page for the given device.
+    fn show_unlocking(&self, device: &Device) {
+        let imp = self.imp();
+        let unlocking_page = UnlockingPage::new(device);
+        unlocking_page.set_menu_model(&imp.primary_menu);
+
+        unlocking_page.connect_unlock_complete(move |page| {
+            if let Some(window) = page.root()
+                .and_then(|w| w.downcast::<SidestepWindow>().ok())
+            {
+                window.show_toast("Reconnect your device to continue installing.");
+                window.reset_to_waiting();
+            }
+        });
+
+        imp.main_nav.push(&unlocking_page);
     }
 
     fn start_device_detection(&self) {
@@ -308,8 +369,12 @@ impl SidestepWindow {
         let details_page = DeviceDetailsPage::new(device, supported);
         details_page.set_menu_model(&imp.primary_menu);
 
+        let window_weak = self.downgrade();
+        let device_clone = device.clone();
         details_page.connect_unlock_clicked(move |_| {
-            log::info!("Unlock clicked - unlocking page not implemented yet");
+            if let Some(window) = window_weak.upgrade() {
+                window.show_unlocking(&device_clone);
+            }
         });
 
         imp.main_nav.push(&details_page);
@@ -362,7 +427,9 @@ impl SidestepWindow {
     }
 
     pub fn append_terminal_log(&self, line: &str) {
-        // TODO: Append to terminal overlay
         log::debug!("[terminal] {}", line);
+        if let Some(ref overlay) = *self.imp().terminal_overlay.borrow() {
+            overlay.append_line(line);
+        }
     }
 }

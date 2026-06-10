@@ -44,6 +44,14 @@ pub struct UnlockingStep {
     /// Warning message to display before this step
     #[serde(default)]
     pub warning: Option<String>,
+
+    /// Optional URL to a helpful resource (e.g. a vendor unlock portal)
+    #[serde(default)]
+    pub link: Option<String>,
+
+    /// Label for the link button (defaults to "Open Website" when a link is set)
+    #[serde(default)]
+    pub link_label: Option<String>,
 }
 
 impl UnlockingStep {
