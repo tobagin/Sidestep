@@ -22,6 +22,10 @@ mod imp {
         pub toast_overlay: TemplateChild<adw::ToastOverlay>,
         #[template_child]
         pub main_nav: TemplateChild<adw::NavigationView>,
+        #[template_child]
+        pub terminal_revealer: TemplateChild<gtk::Revealer>,
+        #[template_child]
+        pub terminal_overlay: TemplateChild<crate::pages::terminal_overlay::TerminalOverlay>,
 
         pub settings: once_cell::sync::OnceCell<gio::Settings>,
         pub device_detector: RefCell<Option<DeviceDetector>>,
@@ -43,6 +47,8 @@ mod imp {
         type ParentType = adw::ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
+            // Register the custom child type before the template is parsed.
+            crate::pages::terminal_overlay::TerminalOverlay::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -77,6 +83,26 @@ mod imp {
             // Restore terminal visibility
             let show_terminal = settings.boolean("show-terminal");
             self.terminal_visible.set(show_terminal);
+            self.terminal_revealer.set_reveal_child(show_terminal);
+
+            // Keep the overlay in sync when the Preferences switch flips it.
+            let window_weak = obj.downgrade();
+            settings.connect_changed(Some("show-terminal"), move |s, _| {
+                if let Some(window) = window_weak.upgrade() {
+                    window.set_terminal_visible(s.boolean("show-terminal"));
+                }
+            });
+
+            // Auto-sync device configs in the background if the interval elapsed.
+            // Fire-and-forget: on failure the bundled DB still works; on success
+            // the next DeviceDatabase::new() picks up the fresh configs.
+            if crate::models::sync::is_due(settings.int("sync-interval-hours")) {
+                std::thread::spawn(|| {
+                    if let Err(e) = crate::models::sync::run_blocking() {
+                        log::warn!("Background device DB sync failed: {:#}", e);
+                    }
+                });
+            }
 
             // Setup actions
             obj.setup_actions();
@@ -191,16 +217,29 @@ impl SidestepWindow {
         toggle_terminal.connect_activate(move |action, _| {
             let Some(window) = window_weak.upgrade() else { return; };
             let state = action.state().unwrap().get::<bool>().unwrap();
-            action.set_state(&(!state).into());
-
-            let imp = window.imp();
-            imp.terminal_visible.set(!state);
-            log::debug!("Terminal visibility: {}", !state);
-            // TODO: Show/hide terminal overlay
+            window.set_terminal_visible(!state);
         });
 
         // Register window actions
         self.add_action(&toggle_terminal);
+    }
+
+    /// Single source of truth for terminal visibility: updates the revealer,
+    /// the stateful action, and persists the setting. Idempotent.
+    pub fn set_terminal_visible(&self, visible: bool) {
+        let imp = self.imp();
+        if imp.terminal_visible.get() == visible {
+            return;
+        }
+        imp.terminal_visible.set(visible);
+        imp.terminal_revealer.set_reveal_child(visible);
+
+        if let Some(action) = self.lookup_action("show-terminal").and_downcast::<gio::SimpleAction>() {
+            action.set_state(&visible.into());
+        }
+        if let Some(settings) = imp.settings.get() {
+            settings.set_boolean("show-terminal", visible).ok();
+        }
     }
 
     fn start_device_detection(&self) {
@@ -362,7 +401,7 @@ impl SidestepWindow {
     }
 
     pub fn append_terminal_log(&self, line: &str) {
-        // TODO: Append to terminal overlay
         log::debug!("[terminal] {}", line);
+        self.imp().terminal_overlay.append(line);
     }
 }

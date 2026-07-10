@@ -7,7 +7,19 @@ template $SidestepWindow: Adw.ApplicationWindow {
   default-height: 600;
 
   content: Adw.ToastOverlay toast_overlay {
-    child: Adw.NavigationView main_nav {};
+    child: Box {
+      orientation: vertical;
+
+      Adw.NavigationView main_nav {
+        vexpand: true;
+      }
+
+      Revealer terminal_revealer {
+        transition-type: slide_up;
+
+        child: $TerminalOverlay terminal_overlay {};
+      }
+    };
   };
 }
 

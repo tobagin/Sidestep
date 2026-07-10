@@ -117,10 +117,9 @@ impl SidestepApplication {
     }
 
     fn show_preferences(&self) {
-        let _window = self.active_window().unwrap();
-        
-        // TODO: Implement preferences dialog
-        log::info!("Preferences dialog not yet implemented");
+        let window = self.active_window();
+        let dialog = crate::pages::preferences_dialog::PreferencesDialog::new();
+        dialog.present(window.as_ref());
     }
 }
 

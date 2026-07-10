@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use crate::flashing::{DroidianInstaller, EosInstaller, FactoryImageInstaller, InstallProgress, LineageosInstaller, MobianInstaller, PostmarketosInstaller, UbportsInstaller};
+use crate::models::installer::{FirmwareImage, FlashPartition, FlashOperation};
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::prelude::*;
@@ -140,7 +141,7 @@ impl FlashingPage {
     }
 
     /// Start real UBports installation with progress from background thread
-    pub fn start_ubports_installation(&self, distro_name: &str, serial: &str, channel_path: &str) {
+    pub fn start_ubports_installation(&self, distro_name: &str, serial: &str, channel_path: &str, firmware: Vec<FirmwareImage>) {
         self.set_distro_name(distro_name);
 
         let imp = self.imp();
@@ -152,7 +153,7 @@ impl FlashingPage {
         #[allow(deprecated)]
         imp.decompress_row.set_icon_name(Some("channel-secure-symbolic"));
 
-        let installer = UbportsInstaller::new(serial.to_string(), channel_path.to_string());
+        let installer = UbportsInstaller::new(serial.to_string(), channel_path.to_string(), firmware);
         let receiver = installer.spawn();
 
         // Poll receiver on the main thread
@@ -175,6 +176,7 @@ impl FlashingPage {
         serial: &str,
         release_url: &str,
         artifact_pattern: &str,
+        flash_partitions: Vec<FlashPartition>,
     ) {
         self.set_distro_name(distro_name);
 
@@ -192,6 +194,7 @@ impl FlashingPage {
             serial.to_string(),
             release_url.to_string(),
             artifact_pattern.to_string(),
+            flash_partitions,
         );
         let receiver = installer.spawn();
 
@@ -217,6 +220,7 @@ impl FlashingPage {
         interface: &str,
         chipset: &str,
         device_model: &str,
+        flash_operations: Vec<FlashOperation>,
     ) {
         self.set_distro_name(distro_name);
 
@@ -236,6 +240,7 @@ impl FlashingPage {
             interface.to_string(),
             chipset.to_string(),
             device_model.to_string(),
+            flash_operations,
         );
         let receiver = installer.spawn();
 
@@ -261,6 +266,7 @@ impl FlashingPage {
         channel: &str,
         interface: &str,
         device: &str,
+        flash_operations: Vec<FlashOperation>,
     ) {
         self.set_distro_name(distro_name);
 
@@ -274,6 +280,7 @@ impl FlashingPage {
             channel.to_string(),
             interface.to_string(),
             device.to_string(),
+            flash_operations,
         );
         let receiver = installer.spawn();
 
@@ -413,6 +420,14 @@ impl FlashingPage {
     /// Handle a progress message from the installer. Returns true if polling should stop.
     fn handle_progress(&self, msg: InstallProgress) -> bool {
         let imp = self.imp();
+
+        // Mirror meaningful step events into the terminal overlay.
+        if let (Some(line), Some(window)) = (
+            terminal_line(&msg),
+            self.root().and_downcast::<crate::window::SidestepWindow>(),
+        ) {
+            window.append_terminal_log(&line);
+        }
 
         match msg {
             InstallProgress::DownloadProgress {
@@ -564,5 +579,22 @@ impl FlashingPage {
 
             glib::ControlFlow::Break
         });
+    }
+}
+
+/// Format a progress message as a terminal log line. Returns None for
+/// high-frequency byte/percent updates (download & verify) to avoid flooding.
+fn terminal_line(msg: &InstallProgress) -> Option<String> {
+    match msg {
+        InstallProgress::StatusChanged(s) => Some(s.clone()),
+        InstallProgress::FlashProgress { current, total, description } => {
+            Some(format!("[{}/{}] {}", current, total, description))
+        }
+        InstallProgress::WaitingForRecovery => Some("Waiting for Recovery Mode…".to_string()),
+        InstallProgress::RecoveryDetected => Some("Recovery mode detected".to_string()),
+        InstallProgress::WaitingForUserAction(m) => Some(m.clone()),
+        InstallProgress::Complete => Some("Installation complete.".to_string()),
+        InstallProgress::Error(m) => Some(format!("ERROR: {}", m)),
+        _ => None,
     }
 }

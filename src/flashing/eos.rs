@@ -38,10 +38,7 @@ impl EosInstaller {
         codename: String,
         channel: String,
     ) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("eos");
+        let download_dir = crate::flashing::download_dir().join("eos");
 
         Self {
             serial,

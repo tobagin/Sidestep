@@ -72,6 +72,7 @@ blueprint_sources = files(
   'ui/terminal_overlay.blp',
   'ui/preferences_dialog.blp',
   'ui/pages/safety.blp',
+  'ui/pages/wizard_choice_page.blp',
   'ui/pages/unlocking.blp',
   'ui/pages/device_details.blp',
   'ui/pages/flashing.blp',

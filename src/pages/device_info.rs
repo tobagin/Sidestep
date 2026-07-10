@@ -526,7 +526,7 @@ impl DeviceInfoPage {
     // ────────────────────────────────────────────────────────────────
 
     fn load_device_info(&self, device: &Device) -> Option<DeviceInfo> {
-        let devices_dir = DeviceDatabase::devices_data_dir();
+        let devices_dir = DeviceDatabase::bundled_devices_dir();
         let manufacturer = DeviceDatabase::maker_to_dir(&device.maker);
         let parser = YamlParser::new(&devices_dir);
         match parser.parse_device_info(&manufacturer, &device.codename) {

@@ -235,7 +235,9 @@ available_distros:
         label: "Nightly"
         # The specific artifact name for sargo API 28 (Android 9 base)
         artifact_match: "google_sargo-api28-arm64"
-        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+        # /releases/latest skips prereleases; Droidian's newest builds live under
+        # the rolling "nightly" tag (marked prerelease), so target it directly.
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/tags/nightly"
     flash_method: "fastboot_zip_orchestrator"
     compatibility:
       working:

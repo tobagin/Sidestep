@@ -15,3 +15,10 @@ steps:
   install:
     type: "flash"
     url: ""
+flash_operations:
+  - type: flash
+    partition: "boot"
+    source: "boot"
+  - type: flash
+    partition: "userdata"
+    source: "rootfs"

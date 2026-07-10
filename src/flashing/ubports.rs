@@ -6,46 +6,12 @@ use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
+use crate::models::installer::FirmwareImage;
 use crate::models::system_image::SystemImageIndex;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
 use std::time::Duration;
-
-/// Firmware image descriptor (hardcoded for sargo MVP)
-struct FirmwareImage {
-    url: &'static str,
-    filename: &'static str,
-    partition: &'static str,
-    sha256: &'static str,
-    /// Extra fastboot flags (e.g., --disable-verity for vbmeta)
-    flags: &'static [&'static str],
-}
-
-/// Sargo firmware images from cdimage.ubports.com
-const SARGO_FIRMWARE: &[FirmwareImage] = &[
-    FirmwareImage {
-        url: "https://cdimage.ubports.com/devices/sargo/boot.img",
-        filename: "boot.img",
-        partition: "boot",
-        sha256: "3125fa5cdd097cd69b8005af13e4c6a4a4cc61b83c6b13b219799def51fff2fa",
-        flags: &[],
-    },
-    FirmwareImage {
-        url: "https://cdimage.ubports.com/devices/sargo/dtbo.img",
-        filename: "dtbo.img",
-        partition: "dtbo",
-        sha256: "51e63686ee4bb15e1ddc296f8809996d645d114347daebacc561cf02d2bfce2d",
-        flags: &[],
-    },
-    FirmwareImage {
-        url: "https://cdimage.ubports.com/devices/sargo/vbmeta.img",
-        filename: "vbmeta.img",
-        partition: "vbmeta",
-        sha256: "854a2c2a5e82c2c49a5d9d62c70334002c7dcd9203f904952ff5fc43b2eac420",
-        flags: &["--disable-verity", "--disable-verification"],
-    },
-];
 
 /// UBports system-image server base URL
 const SYSTEM_IMAGE_SERVER: &str = "https://system-image.ubports.com";
@@ -58,23 +24,22 @@ const GPG_KEYRINGS: &[&str] = &[
     "gpg/image-signing.tar.xz.asc",
 ];
 
-/// Orchestrates Ubuntu Touch installation on sargo
+/// Orchestrates Ubuntu Touch installation
 pub struct UbportsInstaller {
     serial: String,
     channel_path: String,
+    firmware: Vec<FirmwareImage>,
     download_dir: PathBuf,
 }
 
 impl UbportsInstaller {
-    pub fn new(serial: String, channel_path: String) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("ubports");
+    pub fn new(serial: String, channel_path: String, firmware: Vec<FirmwareImage>) -> Self {
+        let download_dir = crate::flashing::download_dir().join("ubports");
 
         Self {
             serial,
             channel_path,
+            firmware,
             download_dir,
         }
     }
@@ -103,6 +68,10 @@ impl UbportsInstaller {
 
     /// Main installation flow (runs on background thread)
     async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
+        if self.firmware.is_empty() {
+            anyhow::bail!("No firmware images configured for UBports installation");
+        }
+
         let downloader = ImageDownloader::new(self.download_dir.clone());
         let adb = Adb::new();
         let fastboot = Fastboot::new();
@@ -160,8 +129,8 @@ impl UbportsInstaller {
         // ── Step 9: Format userdata as ext4 ──
         // Matches UBports installer: fastboot format:ext4 userdata
         let _ = sender.send(InstallProgress::FlashProgress {
-            current: SARGO_FIRMWARE.len() + 1,
-            total: SARGO_FIRMWARE.len() + 2,
+            current: self.firmware.len() + 1,
+            total: self.firmware.len() + 2,
             description: "Formatting userdata...".into(),
         });
         fastboot
@@ -170,10 +139,6 @@ impl UbportsInstaller {
             .context("Failed to format userdata")?;
 
         // ── Step 10: User enters recovery mode ──
-        // The official UBports installer prompts the user to select
-        // "Recovery mode" from the fastboot menu. The halium boot.img
-        // must boot in recovery mode — a normal reboot will fail
-        // because there is no system partition yet.
         let _ = sender.send(InstallProgress::WaitingForRecovery);
         adb.wait_for_recovery(&self.serial).await?;
         let _ = sender.send(InstallProgress::RecoveryDetected);
@@ -182,11 +147,8 @@ impl UbportsInstaller {
         let _ = sender.send(InstallProgress::StatusChanged(
             "Preparing system image...".into(),
         ));
-        // Mount all partitions (errors are non-fatal)
         let _ = adb.shell(&self.serial, "mount -a").await;
-        // Wipe stale cache
         let _ = adb.shell(&self.serial, "rm -rf /cache/recovery").await;
-        // Create recovery directory
         adb.shell(&self.serial, "mkdir -p /cache/recovery")
             .await
             .context("Failed to create /cache/recovery")?;
@@ -222,19 +184,18 @@ impl UbportsInstaller {
         downloader: &ImageDownloader,
         sender: &Sender<InstallProgress>,
     ) -> Result<()> {
-        let total_size: u64 = 0; // We don't know sizes upfront; use per-file progress
         let mut cumulative_downloaded: u64 = 0;
 
-        for fw in SARGO_FIRMWARE {
-            let file_name = fw.filename.to_string();
+        for fw in &self.firmware {
+            let file_name = fw.filename.clone();
             let sender_clone = sender.clone();
             let prev_downloaded = cumulative_downloaded;
 
             let path = downloader
                 .download_if_needed(
-                    fw.url,
-                    fw.filename,
-                    Some(fw.sha256),
+                    &fw.url,
+                    &fw.filename,
+                    Some(&fw.sha256),
                     Some(Box::new(move |downloaded, total| {
                         let _ = sender_clone.send(InstallProgress::DownloadProgress {
                             downloaded: prev_downloaded + downloaded,
@@ -246,27 +207,24 @@ impl UbportsInstaller {
                 .await
                 .with_context(|| format!("Failed to download {}", fw.filename))?;
 
-            // Update cumulative size from the file we just downloaded
             let file_size = tokio::fs::metadata(&path).await?.len();
             cumulative_downloaded += file_size;
         }
 
-        let _ = cumulative_downloaded;
-        let _ = total_size;
         Ok(())
     }
 
     fn verify_firmware(&self, sender: &Sender<InstallProgress>) -> Result<()> {
-        let total = SARGO_FIRMWARE.len();
-        for (i, fw) in SARGO_FIRMWARE.iter().enumerate() {
-            let path = self.download_dir.join(fw.filename);
+        let total = self.firmware.len();
+        for (i, fw) in self.firmware.iter().enumerate() {
+            let path = self.download_dir.join(&fw.filename);
             let _ = sender.send(InstallProgress::VerifyProgress {
                 verified: i + 1,
                 total,
-                file_name: fw.filename.to_string(),
+                file_name: fw.filename.clone(),
             });
 
-            let ok = ChecksumVerifier::verify(&path, fw.sha256)?;
+            let ok = ChecksumVerifier::verify(&path, &fw.sha256)?;
             if !ok {
                 anyhow::bail!(
                     "Checksum mismatch for {} — expected {}",
@@ -279,7 +237,6 @@ impl UbportsInstaller {
     }
 
     /// Fetch the system-image index.json, pick latest full image, download all files.
-    /// Returns list of (local_path, remote_filename) pairs for files to push.
     async fn download_system_image(
         &self,
         downloader: &ImageDownloader,
@@ -308,7 +265,6 @@ impl UbportsInstaller {
             entry.files.len()
         );
 
-        // Calculate total download size
         let total_size: u64 = entry.files.iter().map(|f| f.size).sum();
 
         let mut downloaded_so_far: u64 = 0;
@@ -349,7 +305,6 @@ impl UbportsInstaller {
                 checksum: file.checksum.clone(),
             });
 
-            // Also download the .asc signature
             let sig_url = format!("{}{}", SYSTEM_IMAGE_SERVER, file.signature);
             let sig_filename = file
                 .signature
@@ -365,7 +320,7 @@ impl UbportsInstaller {
             system_files.push(SystemFile {
                 local_path: sig_path,
                 remote_name: sig_filename.to_string(),
-                checksum: String::new(), // .asc files aren't individually checksummed
+                checksum: String::new(),
             });
 
             downloaded_so_far += file.size;
@@ -425,7 +380,6 @@ impl UbportsInstaller {
     }
 
     async fn wait_for_fastboot(&self, fastboot: &Fastboot) -> Result<()> {
-        // Poll fastboot devices until our device appears
         for _ in 0..60 {
             if let Ok(devices) = fastboot.devices().await {
                 if devices.iter().any(|d| d.serial == self.serial) {
@@ -442,25 +396,26 @@ impl UbportsInstaller {
         fastboot: &Fastboot,
         sender: &Sender<InstallProgress>,
     ) -> Result<()> {
-        let total = SARGO_FIRMWARE.len() + 2; // +1 for erase, +1 for overall
+        let total = self.firmware.len() + 2; // +1 for format, +1 for overall
 
-        for (i, fw) in SARGO_FIRMWARE.iter().enumerate() {
+        for (i, fw) in self.firmware.iter().enumerate() {
             let _ = sender.send(InstallProgress::FlashProgress {
                 current: i + 1,
                 total,
                 description: format!("Flashing {}...", fw.partition),
             });
 
-            let image_path = self.download_dir.join(fw.filename);
+            let image_path = self.download_dir.join(&fw.filename);
 
             if fw.flags.is_empty() {
                 fastboot
-                    .flash(&self.serial, fw.partition, &image_path)
+                    .flash(&self.serial, &fw.partition, &image_path)
                     .await
                     .with_context(|| format!("Failed to flash {}", fw.partition))?;
             } else {
+                let flag_refs: Vec<&str> = fw.flags.iter().map(|s| s.as_str()).collect();
                 fastboot
-                    .flash_with_flags(&self.serial, fw.partition, &image_path, fw.flags)
+                    .flash_with_flags(&self.serial, &fw.partition, &image_path, &flag_refs)
                     .await
                     .with_context(|| format!("Failed to flash {}", fw.partition))?;
             }
@@ -475,13 +430,11 @@ impl UbportsInstaller {
         system_files: &[SystemFile],
         sender: &Sender<InstallProgress>,
     ) -> Result<()> {
-        // Collect all files to push: system-image files + GPG keyrings
         let mut all_files: Vec<(PathBuf, String)> = system_files
             .iter()
             .map(|f| (f.local_path.clone(), f.remote_name.clone()))
             .collect();
 
-        // Add GPG keyring files
         for keyring_path in GPG_KEYRINGS {
             let filename = keyring_path.rsplit('/').next().unwrap_or(keyring_path);
             let local = self.download_dir.join(filename);
@@ -512,8 +465,6 @@ impl UbportsInstaller {
         adb: &Adb,
         system_files: &[SystemFile],
     ) -> Result<()> {
-        // Build the ubuntu_command content
-        // Only include .tar.xz files (not .asc) for update lines
         let tar_files: Vec<_> = system_files
             .iter()
             .filter(|f| f.remote_name.ends_with(".tar.xz"))
@@ -536,8 +487,6 @@ impl UbportsInstaller {
         let command_content = lines.join("\n");
         log::info!("ubuntu_command:\n{}", command_content);
 
-        // Write to /cache/recovery/ubuntu_command via adb shell
-        // Escape content for shell
         let escaped = command_content.replace('\'', "'\\''");
         let shell_cmd = format!(
             "echo '{}' > /cache/recovery/ubuntu_command",

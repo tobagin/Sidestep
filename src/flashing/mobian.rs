@@ -6,6 +6,7 @@ use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
+use crate::models::installer::FlashOperation;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
@@ -19,7 +20,7 @@ use std::time::Duration;
 ///   3. Verify checksum
 ///   4. Extract tar.xz (boot image + rootfs image)
 ///   5. Reboot to bootloader → wait for fastboot
-///   6. Flash boot, userdata (sparse), erase dtbo, oem uart enable
+///   6. Execute flash_operations from YAML config
 ///   7. Reboot
 pub struct MobianInstaller {
     serial: String,
@@ -27,6 +28,7 @@ pub struct MobianInstaller {
     interface: String,
     device_model: String,
     chipset: String,
+    flash_operations: Vec<FlashOperation>,
     download_dir: PathBuf,
 }
 
@@ -37,11 +39,9 @@ impl MobianInstaller {
         interface: String,
         chipset: String,
         device_model: String,
+        flash_operations: Vec<FlashOperation>,
     ) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("mobian");
+        let download_dir = crate::flashing::download_dir().join("mobian");
 
         Self {
             serial,
@@ -49,6 +49,7 @@ impl MobianInstaller {
             interface,
             device_model,
             chipset,
+            flash_operations,
             download_dir,
         }
     }
@@ -77,6 +78,10 @@ impl MobianInstaller {
 
     /// Main installation flow (runs on background thread)
     async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
+        if self.flash_operations.is_empty() {
+            anyhow::bail!("No flash operations configured for Mobian installation");
+        }
+
         let downloader = ImageDownloader::new(self.download_dir.clone());
         let adb = Adb::new();
         let fastboot = Fastboot::new();
@@ -166,63 +171,19 @@ impl MobianInstaller {
         ));
         self.wait_for_fastboot(&fastboot).await?;
 
-        // ── Step 8: Flash partitions ──
-        let total_steps = 5;
-
-        // 8a: Flash boot
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 1,
-            total: total_steps,
-            description: "Flashing boot...".into(),
-        });
-        fastboot
-            .flash(&self.serial, "boot", &boot_img)
-            .await
-            .context("Failed to flash boot")?;
-
-        // 8b: Format userdata (wipe old data before flashing new rootfs)
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 2,
-            total: total_steps,
-            description: "Formatting userdata...".into(),
-        });
-        fastboot
-            .format(&self.serial, "userdata", "ext4")
-            .await
-            .context("Failed to format userdata as ext4")?;
-
-        // 8c: Flash userdata (sparse rootfs)
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 3,
-            total: total_steps,
-            description: "Flashing rootfs (this may take a while)...".into(),
-        });
-        fastboot
-            .flash_sparse(&self.serial, "userdata", &rootfs_img, "100M")
-            .await
-            .context("Failed to flash userdata (rootfs)")?;
-
-        // 8d: Erase dtbo
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 4,
-            total: total_steps,
-            description: "Erasing dtbo...".into(),
-        });
-        fastboot
-            .erase(&self.serial, "dtbo")
-            .await
-            .context("Failed to erase dtbo")?;
-
-        // 8e: OEM uart enable
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 5,
-            total: total_steps,
-            description: "Enabling UART...".into(),
-        });
-        fastboot
-            .oem(&self.serial, &["uart", "enable"])
-            .await
-            .context("Failed to run oem uart enable")?;
+        // ── Step 8: Execute flash operations ──
+        let total_steps = self.flash_operations.len();
+        for (i, op) in self.flash_operations.iter().enumerate() {
+            self.execute_flash_operation(
+                &fastboot,
+                sender,
+                op,
+                i + 1,
+                total_steps,
+                &boot_img,
+                &rootfs_img,
+            ).await?;
+        }
 
         // ── Step 9: Reboot ──
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -234,12 +195,102 @@ impl MobianInstaller {
         Ok(())
     }
 
+    /// Execute a single flash operation, resolving source names to actual paths.
+    async fn execute_flash_operation(
+        &self,
+        fastboot: &Fastboot,
+        sender: &Sender<InstallProgress>,
+        op: &FlashOperation,
+        current: usize,
+        total: usize,
+        boot_img: &PathBuf,
+        rootfs_img: &PathBuf,
+    ) -> Result<()> {
+        match op {
+            FlashOperation::Flash { partition, source, flags } => {
+                let image_path = self.resolve_source(source, boot_img, rootfs_img);
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Flashing {}...", partition),
+                });
+                if flags.is_empty() {
+                    fastboot
+                        .flash(&self.serial, partition, &image_path)
+                        .await
+                        .with_context(|| format!("Failed to flash {}", partition))?;
+                } else {
+                    let flag_refs: Vec<&str> = flags.iter().map(|s| s.as_str()).collect();
+                    fastboot
+                        .flash_with_flags(&self.serial, partition, &image_path, &flag_refs)
+                        .await
+                        .with_context(|| format!("Failed to flash {}", partition))?;
+                }
+            }
+            FlashOperation::FlashSparse { partition, source, chunk_size } => {
+                let image_path = self.resolve_source(source, boot_img, rootfs_img);
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Flashing {} (this may take a while)...", partition),
+                });
+                fastboot
+                    .flash_sparse(&self.serial, partition, &image_path, chunk_size)
+                    .await
+                    .with_context(|| format!("Failed to flash {} (sparse)", partition))?;
+            }
+            FlashOperation::Format { partition, fs_type } => {
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Formatting {}...", partition),
+                });
+                fastboot
+                    .format(&self.serial, partition, fs_type)
+                    .await
+                    .with_context(|| format!("Failed to format {} as {}", partition, fs_type))?;
+            }
+            FlashOperation::Erase { partition } => {
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Erasing {}...", partition),
+                });
+                fastboot
+                    .erase(&self.serial, partition)
+                    .await
+                    .with_context(|| format!("Failed to erase {}", partition))?;
+            }
+            FlashOperation::Oem { args } => {
+                let desc = format!("oem {}", args.join(" "));
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Running {}...", desc),
+                });
+                let arg_refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+                fastboot
+                    .oem(&self.serial, &arg_refs)
+                    .await
+                    .with_context(|| format!("Failed to run {}", desc))?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Resolve a source name like "boot" or "rootfs" to an actual file path.
+    fn resolve_source(&self, source: &str, boot_img: &PathBuf, rootfs_img: &PathBuf) -> PathBuf {
+        match source {
+            "boot" => boot_img.clone(),
+            "rootfs" => rootfs_img.clone(),
+            other => PathBuf::from(other),
+        }
+    }
+
     // ────────────────────────────────────────────────────────────────
     // Sub-steps
     // ────────────────────────────────────────────────────────────────
 
-    /// Scrape the Mobian weekly image listing for the latest tar.xz matching
-    /// this chipset + interface combination. Returns (filename, full_url).
     async fn discover_latest_image(&self) -> Result<(String, String)> {
         let client = reqwest::Client::builder()
             .user_agent(format!("Sidestep/{}", crate::config::VERSION))
@@ -261,26 +312,16 @@ impl MobianInstaller {
 
         let html = resp.text().await.context("Failed to read image listing")?;
 
-        // Match filenames like: mobian-sdm670-phosh-20260215.tar.xz
-        let pattern = format!(
-            r"mobian-{}-{}-(\d{{8}})\.tar\.xz",
-            regex_escape(&self.chipset),
-            regex_escape(&self.interface),
-        );
-
         let mut best_date = String::new();
         let mut best_name = String::new();
 
         for line in html.lines() {
-            // Look for href="filename" patterns in the HTML directory listing
             if let Some(start) = line.find("href=\"") {
                 let rest = &line[start + 6..];
                 if let Some(end) = rest.find('"') {
                     let href = &rest[..end];
-                    // Check if this href matches our pattern
                     let expected_prefix = format!("mobian-{}-{}-", self.chipset, self.interface);
                     if href.starts_with(&expected_prefix) && href.ends_with(".tar.xz") {
-                        // Extract date portion
                         let after_prefix = &href[expected_prefix.len()..];
                         if let Some(date_str) = after_prefix.strip_suffix(".tar.xz") {
                             if date_str.len() == 8 && date_str.chars().all(|c| c.is_ascii_digit()) {
@@ -297,12 +338,10 @@ impl MobianInstaller {
 
         if best_name.is_empty() {
             anyhow::bail!(
-                "No Mobian image found for chipset={} interface={} at {}.\n\
-                 Pattern: {}",
+                "No Mobian image found for chipset={} interface={} at {}",
                 self.chipset,
                 self.interface,
                 self.base_url,
-                pattern
             );
         }
 
@@ -310,7 +349,6 @@ impl MobianInstaller {
         Ok((best_name, full_url))
     }
 
-    /// Download SHA256SUMS and extract the hash for the given tar filename.
     async fn download_and_parse_checksums(
         &self,
         downloader: &ImageDownloader,
@@ -326,9 +364,7 @@ impl MobianInstaller {
         }
     }
 
-    /// Extract a tar.xz archive to the given directory.
     fn extract_tar_xz(&self, tar_path: &PathBuf, extract_dir: &PathBuf) -> Result<()> {
-        // Clean up previous extraction
         if extract_dir.exists() {
             std::fs::remove_dir_all(extract_dir)
                 .context("Failed to clean previous extraction")?;
@@ -349,12 +385,9 @@ impl MobianInstaller {
         Ok(())
     }
 
-    /// Find a file matching a glob-like pattern in the extract directory.
-    /// Only supports `*` prefix patterns like `*.boot-sargo.img`.
     fn find_extracted_file(&self, extract_dir: &PathBuf, pattern: &str) -> Result<PathBuf> {
         let suffix = pattern.trim_start_matches('*');
 
-        // Search recursively in extract_dir
         for entry in walkdir(extract_dir)? {
             let file_name = entry.file_name();
             let name = file_name.to_str().unwrap_or_default();
@@ -370,7 +403,6 @@ impl MobianInstaller {
         )
     }
 
-    /// Poll fastboot devices until our device appears.
     async fn wait_for_fastboot(&self, fastboot: &Fastboot) -> Result<()> {
         for _ in 0..60 {
             if let Ok(devices) = fastboot.devices().await {
@@ -402,20 +434,4 @@ fn walkdir_inner(dir: &std::path::Path, results: &mut Vec<std::fs::DirEntry>) ->
         }
     }
     Ok(())
-}
-
-/// Escape special regex characters in a string (minimal set for our patterns).
-fn regex_escape(s: &str) -> String {
-    let mut out = String::with_capacity(s.len());
-    for c in s.chars() {
-        match c {
-            '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '\\' | '|' | '^'
-            | '$' => {
-                out.push('\\');
-                out.push(c);
-            }
-            _ => out.push(c),
-        }
-    }
-    out
 }

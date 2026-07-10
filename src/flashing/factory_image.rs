@@ -4,6 +4,7 @@
 use crate::flashing::checksum::ChecksumVerifier;
 use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
+use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
@@ -26,10 +27,7 @@ pub struct FactoryImageInstaller {
 
 impl FactoryImageInstaller {
     pub fn new(serial: String, url: String, sha256: String, android_version: String) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("factory-image");
+        let download_dir = crate::flashing::download_dir().join("factory-image");
 
         Self {
             serial,
@@ -63,6 +61,7 @@ impl FactoryImageInstaller {
 
     async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
         let downloader = ImageDownloader::new(self.download_dir.clone());
+        let adb = Adb::new();
         let fastboot = Fastboot::new();
 
         // Derive filename from URL
@@ -127,6 +126,24 @@ impl FactoryImageInstaller {
         log::info!("Bootloader: {}", bootloader_img.display());
         log::info!("Radio: {}", radio_img.display());
         log::info!("Image ZIP: {}", image_zip.display());
+
+        // ── Step 4b: Ensure device is in fastboot mode ──
+        // The device may still be booted in Android (e.g. coming from another
+        // OS like /e/OS). fastboot would otherwise block forever waiting for a
+        // device. Reboot to bootloader via ADB, then wait for fastboot.
+        let _ = sender.send(InstallProgress::StatusChanged(
+            "Rebooting to bootloader...".into(),
+        ));
+        if let Err(e) = adb.reboot_bootloader(&self.serial).await {
+            log::warn!(
+                "ADB reboot-bootloader failed (device may already be in fastboot): {}",
+                e
+            );
+        }
+        let _ = sender.send(InstallProgress::StatusChanged(
+            "Waiting for device in fastboot mode...".into(),
+        ));
+        self.wait_for_fastboot(&fastboot).await?;
 
         // ── Step 5: Flash bootloader ──
         let total_steps = 7;

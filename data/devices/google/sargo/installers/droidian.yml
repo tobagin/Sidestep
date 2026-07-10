@@ -15,3 +15,15 @@ steps:
   install:
     type: "flash"
     url: "https://github.com/droidian-images/droidian/releases/download/nightly/droidian-OFFICIAL-phosh-phone-google_sargo-api28-arm64-next_20260111.zip"
+flash_partitions:
+  - image_path: "data/boot.img"
+    partition: "boot"
+  - image_path: "data/dtbo.img"
+    partition: "dtbo"
+  - image_path: "data/userdata.img"
+    partition: "userdata"
+  - image_path: "data/vbmeta.img"
+    partition: "vbmeta"
+    flags:
+      - "--disable-verity"
+      - "--disable-verification"

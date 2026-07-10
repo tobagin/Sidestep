@@ -1,0 +1,19 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WizardChoicePage: Adw.NavigationPage {
+  title: _("Sidestep");
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Adw.StatusPage status_page {
+      child: Box buttons_box {
+        orientation: vertical;
+        spacing: 12;
+        halign: center;
+      };
+    };
+  };
+}

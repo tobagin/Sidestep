@@ -6,48 +6,35 @@ use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
+use crate::models::installer::FlashPartition;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
 use std::time::Duration;
-
-struct DroidianPartition {
-    image_name: &'static str,
-    partition: &'static str,
-    flags: &'static [&'static str],
-}
-
-/// Sargo (Pixel 3a) partition layout — matches UBports installer-configs.
-const SARGO_PARTITIONS: &[DroidianPartition] = &[
-    DroidianPartition { image_name: "data/boot.img", partition: "boot", flags: &[] },
-    DroidianPartition { image_name: "data/dtbo.img", partition: "dtbo", flags: &[] },
-    DroidianPartition { image_name: "data/userdata.img", partition: "userdata", flags: &[] },
-    DroidianPartition {
-        image_name: "data/vbmeta.img",
-        partition: "vbmeta",
-        flags: &["--disable-verity", "--disable-verification"],
-    },
-];
 
 /// Orchestrates Droidian installation
 pub struct DroidianInstaller {
     serial: String,
     release_url: String,
     artifact_pattern: String,
+    flash_partitions: Vec<FlashPartition>,
     download_dir: PathBuf,
 }
 
 impl DroidianInstaller {
-    pub fn new(serial: String, release_url: String, artifact_pattern: String) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("droidian");
+    pub fn new(
+        serial: String,
+        release_url: String,
+        artifact_pattern: String,
+        flash_partitions: Vec<FlashPartition>,
+    ) -> Self {
+        let download_dir = crate::flashing::download_dir().join("droidian");
 
         Self {
             serial,
             release_url,
             artifact_pattern,
+            flash_partitions,
             download_dir,
         }
     }
@@ -76,6 +63,10 @@ impl DroidianInstaller {
 
     /// Main installation flow (runs on background thread)
     async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
+        if self.flash_partitions.is_empty() {
+            anyhow::bail!("No flash partitions configured for Droidian installation");
+        }
+
         let downloader = ImageDownloader::new(self.download_dir.clone());
         let adb = Adb::new();
         let fastboot = Fastboot::new();
@@ -162,31 +153,32 @@ impl DroidianInstaller {
         let _ = sender.send(InstallProgress::StatusChanged(
             "Flashing partitions...".into(),
         ));
-        let total = SARGO_PARTITIONS.len();
-        for (i, part) in SARGO_PARTITIONS.iter().enumerate() {
+        let total = self.flash_partitions.len();
+        for (i, part) in self.flash_partitions.iter().enumerate() {
             let _ = sender.send(InstallProgress::FlashProgress {
                 current: i + 1,
                 total,
                 description: format!("Flashing {}...", part.partition),
             });
 
-            let image_path = extract_dir.join(part.image_name);
+            let image_path = extract_dir.join(&part.image_path);
             if !image_path.exists() {
                 anyhow::bail!(
                     "Image file not found: {} (expected at {})",
-                    part.image_name,
+                    part.image_path,
                     image_path.display()
                 );
             }
 
             if part.flags.is_empty() {
                 fastboot
-                    .flash(&self.serial, part.partition, &image_path)
+                    .flash(&self.serial, &part.partition, &image_path)
                     .await
                     .with_context(|| format!("Failed to flash {}", part.partition))?;
             } else {
+                let flag_refs: Vec<&str> = part.flags.iter().map(|s| s.as_str()).collect();
                 fastboot
-                    .flash_with_flags(&self.serial, part.partition, &image_path, part.flags)
+                    .flash_with_flags(&self.serial, &part.partition, &image_path, &flag_refs)
                     .await
                     .with_context(|| format!("Failed to flash {}", part.partition))?;
             }
@@ -206,7 +198,6 @@ impl DroidianInstaller {
     // Sub-steps
     // ────────────────────────────────────────────────────────────────
 
-    /// Query GitHub API for the latest release, returning (zip_url, zip_name, checksums_url).
     async fn fetch_release_info(&self) -> Result<(String, String, String)> {
         let client = reqwest::Client::builder()
             .user_agent(format!("Sidestep/{}", crate::config::VERSION))
@@ -234,7 +225,6 @@ impl DroidianInstaller {
             .as_array()
             .context("No 'assets' array in release JSON")?;
 
-        // Find the ZIP matching our artifact pattern
         let zip_asset = assets
             .iter()
             .find(|a| {
@@ -256,7 +246,6 @@ impl DroidianInstaller {
             .context("No name for ZIP asset")?
             .to_string();
 
-        // Find the SHA256SUMS asset
         let checksums_asset = assets
             .iter()
             .find(|a| {
@@ -274,7 +263,6 @@ impl DroidianInstaller {
         Ok((zip_url, zip_name, checksums_url))
     }
 
-    /// Download SHA256SUMS and extract the hash for the given zip filename.
     async fn download_and_parse_checksums(
         &self,
         downloader: &ImageDownloader,
@@ -285,9 +273,7 @@ impl DroidianInstaller {
         Ok(checksums.get(zip_name).cloned())
     }
 
-    /// Extract a ZIP archive to the given directory.
     fn extract_zip(&self, zip_path: &PathBuf, extract_dir: &PathBuf) -> Result<()> {
-        // Clean up previous extraction
         if extract_dir.exists() {
             std::fs::remove_dir_all(extract_dir)
                 .context("Failed to clean previous extraction")?;
@@ -319,7 +305,6 @@ impl DroidianInstaller {
         Ok(())
     }
 
-    /// Poll fastboot devices until our device appears.
     async fn wait_for_fastboot(&self, fastboot: &Fastboot) -> Result<()> {
         for _ in 0..60 {
             if let Ok(devices) = fastboot.devices().await {

@@ -6,6 +6,7 @@ pub mod device_info;
 pub mod distro_config;
 pub mod installer;
 pub mod database;
+pub mod sync;
 pub mod system_image;
 
 pub use device::Device;

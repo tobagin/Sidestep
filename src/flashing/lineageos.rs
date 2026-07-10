@@ -64,10 +64,7 @@ impl LineageosInstaller {
         api_url: String,
         update_only: bool,
     ) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("lineageos");
+        let download_dir = crate::flashing::download_dir().join("lineageos");
 
         Self {
             serial,

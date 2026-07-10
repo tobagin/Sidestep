@@ -4,6 +4,7 @@
 use crate::config;
 use crate::models::Device;
 use crate::models::distro_config::DistroConfig;
+use crate::models::installer::InstallerConfig;
 use crate::utils::yaml_parser::YamlParser;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -24,17 +25,24 @@ impl DeviceDatabase {
         db
     }
 
-    /// Scan data/devices/{manufacturer}/{codename}/info.yml and load all devices.
+    /// Load devices, bundled data first then synced updates overlaid on top.
+    /// The bundled copy is authoritative: a synced device only overrides a
+    /// bundled one when it parses, and synced-only devices are added — so an
+    /// incompatible or partial sync can never drop below the bundled set.
     fn load_from_data_dir(&mut self) {
-        let devices_dir = Self::devices_data_dir();
-        let parser = YamlParser::new(&devices_dir);
+        self.load_dir(&Self::synced_devices_dir());
+        self.load_dir(&Self::bundled_devices_dir());
+        log::info!("Loaded {} devices", self.devices.len());
+    }
 
-        let manufacturers = match std::fs::read_dir(&devices_dir) {
+    /// Scan {dir}/{manufacturer}/{codename}/info.yml and insert each device.
+    /// Later calls override earlier ones by codename.
+    fn load_dir(&mut self, devices_dir: &std::path::Path) {
+        let parser = YamlParser::new(devices_dir);
+
+        let manufacturers = match std::fs::read_dir(devices_dir) {
             Ok(entries) => entries,
-            Err(e) => {
-                log::error!("Cannot read devices directory {:?}: {}", devices_dir, e);
-                return;
-            }
+            Err(_) => return, // dir may not exist (e.g. never synced) — fine
         };
 
         for mfr_entry in manufacturers.flatten() {
@@ -60,8 +68,10 @@ impl DeviceDatabase {
                         self.devices.insert(device.codename.clone(), device);
                     }
                     Err(e) => {
-                        log::warn!(
-                            "Failed to load device {}/{}: {:#}",
+                        // Non-fatal: a bundled device stays if its synced
+                        // overlay fails to parse (e.g. schema drift).
+                        log::debug!(
+                            "Skipped device {}/{}: {:#}",
                             manufacturer,
                             codename,
                             e
@@ -70,8 +80,6 @@ impl DeviceDatabase {
                 }
             }
         }
-
-        log::info!("Loaded {} devices from {:?}", self.devices.len(), devices_dir);
     }
 
     /// Find a device by its codename
@@ -91,8 +99,8 @@ impl DeviceDatabase {
         None
     }
 
-    /// Resolve the devices data directory, checking common install paths.
-    pub fn devices_data_dir() -> PathBuf {
+    /// The bundled (authoritative) devices directory, checking install paths.
+    pub fn bundled_devices_dir() -> PathBuf {
         let candidates = vec![
             PathBuf::from(config::PKGDATADIR).join("devices"),
             PathBuf::from("/app/share/sidestep/devices"),
@@ -103,6 +111,11 @@ impl DeviceDatabase {
             .into_iter()
             .find(|p| p.exists())
             .unwrap_or_else(|| PathBuf::from("devices"))
+    }
+
+    /// The user-synced devices directory (may not exist yet).
+    pub fn synced_devices_dir() -> PathBuf {
+        crate::models::sync::user_data_dir().join("devices")
     }
 
     /// Sanitize a manufacturer name for use as a filesystem directory.
@@ -116,18 +129,20 @@ impl DeviceDatabase {
             .to_lowercase()
     }
 
-    /// Load all distro configs for a device from distros.yml.
+    /// Load all distro configs for a device from distros.yml. Bundled data is
+    /// tried first; the synced dir is a fallback for synced-only devices.
     pub fn get_distro_configs(&self, device: &Device) -> Vec<DistroConfig> {
-        let devices_dir = Self::devices_data_dir();
         let manufacturer = Self::maker_to_dir(&device.maker);
-        let parser = YamlParser::new(devices_dir);
-        match parser.parse_device_config(&manufacturer, &device.codename) {
-            Ok(config) => config.available_distros,
-            Err(e) => {
-                log::debug!("No distros.yml for {}: {:#}", device.codename, e);
-                Vec::new()
+        for dir in [Self::bundled_devices_dir(), Self::synced_devices_dir()] {
+            let parser = YamlParser::new(dir);
+            if let Ok(config) = parser.parse_device_config(&manufacturer, &device.codename) {
+                if !config.available_distros.is_empty() {
+                    return config.available_distros;
+                }
             }
         }
+        log::debug!("No distros.yml for {}", device.codename);
+        Vec::new()
     }
 
     /// Load a single distro config by ID from distros.yml.
@@ -135,6 +150,40 @@ impl DeviceDatabase {
         self.get_distro_configs(device)
             .into_iter()
             .find(|d| d.id == distro_id)
+    }
+
+    /// Load an installer config YAML for a specific device + distro.
+    pub fn load_installer_config(&self, device: &Device, distro_id: &str) -> Option<InstallerConfig> {
+        let possible_dirs = vec![
+            PathBuf::from(config::SIDESTEP_DATA_DIR),
+            PathBuf::from(config::PKGDATADIR),
+            PathBuf::from("/app/share/sidestep"),
+            PathBuf::from("data"),
+            // Synced last: fallback for synced-only devices bundled lacks.
+            crate::models::sync::user_data_dir(),
+        ];
+
+        for dir in possible_dirs {
+            let config_path = dir
+                .join("devices")
+                .join(Self::maker_to_dir(&device.maker))
+                .join(device.codename.to_lowercase())
+                .join("installers")
+                .join(format!("{}.yml", distro_id));
+
+            if let Ok(content) = std::fs::read_to_string(&config_path) {
+                match serde_yaml::from_str::<InstallerConfig>(&content) {
+                    Ok(config) => return Some(config),
+                    Err(e) => {
+                        log::error!("Failed to parse {}: {}", config_path.display(), e);
+                        return None;
+                    }
+                }
+            }
+        }
+
+        log::debug!("No installer config found for {}/{}", device.codename, distro_id);
+        None
     }
 
     /// Get all supported devices

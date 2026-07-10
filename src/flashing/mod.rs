@@ -13,6 +13,22 @@ pub mod lineageos;
 pub mod eos;
 pub mod factory_image;
 
+use std::path::PathBuf;
+
+/// Base directory for downloaded images. Reads the user's `download-path`
+/// setting; falls back to the system cache dir. Callers append a per-distro
+/// subdir (e.g. `.join("mobian")`).
+pub fn download_dir() -> PathBuf {
+    use gtk::prelude::SettingsExt;
+    let configured = gtk::gio::Settings::new(crate::config::APP_ID).string("download-path");
+    if !configured.is_empty() {
+        return PathBuf::from(configured.as_str());
+    }
+    dirs::cache_dir()
+        .unwrap_or_else(|| PathBuf::from("/tmp"))
+        .join("sidestep")
+}
+
 pub use checksum::ChecksumVerifier;
 pub use progress::InstallProgress;
 pub use ubports::UbportsInstaller;

@@ -7,6 +7,7 @@ use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
+use crate::models::installer::FlashOperation;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
@@ -21,7 +22,7 @@ use std::time::Duration;
 ///   4. Verify SHA256 checksums
 ///   5. Decompress both XZ files → .img
 ///   6. Reboot to bootloader → wait for fastboot
-///   7. Flash boot, userdata
+///   7. Execute flash_operations from YAML config
 ///   8. Reboot
 pub struct PostmarketosInstaller {
     serial: String,
@@ -29,6 +30,7 @@ pub struct PostmarketosInstaller {
     channel: String,
     interface: String,
     device: String,
+    flash_operations: Vec<FlashOperation>,
     download_dir: PathBuf,
 }
 
@@ -39,11 +41,9 @@ impl PostmarketosInstaller {
         channel: String,
         interface: String,
         device: String,
+        flash_operations: Vec<FlashOperation>,
     ) -> Self {
-        let download_dir = dirs::cache_dir()
-            .unwrap_or_else(|| PathBuf::from("/tmp"))
-            .join("sidestep")
-            .join("postmarketos");
+        let download_dir = crate::flashing::download_dir().join("postmarketos");
 
         Self {
             serial,
@@ -51,6 +51,7 @@ impl PostmarketosInstaller {
             channel,
             interface,
             device,
+            flash_operations,
             download_dir,
         }
     }
@@ -79,6 +80,10 @@ impl PostmarketosInstaller {
 
     /// Main installation flow (runs on background thread)
     async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
+        if self.flash_operations.is_empty() {
+            anyhow::bail!("No flash operations configured for postmarketOS installation");
+        }
+
         let downloader = ImageDownloader::new(self.download_dir.clone());
         let adb = Adb::new();
         let fastboot = Fastboot::new();
@@ -206,30 +211,19 @@ impl PostmarketosInstaller {
         ));
         self.wait_for_fastboot(&fastboot).await?;
 
-        // ── Step 10: Flash partitions ──
-        let total_steps = 2;
-
-        // 10a: Flash boot
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 1,
-            total: total_steps,
-            description: "Flashing boot...".into(),
-        });
-        fastboot
-            .flash(&self.serial, "boot", &boot_img)
-            .await
-            .context("Failed to flash boot")?;
-
-        // 10b: Flash userdata (rootfs)
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 2,
-            total: total_steps,
-            description: "Flashing rootfs (this may take a while)...".into(),
-        });
-        fastboot
-            .flash(&self.serial, "userdata", &rootfs_img)
-            .await
-            .context("Failed to flash userdata (rootfs)")?;
+        // ── Step 10: Execute flash operations ──
+        let total_steps = self.flash_operations.len();
+        for (i, op) in self.flash_operations.iter().enumerate() {
+            self.execute_flash_operation(
+                &fastboot,
+                sender,
+                op,
+                i + 1,
+                total_steps,
+                &boot_img,
+                &rootfs_img,
+            ).await?;
+        }
 
         // ── Step 11: Reboot ──
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -241,12 +235,102 @@ impl PostmarketosInstaller {
         Ok(())
     }
 
+    /// Execute a single flash operation, resolving source names to actual paths.
+    async fn execute_flash_operation(
+        &self,
+        fastboot: &Fastboot,
+        sender: &Sender<InstallProgress>,
+        op: &FlashOperation,
+        current: usize,
+        total: usize,
+        boot_img: &PathBuf,
+        rootfs_img: &PathBuf,
+    ) -> Result<()> {
+        match op {
+            FlashOperation::Flash { partition, source, flags } => {
+                let image_path = self.resolve_source(source, boot_img, rootfs_img);
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Flashing {}...", partition),
+                });
+                if flags.is_empty() {
+                    fastboot
+                        .flash(&self.serial, partition, &image_path)
+                        .await
+                        .with_context(|| format!("Failed to flash {}", partition))?;
+                } else {
+                    let flag_refs: Vec<&str> = flags.iter().map(|s| s.as_str()).collect();
+                    fastboot
+                        .flash_with_flags(&self.serial, partition, &image_path, &flag_refs)
+                        .await
+                        .with_context(|| format!("Failed to flash {}", partition))?;
+                }
+            }
+            FlashOperation::FlashSparse { partition, source, chunk_size } => {
+                let image_path = self.resolve_source(source, boot_img, rootfs_img);
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Flashing {} (this may take a while)...", partition),
+                });
+                fastboot
+                    .flash_sparse(&self.serial, partition, &image_path, chunk_size)
+                    .await
+                    .with_context(|| format!("Failed to flash {} (sparse)", partition))?;
+            }
+            FlashOperation::Format { partition, fs_type } => {
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Formatting {}...", partition),
+                });
+                fastboot
+                    .format(&self.serial, partition, fs_type)
+                    .await
+                    .with_context(|| format!("Failed to format {} as {}", partition, fs_type))?;
+            }
+            FlashOperation::Erase { partition } => {
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Erasing {}...", partition),
+                });
+                fastboot
+                    .erase(&self.serial, partition)
+                    .await
+                    .with_context(|| format!("Failed to erase {}", partition))?;
+            }
+            FlashOperation::Oem { args } => {
+                let desc = format!("oem {}", args.join(" "));
+                let _ = sender.send(InstallProgress::FlashProgress {
+                    current,
+                    total,
+                    description: format!("Running {}...", desc),
+                });
+                let arg_refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+                fastboot
+                    .oem(&self.serial, &arg_refs)
+                    .await
+                    .with_context(|| format!("Failed to run {}", desc))?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Resolve a source name like "boot" or "rootfs" to an actual file path.
+    fn resolve_source(&self, source: &str, boot_img: &PathBuf, rootfs_img: &PathBuf) -> PathBuf {
+        match source {
+            "boot" => boot_img.clone(),
+            "rootfs" => rootfs_img.clone(),
+            other => PathBuf::from(other),
+        }
+    }
+
     // ────────────────────────────────────────────────────────────────
     // Sub-steps
     // ────────────────────────────────────────────────────────────────
 
-    /// Scrape the interface listing page for the latest date-stamped build directory.
-    /// Directories follow the pattern `YYYYMMDD-HHMM/`.
     async fn discover_latest_build(&self, listing_url: &str) -> Result<String> {
         let client = reqwest::Client::builder()
             .user_agent(format!("Sidestep/{}", crate::config::VERSION))
@@ -268,7 +352,6 @@ impl PostmarketosInstaller {
 
         let html = resp.text().await.context("Failed to read build listing")?;
 
-        // Look for href="YYYYMMDD-HHMM/" patterns (date-stamped directories)
         let mut best_dir = String::new();
 
         for line in html.lines() {
@@ -276,14 +359,13 @@ impl PostmarketosInstaller {
                 let rest = &line[start + 6..];
                 if let Some(end) = rest.find('"') {
                     let href = &rest[..end];
-                    // Match pattern: YYYYMMDD-HHMM/
                     if href.ends_with('/')
                         && href.len() == 14
                         && href[..8].chars().all(|c| c.is_ascii_digit())
                         && href.as_bytes()[8] == b'-'
                         && href[9..13].chars().all(|c| c.is_ascii_digit())
                     {
-                        let dir_name = &href[..13]; // without trailing slash
+                        let dir_name = &href[..13];
                         if dir_name > best_dir.as_str() {
                             best_dir = dir_name.to_string();
                         }
@@ -306,8 +388,6 @@ impl PostmarketosInstaller {
         Ok(best_dir)
     }
 
-    /// Scrape a build directory page for boot + rootfs image filenames and their SHA256 hashes.
-    /// Returns (boot_filename, boot_sha256, rootfs_filename, rootfs_sha256).
     async fn discover_images(
         &self,
         build_url: &str,
@@ -332,7 +412,6 @@ impl PostmarketosInstaller {
 
         let html = resp.text().await.context("Failed to read build directory")?;
 
-        // Collect all .img.xz hrefs from the page
         let mut boot_name: Option<String> = None;
         let mut rootfs_name: Option<String> = None;
 
@@ -359,34 +438,22 @@ impl PostmarketosInstaller {
             anyhow::anyhow!("Could not find rootfs image in {}", build_url)
         })?;
 
-        // Parse SHA256 hashes from the page.
-        // Format on the page: sha256 link followed by ": HASH" on the same line or nearby.
-        // The HTML contains patterns like:
-        //   <a href="filename.sha256">sha256</a>: HASH_VALUE
         let boot_hash = self.extract_sha256(&html, &boot_name)?;
         let rootfs_hash = self.extract_sha256(&html, &rootfs_name)?;
 
         Ok((boot_name, boot_hash, rootfs_name, rootfs_hash))
     }
 
-    /// Extract the SHA256 hash for a given filename from the build directory HTML.
-    /// Looks for patterns like: `href="filename.sha256">sha256</a>: HASH`
     fn extract_sha256(&self, html: &str, filename: &str) -> Result<String> {
         let sha256_file = format!("{}.sha256", filename);
 
-        // The HTML may span multiple lines, e.g.:
-        //   <a href="file.sha256"
-        //      >sha256</a>: HASH
-        // So we check both the current line and the next line for the hash.
         let lines: Vec<&str> = html.lines().collect();
         for (i, line) in lines.iter().enumerate() {
             if line.contains(&sha256_file) {
-                // Check current line and next line for the hash pattern
                 for check_line in &lines[i..std::cmp::min(i + 3, lines.len())] {
                     if let Some(pos) = check_line.find("sha256</a>:") {
-                        let after = &check_line[pos + 11..]; // skip "sha256</a>:"
+                        let after = &check_line[pos + 11..];
                         let hash = after.trim().split_whitespace().next().unwrap_or("");
-                        // Strip any trailing HTML tags
                         let hash = hash.split('<').next().unwrap_or(hash);
                         if hash.len() == 64 && hash.chars().all(|c| c.is_ascii_hexdigit()) {
                             return Ok(hash.to_string());
@@ -402,7 +469,6 @@ impl PostmarketosInstaller {
         )
     }
 
-    /// Poll fastboot devices until our device appears.
     async fn wait_for_fastboot(&self, fastboot: &Fastboot) -> Result<()> {
         for _ in 0..60 {
             if let Ok(devices) = fastboot.devices().await {
