@@ -3,6 +3,8 @@
 
 pub mod device;
 pub mod device_info;
+pub mod unlocking_step;
+pub mod unlock_guide;
 pub mod distro_config;
 pub mod installer;
 pub mod database;

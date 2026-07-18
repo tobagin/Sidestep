@@ -5,6 +5,7 @@ use crate::pages::device_browser::DeviceBrowserPage;
 use crate::pages::device_details::DeviceDetailsPage;
 use crate::pages::device_info::DeviceInfoPage;
 use crate::pages::success::SuccessPage;
+use crate::pages::unlocking::UnlockingPage;
 use crate::pages::waiting::WaitingPage;
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
@@ -20,6 +21,8 @@ mod imp {
     pub struct SidestepWindow {
         #[template_child]
         pub toast_overlay: TemplateChild<adw::ToastOverlay>,
+        #[template_child]
+        pub content_box: TemplateChild<gtk::Box>,
         #[template_child]
         pub main_nav: TemplateChild<adw::NavigationView>,
         #[template_child]
@@ -242,6 +245,24 @@ impl SidestepWindow {
         }
     }
 
+    /// Push the bootloader unlocking page for the given device.
+    fn show_unlocking(&self, device: &Device) {
+        let imp = self.imp();
+        let unlocking_page = UnlockingPage::new(device);
+        unlocking_page.set_menu_model(&imp.primary_menu);
+
+        unlocking_page.connect_unlock_complete(move |page| {
+            if let Some(window) = page.root()
+                .and_then(|w| w.downcast::<SidestepWindow>().ok())
+            {
+                window.show_toast("Reconnect your device to continue installing.");
+                window.reset_to_waiting();
+            }
+        });
+
+        imp.main_nav.push(&unlocking_page);
+    }
+
     fn start_device_detection(&self) {
         log::info!("Starting device detection");
         let imp = self.imp();
@@ -347,8 +368,12 @@ impl SidestepWindow {
         let details_page = DeviceDetailsPage::new(device, supported);
         details_page.set_menu_model(&imp.primary_menu);
 
+        let window_weak = self.downgrade();
+        let device_clone = device.clone();
         details_page.connect_unlock_clicked(move |_| {
-            log::info!("Unlock clicked - unlocking page not implemented yet");
+            if let Some(window) = window_weak.upgrade() {
+                window.show_unlocking(&device_clone);
+            }
         });
 
         imp.main_nav.push(&details_page);

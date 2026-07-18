@@ -1,0 +1,28 @@
+# Bootloader unlocking steps
+unlocking_steps:
+  - order: 1
+    title: "Enable Developer Options"
+    description: "Go to Settings > About Phone and tap 'Build Number' 7 times"
+    type: manual
+  - order: 2
+    title: "Enable OEM Unlocking"
+    description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'. Note: this option may take up to a week to appear after first setup."
+    type: manual
+    warning: "OEM Unlock may take up to one week to become available"
+  - order: 3
+    title: "Get Unlock Code from Motorola"
+    description: "Visit the Motorola bootloader unlock page to request an unlock code for your device"
+    type: manual
+  - order: 4
+    title: "Reboot to Bootloader"
+    description: "Reboot the device into fastboot mode"
+    type: automated
+    command: "adb reboot bootloader"
+    duration_secs: 10
+  - order: 5
+    title: "Unlock Bootloader"
+    description: "Run OEM unlock command with the code from Motorola"
+    type: automated
+    command: "fastboot oem unlock <code>"
+    warning: "This will factory reset your device!"
+    duration_secs: 30

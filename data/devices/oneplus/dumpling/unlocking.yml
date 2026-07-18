@@ -1,0 +1,23 @@
+# Bootloader unlocking steps
+unlocking_steps:
+  - order: 1
+    title: "Enable Developer Options"
+    description: "Go to Settings > About Phone and tap 'Build Number' 7 times"
+    type: manual
+  - order: 2
+    title: "Enable OEM Unlocking"
+    description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'"
+    type: manual
+  - order: 3
+    title: "Reboot to Bootloader"
+    description: "Reboot the device into fastboot mode"
+    type: automated
+    command: "adb reboot bootloader"
+    duration_secs: 10
+  - order: 4
+    title: "Unlock Bootloader"
+    description: "Run unlock command. Use volume keys to confirm on device."
+    type: automated
+    command: "fastboot oem unlock"
+    warning: "This will factory reset your device!"
+    duration_secs: 30

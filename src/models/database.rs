@@ -5,6 +5,7 @@ use crate::config;
 use crate::models::Device;
 use crate::models::distro_config::DistroConfig;
 use crate::models::installer::InstallerConfig;
+use crate::models::unlocking_step::UnlockingStep;
 use crate::utils::yaml_parser::YamlParser;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -142,6 +143,38 @@ impl DeviceDatabase {
             }
         }
         log::debug!("No distros.yml for {}", device.codename);
+        Vec::new()
+    }
+
+    /// Load the curated bootloader-unlocking steps for a device from
+    /// `unlocking.yml`. Returns empty when the device has no curated steps —
+    /// callers fall back to the manufacturer-aware guide in `unlock_guide`.
+    pub fn get_unlocking_steps(&self, codename: &str) -> Vec<UnlockingStep> {
+        #[derive(serde::Deserialize)]
+        struct UnlockingFile {
+            unlocking_steps: Vec<UnlockingStep>,
+        }
+
+        let Some(device) = self.find_by_codename(codename) else {
+            return Vec::new();
+        };
+        let maker = Self::maker_to_dir(&device.maker);
+
+        for base in [Self::bundled_devices_dir(), Self::synced_devices_dir()] {
+            // Device dirs are named for the codename; try as-is then lowercased.
+            for name in [device.codename.clone(), device.codename.to_lowercase()] {
+                let path = base.join(&maker).join(&name).join("unlocking.yml");
+                let Ok(content) = std::fs::read_to_string(&path) else {
+                    continue;
+                };
+                match serde_yaml::from_str::<UnlockingFile>(&content) {
+                    Ok(f) => return f.unlocking_steps,
+                    Err(e) => log::warn!("Failed to parse {}: {}", path.display(), e),
+                }
+            }
+        }
+
+        log::debug!("No curated unlocking steps for {}", codename);
         Vec::new()
     }
 
