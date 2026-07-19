@@ -87,5 +87,14 @@ mod tests {
         // Motorola with per-vendor unlock steps.
         let m = p.parse_device("motorola", "addison").expect("parse addison");
         assert_eq!(m.name, "moto z play");
+
+        // parse_device_info (used by the browser's specs panel) must succeed even
+        // though the community info.yml omits fields like display.density /
+        // connectivity.sensors — previously this failed and hid all specs.
+        let info = p
+            .parse_device_info("motorola", "addison")
+            .expect("parse_device_info addison");
+        assert!(!info.device.specs.soc.is_empty(), "SoC populated");
+        assert_eq!(info.device.display.density, ""); // missing field defaults, not fatal
     }
 }

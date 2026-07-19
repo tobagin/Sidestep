@@ -8,7 +8,11 @@ pub struct DeviceInfo {
     pub device: DeviceInfoData,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+// Every spec section defaults so partial info.yml files (e.g. community devices
+// where the source lacks some fields) still parse and display what they have,
+// rather than failing to parse and hiding the whole specs group.
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 #[allow(dead_code)]
 pub struct DeviceInfoData {
     pub name: String,
@@ -20,7 +24,8 @@ pub struct DeviceInfoData {
     pub cameras: Vec<CameraSpecs>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 #[allow(dead_code)]
 pub struct DeviceSpecs {
     pub soc: String,
@@ -33,7 +38,8 @@ pub struct DeviceSpecs {
     pub dimensions: Option<Dimensions>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 #[allow(dead_code)]
 pub struct Dimensions {
     pub height: String,
@@ -41,7 +47,8 @@ pub struct Dimensions {
     pub depth: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 pub struct DisplaySpecs {
     pub size: String,
     pub resolution: String,
@@ -50,7 +57,8 @@ pub struct DisplaySpecs {
     pub refresh_rate: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 pub struct ConnectivitySpecs {
     pub network: Vec<String>,
     pub bluetooth: String,
@@ -60,7 +68,8 @@ pub struct ConnectivitySpecs {
     pub location: Vec<String>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Default, Deserialize)]
+#[serde(default)]
 pub struct CameraSpecs {
     pub label: String,
     pub resolution: String,

@@ -216,21 +216,31 @@ impl DeviceDetailsPage {
         let specs = &info.device.specs;
         let display = &info.device.display;
 
-        rows.push(self.make_action_row("SoC", &specs.soc));
-        rows.push(self.make_action_row("CPU", &specs.cpu));
-        rows.push(self.make_action_row("GPU", &specs.gpu));
-        rows.push(self.make_action_row("RAM", &specs.ram));
-        rows.push(self.make_action_row("Storage", &specs.storage));
-        rows.push(self.make_action_row("Battery", &specs.battery));
-        rows.push(self.make_action_row("Display", &format!(
-            "{} {} ({})", display.size, display.panel_type, display.resolution
-        )));
+        // Only show rows we actually have a value for — community devices may
+        // carry partial specs.
+        let mut push = |title: &str, value: &str| {
+            if !value.trim().is_empty() {
+                rows.push(self.make_action_row(title, value));
+            }
+        };
+        push("SoC", &specs.soc);
+        push("CPU", &specs.cpu);
+        push("GPU", &specs.gpu);
+        push("RAM", &specs.ram);
+        push("Storage", &specs.storage);
+        push("Battery", &specs.battery);
+        let disp = format!("{} {} {}", display.size, display.panel_type, display.resolution)
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ");
+        push("Display", &disp);
 
         for row in &rows {
             imp.specs_group.add(row);
         }
+        let any = !rows.is_empty();
         *imp.specs_rows.borrow_mut() = rows;
-        imp.specs_group.set_visible(true);
+        imp.specs_group.set_visible(any);
     }
 
     fn load_device_info(&self, device: &Device) -> Option<DeviceInfo> {
