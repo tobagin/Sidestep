@@ -34,7 +34,7 @@ device:
       - "Gyroscope"
       - "Proximity sensor"
   cameras:
-    - label: "8 MP"
+    - label: "Camera"
       resolution: "8 MP"
-    - label: "2 MP"
+    - label: "Camera"
       resolution: "2 MP"

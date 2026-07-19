@@ -42,7 +42,8 @@ device:
       - "GLONASS"
       - "GPS"
   cameras:
-    - label: "48 MP"
+    - label: "Camera"
       resolution: "48 MP"
-    - label: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
       resolution: "8 MP"

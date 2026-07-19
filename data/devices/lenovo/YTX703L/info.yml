@@ -39,7 +39,7 @@ device:
       - "A-GPS"
       - "GPS"
   cameras:
-    - label: "13 MP"
+    - label: "Camera"
       resolution: "13 MP"
-    - label: "5 MP (front)"
-      resolution: "5 MP (front)"
+    - label: "Front"
+      resolution: "5 MP"

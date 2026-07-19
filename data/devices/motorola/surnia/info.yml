@@ -32,7 +32,7 @@ device:
       - "Accelerometer"
       - "Proximity sensor"
   cameras:
-    - label: "5 MP"
+    - label: "Camera"
       resolution: "5 MP"
-    - label: "0.3 MP"
+    - label: "Camera"
       resolution: "0.3 MP"

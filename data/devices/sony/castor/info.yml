@@ -42,7 +42,7 @@ device:
       - "GLONASS"
       - "GPS"
   cameras:
-    - label: "8.1 MP"
+    - label: "Camera"
       resolution: "8.1 MP"
-    - label: "2.2 MP"
+    - label: "Camera"
       resolution: "2.2 MP"

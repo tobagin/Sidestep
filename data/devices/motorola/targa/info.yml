@@ -35,7 +35,8 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "8 MP"
+    - label: "Camera"
       resolution: "8 MP"
-    - label: "0.3 MP"
+      features: "LED flash"
+    - label: "Camera"
       resolution: "0.3 MP"

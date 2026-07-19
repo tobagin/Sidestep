@@ -32,7 +32,8 @@ device:
     sensors:
       - "Hall effect sensor"
   cameras:
-    - label: "12 MP"
+    - label: "Camera"
       resolution: "12 MP"
-    - label: "5 MP"
+      features: "Dual LED flash"
+    - label: "Camera"
       resolution: "5 MP"

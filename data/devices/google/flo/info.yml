@@ -28,7 +28,7 @@ device:
     peripherals:
       - "3.5mm jack"
   cameras:
-    - label: "5 MP"
+    - label: "Camera"
       resolution: "5 MP"
-    - label: "1.2 MP"
+    - label: "Camera"
       resolution: "1.2 MP"

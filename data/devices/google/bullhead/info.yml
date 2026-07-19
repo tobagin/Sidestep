@@ -36,7 +36,8 @@ device:
       - "Gyroscope"
       - "Proximity sensor"
   cameras:
-    - label: "12.3 MP"
+    - label: "Camera"
       resolution: "12.3 MP"
-    - label: "5 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Camera"
       resolution: "5 MP"

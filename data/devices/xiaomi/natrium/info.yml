@@ -41,9 +41,11 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "16 MP"
+    - label: "Camera"
       resolution: "16 MP"
-    - label: "16 MP (monochromatic)"
-      resolution: "16 MP (monochromatic)"
-    - label: "4 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Monochromatic"
+      resolution: "16 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Camera"
       resolution: "4 MP"

@@ -39,9 +39,11 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "13 MP (Rear)"
-      resolution: "13 MP (Rear)"
-    - label: "13 MP (Monochrome sensor)"
-      resolution: "13 MP (Monochrome sensor)"
-    - label: "16 MP (Front)"
-      resolution: "16 MP (Front)"
+    - label: "Rear"
+      resolution: "13 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Monochrome sensor"
+      resolution: "13 MP"
+    - label: "Front"
+      resolution: "16 MP"
+      features: "LED flash"

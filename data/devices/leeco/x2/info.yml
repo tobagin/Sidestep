@@ -36,7 +36,8 @@ device:
       - "Light sensor"
       - "Proximity sensor"
   cameras:
-    - label: "21 MP"
+    - label: "Camera"
       resolution: "21 MP"
-    - label: "8 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Camera"
       resolution: "8 MP"

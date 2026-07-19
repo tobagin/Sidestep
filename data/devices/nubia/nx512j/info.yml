@@ -37,7 +37,9 @@ device:
       - "Hall effect sensor"
       - "Proximity sensor"
   cameras:
-    - label: "15.9 MP"
+    - label: "Camera"
       resolution: "15.9 MP"
-    - label: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
       resolution: "8 MP"
+      features: "LED flash"

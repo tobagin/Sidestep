@@ -29,5 +29,5 @@ device:
       - "Compass"
       - "Proximity sensor"
   cameras:
-    - label: "5 MP"
+    - label: "Camera"
       resolution: "5 MP"

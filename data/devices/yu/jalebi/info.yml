@@ -26,7 +26,7 @@ device:
       - "3.5mm jack"
       - "Dual SIM"
   cameras:
-    - label: "8 MP"
+    - label: "Camera"
       resolution: "8 MP"
-    - label: "2 MP"
+    - label: "Camera"
       resolution: "2 MP"

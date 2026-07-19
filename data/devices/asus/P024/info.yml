@@ -31,7 +31,7 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "5 MP or 8 MP"
+    - label: "Camera"
       resolution: "5 MP or 8 MP"
-    - label: "2 MP"
+    - label: "Camera"
       resolution: "2 MP"

@@ -25,7 +25,8 @@ device:
     peripherals:
       - "3.5mm jack"
   cameras:
-    - label: "21 MP"
+    - label: "Camera"
       resolution: "21 MP"
-    - label: "5 MP"
+      features: "Dual LED flash"
+    - label: "Camera"
       resolution: "5 MP"

@@ -40,7 +40,8 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "20 MP"
+    - label: "Camera"
       resolution: "20 MP"
-    - label: "4 MP"
+      features: "Dual LED flash"
+    - label: "Camera"
       resolution: "4 MP"

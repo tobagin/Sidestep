@@ -36,7 +36,8 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "16 MP (w/ 5 MP depth sensor)"
-      resolution: "16 MP (w/ 5 MP depth sensor)"
-    - label: "25 MP"
+    - label: "W/ 5 MP depth sensor"
+      resolution: "16 MP"
+      features: "LED flash"
+    - label: "Camera"
       resolution: "25 MP"

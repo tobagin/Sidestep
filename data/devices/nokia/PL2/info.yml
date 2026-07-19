@@ -38,7 +38,8 @@ device:
     location:
       - "GPS"
   cameras:
-    - label: "16 MP"
+    - label: "Camera"
       resolution: "16 MP"
-    - label: "8 MP"
+      features: "Dual LED (dual tone) flash"
+    - label: "Camera"
       resolution: "8 MP"

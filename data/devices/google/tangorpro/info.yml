@@ -35,7 +35,7 @@ device:
       - "Gyroscope"
       - "Light sensor"
   cameras:
-    - label: "8 MP (main)"
-      resolution: "8 MP (main)"
-    - label: "8 MP (front)"
-      resolution: "8 MP (front)"
+    - label: "Main"
+      resolution: "8 MP"
+    - label: "Front"
+      resolution: "8 MP"

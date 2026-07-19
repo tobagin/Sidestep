@@ -24,7 +24,8 @@ device:
       - "Compass"
       - "Proximity sensor"
   cameras:
-    - label: "8 MP or 13 MP"
+    - label: "Camera"
       resolution: "8 MP or 13 MP"
-    - label: "2 MP or 5 MP"
+      features: "LED flash"
+    - label: "Camera"
       resolution: "2 MP or 5 MP"
