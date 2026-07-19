@@ -19,3 +19,23 @@ available_distros:
       not_working: []
       notes:
         - "Samsung device: recovery flashed via Odin download mode (Heimdall)"
+
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation (Murena)"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/gts4lvwifi/"
+    channels:
+      - id: "a15"
+        label: "Android 15 (Community)"
+      - id: "a14"
+        label: "Android 14 (Community)"
+    flash_method: "heimdall_recovery"
+    compatibility:
+      working:
+        - "Privacy-focused Android (deGoogled)"
+      partial: []
+      not_working: []
+      notes:
+        - "Samsung device: recovery flashed via Odin download mode (Heimdall)"

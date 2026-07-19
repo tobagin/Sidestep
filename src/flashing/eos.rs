@@ -28,6 +28,9 @@ pub struct EosInstaller {
     base_url: String,
     codename: String,
     channel: String,
+    /// Samsung devices flash the recovery over Odin download mode (Heimdall)
+    /// instead of fastboot.
+    use_heimdall: bool,
     download_dir: PathBuf,
 }
 
@@ -37,6 +40,7 @@ impl EosInstaller {
         base_url: String,
         codename: String,
         channel: String,
+        use_heimdall: bool,
     ) -> Self {
         let download_dir = crate::flashing::download_dir().join("eos");
 
@@ -45,6 +49,7 @@ impl EosInstaller {
             base_url,
             codename,
             channel,
+            use_heimdall,
             download_dir,
         }
     }
@@ -170,38 +175,64 @@ impl EosInstaller {
             file_name: "Checksum verified".into(),
         });
 
-        // ── Step 6: Reboot to bootloader ──
-        let _ = sender.send(InstallProgress::StatusChanged(
-            "Rebooting to bootloader...".into(),
-        ));
-        if let Err(e) = adb.reboot_bootloader(&self.serial).await {
-            log::warn!(
-                "ADB reboot-bootloader failed (device may already be in fastboot): {}",
-                e
-            );
+        // ── Step 6+7: Flash the recovery (Samsung: Odin/Heimdall; else fastboot) ──
+        if self.use_heimdall {
+            let _ = sender.send(InstallProgress::StatusChanged(
+                "Rebooting to download mode...".into(),
+            ));
+            let _ = adb.reboot_download(&self.serial).await;
+            let _ = sender.send(InstallProgress::WaitingForUserAction(
+                "If prompted on the device, press Volume Up to enter download mode.".into(),
+            ));
+            crate::hardware::heimdall::Heimdall::new()
+                .wait_for_download_mode(120)
+                .await
+                .context("Device did not enter download mode")?;
+            let _ = sender.send(InstallProgress::FlashProgress {
+                current: 1,
+                total: 2,
+                description: "Flashing /e/OS recovery (Odin)...".into(),
+            });
+            crate::hardware::heimdall::Heimdall::new()
+                .flash(
+                    &[crate::hardware::heimdall::HeimdallFlash {
+                        partition: "RECOVERY".to_string(),
+                        image: recovery_path.clone(),
+                    }],
+                    false,
+                )
+                .await
+                .context("Failed to flash /e/OS recovery via Heimdall")?;
+            let _ = sender.send(InstallProgress::WaitingForUserAction(
+                "On your phone: hold Volume Up + Power (or Vol Up + Home + Power) to boot into recovery.".into(),
+            ));
+        } else {
+            let _ = sender.send(InstallProgress::StatusChanged(
+                "Rebooting to bootloader...".into(),
+            ));
+            if let Err(e) = adb.reboot_bootloader(&self.serial).await {
+                log::warn!(
+                    "ADB reboot-bootloader failed (device may already be in fastboot): {}",
+                    e
+                );
+            }
+            let _ = sender.send(InstallProgress::StatusChanged(
+                "Waiting for device in fastboot mode...".into(),
+            ));
+            self.wait_for_fastboot(&fastboot).await?;
+            let _ = sender.send(InstallProgress::FlashProgress {
+                current: 1,
+                total: 2,
+                description: "Flashing /e/OS recovery (boot)...".into(),
+            });
+            fastboot
+                .flash(&self.serial, "boot", &recovery_path)
+                .await
+                .context("Failed to flash /e/OS recovery to boot partition")?;
+            let _ = sender.send(InstallProgress::WaitingForRecovery);
         }
 
-        // Wait for fastboot
-        let _ = sender.send(InstallProgress::StatusChanged(
-            "Waiting for device in fastboot mode...".into(),
-        ));
-        self.wait_for_fastboot(&fastboot).await?;
-
-        // ── Step 7: Flash recovery to boot partition ──
-        let _ = sender.send(InstallProgress::FlashProgress {
-            current: 1,
-            total: 2,
-            description: "Flashing /e/OS recovery (boot)...".into(),
-        });
-        fastboot
-            .flash(&self.serial, "boot", &recovery_path)
-            .await
-            .context("Failed to flash /e/OS recovery to boot partition")?;
-
-        // ── Step 8: User manually boots into recovery ──
-        // Same pattern as UBports: prompt user to select recovery from
-        // the fastboot menu, then wait for ADB recovery to appear.
-        let _ = sender.send(InstallProgress::WaitingForRecovery);
+        // ── Step 8: Wait for recovery ──
         adb.wait_for_recovery(&self.serial).await?;
         let _ = sender.send(InstallProgress::RecoveryDetected);
         tokio::time::sleep(Duration::from_secs(3)).await;

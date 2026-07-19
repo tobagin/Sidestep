@@ -583,7 +583,8 @@ impl InstallFlow {
             progress_page.set_menu_model(menu_model);
         }
 
-        progress_page.start_eos_installation(serial, &base_url, &self.device.codename, &channel.id);
+        let use_heimdall = self.device.maker.eq_ignore_ascii_case("samsung");
+        progress_page.start_eos_installation(serial, &base_url, &self.device.codename, &channel.id, use_heimdall);
 
         self.push_flashing_page(&progress_page);
     }

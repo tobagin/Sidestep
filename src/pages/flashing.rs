@@ -366,6 +366,7 @@ impl FlashingPage {
         base_url: &str,
         codename: &str,
         channel: &str,
+        use_heimdall: bool,
     ) {
         self.set_distro_name("/e/OS");
 
@@ -383,6 +384,7 @@ impl FlashingPage {
             base_url.to_string(),
             codename.to_string(),
             channel.to_string(),
+            use_heimdall,
         );
         let receiver = installer.spawn(self.cancel_flag());
 
