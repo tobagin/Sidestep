@@ -1,0 +1,75 @@
+name: Release
+
+# Build distributable artifacts (Flatpak bundle, .deb, .rpm) on a version tag,
+# and attach them to the GitHub release.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  flatpak:
+    name: Flatpak bundle
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Flatpak bundle
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: io.github.tobagin.Sidestep.flatpak
+          manifest-path: packaging/io.github.tobagin.Sidestep.yml
+          cache-key: flatpak-${{ github.sha }}
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: io.github.tobagin.Sidestep.flatpak
+
+  packages:
+    name: deb + rpm
+    runs-on: ubuntu-latest
+    # Fedora has current GTK4 / libadwaita (>= 1.6) needed to build the app.
+    container: fedora:42
+    steps:
+      - name: Build dependencies
+        run: >
+          dnf install -y nodejs git gcc meson ninja-build cargo rust
+          gtk4-devel libadwaita-devel glib2-devel blueprint-compiler
+          gettext desktop-file-utils appstream rpm-build ruby ruby-devel rubygems
+          && gem install --no-document fpm
+      - uses: actions/checkout@v4
+      - name: Vendor crates (offline meson build)
+        run: |
+          mkdir -p cargo
+          CARGO_HOME="$PWD/cargo" cargo fetch
+      - name: Build + stage install tree
+        run: |
+          meson setup builddir --prefix=/usr -Dprofile=default
+          meson compile -C builddir
+          DESTDIR="$PWD/pkgroot" meson install -C builddir
+      - name: Package .deb and .rpm
+        run: |
+          VER="${GITHUB_REF_NAME#v}"; [ -n "$VER" ] || VER=0.4.0
+          COMMON=(-s dir -n sidestep -v "$VER" --license GPL-3.0-or-later
+                  --description "Install mobile Linux on Android devices"
+                  --url "https://github.com/tobagin/Sidestep"
+                  --maintainer "tobagin" -C pkgroot)
+          fpm "${COMMON[@]}" -t deb \
+            -d "libgtk-4-1 (>= 4.12)" -d "libadwaita-1-0 (>= 1.6)" \
+            -d "adb" -d "fastboot" .
+          fpm "${COMMON[@]}" -t rpm \
+            -d "gtk4 >= 4.12" -d "libadwaita >= 1.6" -d "android-tools" .
+          ls -1 *.deb *.rpm
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.deb
+            *.rpm

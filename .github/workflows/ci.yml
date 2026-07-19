@@ -8,12 +8,16 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # ubuntu-latest ships libadwaita 1.5, but the app needs >= 1.6 (v1_6 feature).
+    # Build in a Fedora container that has current GTK4 / libadwaita.
+    container: fedora:42
     steps:
+      # nodejs + git must exist in the container for the JS actions below.
+      - name: Container dependencies
+        run: >
+          dnf install -y nodejs git gcc pkgconf-pkg-config
+          gtk4-devel libadwaita-devel openssl-devel
       - uses: actions/checkout@v4
-      - name: Install GTK/libadwaita dev libraries
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -23,8 +27,7 @@ jobs:
         run: cargo check --all-targets
       - name: Test
         run: cargo test
-      # Informational — surfaced but not blocking until the existing backlog of
-      # style/clippy findings is cleared. Flip to blocking once it's green.
+      # Informational until the existing style/clippy backlog is cleared.
       - name: Format
         run: cargo fmt --all --check
         continue-on-error: true

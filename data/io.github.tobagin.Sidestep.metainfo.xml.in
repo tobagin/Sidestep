@@ -54,6 +54,19 @@
   </developer>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.4.0" date="2026-07-19">
+      <description>
+        <p>Massive device and distro expansion:</p>
+        <ul>
+          <li>430 devices across 7 distributions</li>
+          <li>New: GrapheneOS (Pixel 6-9), with signed-image verification</li>
+          <li>Ubuntu Touch rebuilt on a faithful bootstrap flash engine (39 devices)</li>
+          <li>Samsung/Exynos support via the Odin protocol (Heimdall)</li>
+          <li>Hundreds of community LineageOS and /e/OS devices with full specs</li>
+          <li>Signed device-database sync, download resume, and battery/IMEI safeguards</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.3.0" date="2026-02-16">
       <description>
         <p>New devices and Mobian support:</p>
