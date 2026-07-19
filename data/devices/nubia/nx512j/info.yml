@@ -28,10 +28,11 @@ device:
     wifi: "802.11 b/g/n/ac"
     peripherals:
       - "3.5mm jack"
-      - "Accelerometer"
-      - "Compass"
       - "Dual SIM"
       - "FM radio"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
       - "Gyroscope"
       - "Hall effect sensor"
       - "Proximity sensor"

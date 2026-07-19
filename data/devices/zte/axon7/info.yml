@@ -28,11 +28,12 @@ device:
     wifi: "802.11 b/g/n/ac"
     peripherals:
       - "3.5mm jack"
+      - "Fingerprint reader"
+      - "NFC"
+    sensors:
       - "Accelerometer"
       - "Compass"
-      - "Fingerprint reader"
       - "Gyroscope"
-      - "NFC"
       - "Proximity sensor"
   cameras:
     - label: "20 MP"

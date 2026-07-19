@@ -27,13 +27,15 @@ device:
     bluetooth: "4.2"
     wifi: "802.11 a/b/g/n/ac"
     peripherals:
-      - "Accelerometer"
-      - "Compass"
       - "eSIM"
       - "Fingerprint reader"
-      - "GPS"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
       - "Gyroscope"
       - "Proximity sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "40 MP"
       resolution: "40 MP"

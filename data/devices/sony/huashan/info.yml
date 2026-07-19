@@ -28,15 +28,17 @@ device:
     wifi: "802.11 b/g/n"
     peripherals:
       - "3.5mm jack"
-      - "Accelerometer"
-      - "Compass"
-      - "GPS"
-      - "Gyroscope"
       - "HDMI"
-      - "Light sensor"
       - "MHL"
       - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Light sensor"
       - "Proximity sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "8 MP"
       resolution: "8 MP"

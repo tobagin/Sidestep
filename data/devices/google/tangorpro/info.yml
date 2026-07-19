@@ -26,13 +26,14 @@ device:
     bluetooth: "5.2"
     wifi: "802.11 a/b/g/n/ac/ax"
     peripherals:
-      - "Accelerometer"
-      - "Compass"
       - "Fingerprint reader"
-      - "Gyroscope"
-      - "Light sensor"
       - "Ultra Wideband (UWB)"
       - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Light sensor"
   cameras:
     - label: "8 MP (main)"
       resolution: "8 MP (main)"

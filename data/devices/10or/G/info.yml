@@ -28,14 +28,16 @@ device:
     wifi: "802.11 b/g/n"
     peripherals:
       - "3.5mm jack"
-      - "Accelerometer"
       - "Dual SIM"
       - "Fingerprint reader"
-      - "GPS"
-      - "Gyroscope"
-      - "Light sensor"
       - "Stereo speakers"
       - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Gyroscope"
+      - "Light sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "13 MP (Rear)"
       resolution: "13 MP (Rear)"

@@ -24,10 +24,12 @@ device:
     wifi: "802.11 b/g/n"
     peripherals:
       - "3.5mm jack"
+    sensors:
       - "Accelerometer"
       - "Compass"
-      - "GPS"
       - "Proximity sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "5 MP or 8 MP"
       resolution: "5 MP or 8 MP"

@@ -28,19 +28,21 @@ device:
     wifi: "802.11 a/b/g/n/ac"
     peripherals:
       - "3.5mm jack"
-      - "Accelerometer"
-      - "Compass"
       - "eSIM"
       - "Fingerprint reader"
+      - "NFC"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+    location:
       - "BeiDou"
       - "Galileo"
       - "GLONASS"
       - "GPS"
-      - "Gyroscope"
-      - "Light sensor"
-      - "NFC"
-      - "Proximity sensor"
-      - "USB OTG"
   cameras:
     - label: "12.2 MP"
       resolution: "12.2 MP"

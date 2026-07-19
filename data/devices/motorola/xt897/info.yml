@@ -28,13 +28,15 @@ device:
     wifi: "802.11 b/g/n"
     peripherals:
       - "3.5mm jack"
+      - "Hardware keyboard"
+      - "NFC"
+    sensors:
       - "Accelerometer"
       - "Compass"
-      - "GPS"
-      - "Hardware keyboard"
       - "Light sensor"
-      - "NFC"
       - "Proximity sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "8 MP"
       resolution: "8 MP"

@@ -28,17 +28,19 @@ device:
     wifi: "802.11 b/g/n"
     peripherals:
       - "3.5mm jack"
-      - "A-GPS"
-      - "Accelerometer"
-      - "Compass"
       - "Dual SIM"
       - "FM radio"
-      - "GLONASS"
-      - "GPS"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
       - "Gyroscope"
       - "Light sensor"
       - "Proximity sensor"
-      - "USB OTG"
+    location:
+      - "A-GPS"
+      - "GLONASS"
+      - "GPS"
   cameras:
     - label: "13 MP"
       resolution: "13 MP"

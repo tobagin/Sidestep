@@ -24,6 +24,7 @@ device:
     wifi: "802.11 a/b/g/n"
     peripherals:
       - "3.5mm jack"
+    sensors:
       - "Accelerometer"
       - "Compass"
       - "Proximity sensor"

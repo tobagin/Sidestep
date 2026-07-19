@@ -156,15 +156,14 @@ impl DeviceInfoPage {
             .title("Specifications")
             .build();
 
-        group.add(&make_info_row("SoC", &specs.soc));
-        group.add(&make_info_row("CPU", &specs.cpu));
-        group.add(&make_info_row("GPU", &specs.gpu));
-        group.add(&make_info_row("RAM", &specs.ram));
-        group.add(&make_info_row("Storage", &specs.storage));
-        group.add(&make_info_row("Battery", &specs.battery));
-
+        add_info(&group, "SoC", &specs.soc);
+        add_info(&group, "CPU", &specs.cpu);
+        add_info(&group, "GPU", &specs.gpu);
+        add_info(&group, "RAM", &specs.ram);
+        add_info(&group, "Storage", &specs.storage);
+        add_info(&group, "Battery", &specs.battery);
         if let Some(ref arch) = specs.arch {
-            group.add(&make_info_row("Architecture", arch));
+            add_info(&group, "Architecture", arch);
         }
 
         content_box.append(&group);
@@ -181,11 +180,11 @@ impl DeviceInfoPage {
             .title("Display")
             .build();
 
-        group.add(&make_info_row("Size", &display.size));
-        group.add(&make_info_row("Resolution", &display.resolution));
-        group.add(&make_info_row("Panel Type", &display.panel_type));
-        group.add(&make_info_row("Density", &display.density));
-        group.add(&make_info_row("Refresh Rate", &display.refresh_rate));
+        add_info(&group, "Size", &display.size);
+        add_info(&group, "Resolution", &display.resolution);
+        add_info(&group, "Panel Type", &display.panel_type);
+        add_info(&group, "Density", &display.density);
+        add_info(&group, "Refresh Rate", &display.refresh_rate);
 
         content_box.append(&group);
     }
@@ -201,12 +200,12 @@ impl DeviceInfoPage {
             .title("Connectivity")
             .build();
 
-        group.add(&make_info_row("Network", &conn.network.join(", ")));
-        group.add(&make_info_row("Bluetooth", &conn.bluetooth));
-        group.add(&make_info_row("WiFi", &conn.wifi));
-        group.add(&make_info_row("Peripherals", &conn.peripherals.join(", ")));
-        group.add(&make_info_row("Sensors", &conn.sensors.join(", ")));
-        group.add(&make_info_row("Location", &conn.location.join(", ")));
+        add_info(&group, "Network", &conn.network.join(", "));
+        add_info(&group, "Bluetooth", &conn.bluetooth);
+        add_info(&group, "WiFi", &conn.wifi);
+        add_info(&group, "Peripherals", &conn.peripherals.join(", "));
+        add_info(&group, "Sensors", &conn.sensors.join(", "));
+        add_info(&group, "Location", &conn.location.join(", "));
 
         content_box.append(&group);
     }
@@ -547,7 +546,22 @@ fn make_info_row(title: &str, value: &str) -> adw::ActionRow {
     let label = gtk::Label::builder()
         .label(value)
         .css_classes(vec!["dim-label".to_string()])
+        // Long values (e.g. peripheral/sensor lists) must wrap and stay
+        // right-aligned instead of stretching the row off-screen.
+        .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .max_width_chars(28)
+        .xalign(1.0)
+        .halign(gtk::Align::End)
         .build();
     row.add_suffix(&label);
     row
+}
+
+/// Add an info row to a group only when the value is non-empty, so partial
+/// specs (common on community devices) don't render blank rows.
+fn add_info(group: &adw::PreferencesGroup, title: &str, value: &str) {
+    if !value.trim().is_empty() {
+        group.add(&make_info_row(title, value));
+    }
 }

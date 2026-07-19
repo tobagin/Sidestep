@@ -28,9 +28,11 @@ device:
     wifi: "802.11 b/g/n/ac"
     peripherals:
       - "3.5mm jack"
-      - "GPS"
+    sensors:
       - "Light sensor"
       - "Proximity sensor"
+    location:
+      - "GPS"
   cameras:
     - label: "13 MP"
       resolution: "13 MP"

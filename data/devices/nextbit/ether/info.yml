@@ -28,16 +28,18 @@ device:
     wifi: "802.11 a/b/g/n/ac"
     peripherals:
       - "3.5mm jack"
-      - "A-GPS"
+      - "Fingerprint reader"
+      - "NFC"
+    sensors:
       - "Accelerometer"
       - "Compass"
-      - "Fingerprint reader"
-      - "GPS"
       - "Gyroscope"
       - "Hall effect sensor"
       - "Light sensor"
-      - "NFC"
       - "Proximity sensor"
+    location:
+      - "A-GPS"
+      - "GPS"
   cameras:
     - label: "13 MP"
       resolution: "13 MP"
