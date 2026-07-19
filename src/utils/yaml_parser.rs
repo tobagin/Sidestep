@@ -59,3 +59,19 @@ impl YamlParser {
         Ok(config)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::YamlParser;
+
+    #[test]
+    fn parses_generated_pixel_devices() {
+        let p = YamlParser::new("data/devices");
+        // A representative new Pixel: info, and distros with grapheneos + lineageos.
+        let dev = p.parse_device("google", "shiba").expect("parse shiba");
+        assert_eq!(dev.name, "Pixel 8");
+        let cfg = p.parse_device_config("google", "shiba").expect("parse shiba distros");
+        let ids: Vec<_> = cfg.available_distros.iter().map(|d| d.id.as_str()).collect();
+        assert!(ids.contains(&"grapheneos"), "grapheneos present: {ids:?}");
+    }
+}

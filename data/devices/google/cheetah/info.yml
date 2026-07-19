@@ -1,0 +1,40 @@
+device:
+  name: "Pixel 7 Pro"
+  codename: "cheetah"
+  maker: "Google"
+  aliases: ["pixel 7 pro"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2022-10-13"
+  specs:
+    soc: "Google Tensor G2"
+    ram: "12 GB"
+    arch: "arm64"
+    battery: "5000 mAh Li-Po"
+  display:
+    size: "6.7 in"
+    resolution: "1440x3120"
+    refresh_rate: "120 Hz"
+    panel_type: "OLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE, 5G]
+    bluetooth: "5.0+"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "USB Type-C"
+      - "NFC"
+      - "Fingerprint reader (under-display)"
+    location: [GPS, GLONASS, Galileo, BeiDou]
+  cameras:
+    - label: "Main"
+      resolution: "50 MP"
+      features: "f/1.85, OIS"
+    - label: "Ultrawide"
+      resolution: "12 MP"
+      features: "f/2.2"
+    - label: "Telephoto"
+      resolution: "48 MP"
+      features: "f/3.5, 5x OIS"
+    - label: "Front"
+      resolution: "10.8 MP"
+      features: "f/2.2"

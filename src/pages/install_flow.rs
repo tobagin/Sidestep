@@ -411,8 +411,24 @@ impl InstallFlow {
             "postmarketos" => self.launch_postmarketos_interface_selection(channel),
             "lineageos" => self.launch_lineageos_install(channel),
             "eos" => self.launch_eos_install(channel),
+            "grapheneos" => self.launch_grapheneos_install(),
             _ => log::warn!("No installer backend for '{}'", distro_id),
         }
+    }
+
+    fn launch_grapheneos_install(&self) {
+        let Some(ref serial) = self.device.serial else {
+            log::error!("No device serial available for GrapheneOS installation");
+            return;
+        };
+        // GrapheneOS discovers the build from the device codename.
+        log::info!("Installing GrapheneOS for {}", self.device.codename);
+        let progress_page = FlashingPage::new();
+        if let Some(ref menu_model) = self.menu_model {
+            progress_page.set_menu_model(menu_model);
+        }
+        progress_page.start_grapheneos_installation(serial, &self.device.codename);
+        self.push_flashing_page(&progress_page);
     }
 
     /// Launch install for interface-based distros (Mobian, postmarketOS when

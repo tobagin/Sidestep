@@ -190,6 +190,24 @@ impl FlashingPage {
         self.poll_progress(receiver);
     }
 
+    /// Start a GrapheneOS installation (Pixel factory-image via flash-all.sh).
+    pub fn start_grapheneos_installation(&self, serial: &str, device: &str) {
+        self.set_distro_name("GrapheneOS");
+
+        let imp = self.imp();
+        imp.status_page.set_title("Installing GrapheneOS");
+        imp.status_page.set_description(Some("Preparing..."));
+        imp.decompress_row.set_title("Extracting");
+        #[allow(deprecated)]
+        imp.decompress_row.set_icon_name(Some("package-x-generic-symbolic"));
+
+        let installer =
+            crate::flashing::GrapheneosInstaller::new(serial.to_string(), device.to_string());
+        let receiver = installer.spawn(self.cancel_flag());
+
+        self.poll_progress(receiver);
+    }
+
     /// Start a Samsung download-mode (Heimdall/Odin) installation.
     pub fn start_heimdall_installation(
         &self,

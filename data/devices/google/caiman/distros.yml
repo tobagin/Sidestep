@@ -1,0 +1,40 @@
+device_codename: "caiman"
+last_updated: "2026-07-19"
+
+available_distros:
+  # --- GrapheneOS ---
+  - id: "grapheneos"
+    name: "GrapheneOS"
+    developer: "GrapheneOS Project"
+    discovery_strategy: "grapheneos_stable"
+    channels:
+      - id: "stable"
+        label: "Stable"
+    flash_method: "grapheneos_factory"
+    compatibility:
+      working:
+        - "Everything (hardware-parity with stock, hardened)"
+      partial: []
+      not_working: []
+      notes:
+        - "Security-hardened Android; verified boot with re-locked bootloader"
+        - "Factory image flashed via the bundled flash-all.sh"
+        - "Re-lock the bootloader after install for full security"
+
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/caiman/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Android-based custom ROM"
+      partial: []
+      not_working: []
+      notes:
+        - "Installed via recovery sideload"
