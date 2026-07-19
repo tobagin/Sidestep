@@ -1,0 +1,51 @@
+device:
+  name: "Galaxy S6 Edge"
+  codename: "zeroltexx"
+  maker: "Samsung"
+  aliases: ["galaxy s6 edge", "sm-g925f"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-04"
+  specs:
+    soc: "Samsung Exynos 7420"
+    ram: "3 GB"
+    cpu: "Cortex-A53 & Cortex-A57"
+    arch: "arm64"
+    gpu: "ARM Mali-T760 MP8"
+    storage: "16/32/128 GB"
+    battery: "2600 mAh Li-Po"
+    dimensions:
+      height: "143.4 mm"
+      width: "70.5 mm"
+      depth: "6.8 mm"
+  display:
+    size: "5.1 in"
+    resolution: "2560x1440"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "IR blaster"
+      - "Motion Coprocessor"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Heart rate sensor"
+      - "Proximity sensor"
+      - "RGB ambient light"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "16 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "5 MP"

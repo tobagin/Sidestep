@@ -1,0 +1,42 @@
+device:
+  name: "Galaxy Tab E 8.0 LTE (Sprint)"
+  codename: "gtesqltespr"
+  maker: "Samsung"
+  aliases: ["galaxy tab e 8.0 lte (sprint)", "sm-t377p"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016-01"
+  specs:
+    soc: "Qualcomm MSM8916 Snapdragon 410"
+    ram: "1.5 GB"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "16 GB"
+    battery: "5000 mAh Li-Ion"
+    dimensions:
+      height: "212.1 mm"
+      width: "126.1 mm"
+      depth: "8.9 mm"
+  display:
+    size: "8 in"
+    resolution: "800x1280"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G CDMA, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+    location:
+      - "GLONASS"
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "5 MP"
+    - label: "Camera"
+      resolution: "2 MP"

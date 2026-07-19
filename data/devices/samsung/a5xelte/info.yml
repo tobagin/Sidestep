@@ -1,0 +1,48 @@
+device:
+  name: "Galaxy A5 (2016)"
+  codename: "a5xelte"
+  maker: "Samsung"
+  aliases: ["galaxy a5 (2016)", "sm-a510f", "sm-a510f/ds", "sm-a510m", "sm-a510y", "sm-a510k", "sm-a510l", "sm-a510s", "sm-a5108"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-12"
+  specs:
+    soc: "Samsung Exynos 7580"
+    ram: "2 GB"
+    cpu: "Cortex-A53"
+    arch: "{'cpu': 'arm64', 'userspace': 'arm'}"
+    gpu: "ARM Mali-T720 MP2"
+    storage: "16 GB"
+    battery: "2900 mAh Li-Ion"
+    dimensions:
+      height: "144.8 mm"
+      width: "71 mm"
+      depth: "7.3 mm"
+  display:
+    size: "5.2 in"
+    resolution: "1920x1080"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "NFC"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Proximity sensor"
+      - "RGB ambient light"
+    location:
+      - "A-GPS"
+      - "GLONASS"
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "13 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "5 MP"

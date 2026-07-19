@@ -1,0 +1,47 @@
+device:
+  name: "Galaxy M20"
+  codename: "m20lte"
+  maker: "Samsung"
+  aliases: ["galaxy m20", "sm-m205f", "sm-m205fn", "sm-m205g", "sm-m205m", "sm-m205n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-01-28"
+  specs:
+    soc: "Samsung Exynos 7904"
+    ram: "3/4 GB"
+    cpu: "Cortex-A73 & Cortex-A53"
+    arch: "arm64"
+    gpu: "ARM Mali-G71 MP2"
+    storage: "32/64 GB"
+    battery: "5000 mAh Li-Po"
+    dimensions:
+      height: "156.4 mm"
+      width: "74.5 mm"
+      depth: "8.8 mm"
+  display:
+    size: "6.3 in"
+    resolution: "2340x1080"
+    panel_type: "PLS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "13 MP"
+      features: "LED flash"
+    - label: "Ultrawide"
+      resolution: "5 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "8 MP"

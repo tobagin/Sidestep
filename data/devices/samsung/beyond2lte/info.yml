@@ -1,0 +1,56 @@
+device:
+  name: "Galaxy S10+"
+  codename: "beyond2lte"
+  maker: "Samsung"
+  aliases: ["galaxy s10+", "sm-g975f", "sm-g975f/ds", "sm-g975n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-03-08"
+  specs:
+    soc: "Samsung Exynos 9820"
+    ram: "8/12 GB"
+    cpu: "Exynos M4 & Cortex-A75 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G76 MP12"
+    storage: "128/512/1024 GB"
+    battery: "4100 mAh Li-Ion"
+    dimensions:
+      height: "157.6 mm"
+      width: "74.1 mm"
+      depth: "7.8 mm"
+  display:
+    size: "6.4 in"
+    resolution: "3040x1440"
+    panel_type: "Dynamic AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "Qi wireless charging"
+      - "Qi reverse wireless charging"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Heart rate sensor"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Telephoto"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Ultrawide"
+      resolution: "16 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "10 MP"
+    - label: "Depth sensor"
+      resolution: "8 MP"

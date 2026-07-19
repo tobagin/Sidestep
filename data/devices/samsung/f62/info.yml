@@ -1,0 +1,50 @@
+device:
+  name: "Galaxy F62"
+  codename: "f62"
+  maker: "Samsung"
+  aliases: ["galaxy f62", "sm-e625f", "sm-e625f/ds"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2021-02-22"
+  specs:
+    soc: "Samsung Exynos 9825"
+    ram: "6/8 GB"
+    cpu: "Exynos M4 & Cortex-A75 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G76 MP12"
+    storage: "128 GB"
+    battery: "7000 mAh Li-Ion"
+    dimensions:
+      height: "163.9 mm"
+      width: "76.3 mm"
+      depth: "9.5 mm"
+  display:
+    size: "6.7 in"
+    resolution: "2400x1080"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "64 MP"
+      features: "LED flash"
+    - label: "Ultrawide"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Depth"
+      resolution: "5 MP"
+    - label: "Macro"
+      resolution: "5 MP"

@@ -1,0 +1,53 @@
+device:
+  name: "Galaxy S4 (SCH-I545)"
+  codename: "jfltevzw"
+  maker: "Samsung"
+  aliases: ["galaxy s4 (sch-i545)", "sch-i545"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-04"
+  specs:
+    soc: "Qualcomm APQ8064T Snapdragon 600"
+    ram: "2 GB"
+    cpu: "Krait 300"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "16/32 GB"
+    battery: "2600 mAh Li-Ion"
+    dimensions:
+      height: "136.6 mm"
+      width: "69.8 mm"
+      depth: "7.9 mm"
+  display:
+    size: "5 in"
+    resolution: "1920x1080"
+    panel_type: "Pentile RGBG Super AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Hygrometer"
+      - "IR blaster"
+      - "MHL 2.0"
+      - "MHL HDMI"
+      - "NFC"
+      - "Thermometer"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "Proximity sensor"
+    location:
+      - "GLONASS"
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "13 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "2 MP"

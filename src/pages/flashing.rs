@@ -334,6 +334,7 @@ impl FlashingPage {
         serial: &str,
         api_url: &str,
         update_only: bool,
+        use_heimdall: bool,
     ) {
         self.set_distro_name(distro_name);
 
@@ -351,6 +352,7 @@ impl FlashingPage {
             serial.to_string(),
             api_url.to_string(),
             update_only,
+            use_heimdall,
         );
         let receiver = installer.spawn(self.cancel_flag());
 

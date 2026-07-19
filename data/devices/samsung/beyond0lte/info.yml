@@ -1,0 +1,50 @@
+device:
+  name: "Galaxy S10e"
+  codename: "beyond0lte"
+  maker: "Samsung"
+  aliases: ["galaxy s10e", "sm-g970f", "sm-g970f/ds", "sm-g970n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-03-08"
+  specs:
+    soc: "Samsung Exynos 9820"
+    ram: "6/8 GB"
+    cpu: "Exynos M4 & Cortex-A75 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G76 MP12"
+    storage: "128/256 GB"
+    battery: "3100 mAh Li-Ion"
+    dimensions:
+      height: "142.2 mm"
+      width: "69.9 mm"
+      depth: "7.9 mm"
+  display:
+    size: "5.8 in"
+    resolution: "2280x1080"
+    panel_type: "Dynamic AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "Qi wireless charging"
+      - "Qi reverse wireless charging"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Ultrawide"
+      resolution: "16 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "10 MP"

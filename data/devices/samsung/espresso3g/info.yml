@@ -1,0 +1,43 @@
+device:
+  name: "Galaxy Tab 2 7.0 (GSM)"
+  codename: "espresso3g"
+  maker: "Samsung"
+  aliases: ["galaxy tab 2 7.0 (gsm)", "p3100", "p5100"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-04"
+  specs:
+    soc: "TI OMAP4430"
+    ram: "1 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "PowerVR SGX540"
+    storage: "8/16/32 GB"
+    battery: "4000 mAh Li-Ion"
+    dimensions:
+      height: "193.7 mm"
+      width: "122.4 mm"
+      depth: "10.5 mm"
+  display:
+    size: "7 in"
+    resolution: "600x1024"
+    panel_type: "PLS LCD"
+  connectivity:
+    network: [2G GSM]
+    bluetooth: "3.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "15 MP"
+    - label: "Camera"
+      resolution: "1.3 MP"

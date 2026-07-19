@@ -1,0 +1,47 @@
+device:
+  name: "Galaxy A3 (2016)"
+  codename: "a3xelte"
+  maker: "Samsung"
+  aliases: ["galaxy a3 (2016)", "sm-a310f", "sm-a310f/ds", "sm-a310m", "sm-a310n0", "sm-a310y"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-12"
+  specs:
+    soc: "Samsung Exynos 7578"
+    ram: "1.5 GB"
+    cpu: "Cortex-A53"
+    arch: "{'cpu': 'arm64', 'userspace': 'arm'}"
+    gpu: "ARM Mali-T720 MP2"
+    storage: "16 GB"
+    battery: "2300 mAh Li-Ion"
+    dimensions:
+      height: "134.5 mm"
+      width: "65.2 mm"
+      depth: "7.3 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+      - "USB OTG"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Proximity sensor"
+      - "RGB ambient light"
+    location:
+      - "A-GPS"
+      - "GLONASS"
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "13 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "5 MP"

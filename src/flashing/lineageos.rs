@@ -55,6 +55,9 @@ pub struct LineageosInstaller {
     serial: String,
     api_url: String,
     update_only: bool,
+    /// Samsung devices flash over Odin download mode (Heimdall), not fastboot —
+    /// the recovery goes to the "recovery" partition instead of "boot".
+    use_heimdall: bool,
     download_dir: PathBuf,
 }
 
@@ -63,6 +66,7 @@ impl LineageosInstaller {
         serial: String,
         api_url: String,
         update_only: bool,
+        use_heimdall: bool,
     ) -> Self {
         let download_dir = crate::flashing::download_dir().join("lineageos");
 
@@ -70,6 +74,7 @@ impl LineageosInstaller {
             serial,
             api_url,
             update_only,
+            use_heimdall,
             download_dir,
         }
     }
@@ -239,6 +244,44 @@ impl LineageosInstaller {
                     e
                 );
             }
+        } else if self.use_heimdall {
+            // ── Samsung fresh install: download mode → Heimdall flash recovery ──
+            let recovery = boot_file
+                .ok_or_else(|| anyhow::anyhow!("No recovery image in this LineageOS build"))?;
+            let recovery_path = self.download_dir.join(&recovery.filename);
+
+            let _ = sender.send(InstallProgress::StatusChanged(
+                "Rebooting to download mode...".into(),
+            ));
+            let _ = adb.reboot_download(&self.serial).await;
+            let _ = sender.send(InstallProgress::WaitingForUserAction(
+                "If prompted on the device, press Volume Up to enter download mode.".into(),
+            ));
+            crate::hardware::heimdall::Heimdall::new()
+                .wait_for_download_mode(120)
+                .await
+                .context("Device did not enter download mode")?;
+
+            let _ = sender.send(InstallProgress::FlashProgress {
+                current: 1,
+                total: 2,
+                description: "Flashing LineageOS recovery (Odin)...".into(),
+            });
+            crate::hardware::heimdall::Heimdall::new()
+                .flash(
+                    &[crate::hardware::heimdall::HeimdallFlash {
+                        partition: "RECOVERY".to_string(),
+                        image: recovery_path,
+                    }],
+                    false,
+                )
+                .await
+                .context("Failed to flash recovery via Heimdall")?;
+
+            // The user boots recovery manually (Vol Up + Power on most Samsungs).
+            let _ = sender.send(InstallProgress::WaitingForUserAction(
+                "On your phone: hold Volume Up + Power (or Vol Up + Home + Power) to boot into recovery.".into(),
+            ));
         } else {
             // ── Fresh install: reboot to bootloader → flash boot → reboot to recovery ──
             let _ = sender.send(InstallProgress::StatusChanged(

@@ -1,0 +1,54 @@
+device:
+  name: "Galaxy Note10+ 5G"
+  codename: "d2x"
+  maker: "Samsung"
+  aliases: ["galaxy note10+ 5g", "sm-n976b", "sm-n976n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-08-23"
+  specs:
+    soc: "Samsung Exynos 9825"
+    ram: "12 GB"
+    cpu: "Exynos M4 & Cortex-A75 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G76 MP12"
+    storage: "256/512 GB"
+    battery: "4300 mAh Li-Ion"
+    dimensions:
+      height: "162.3 mm"
+      width: "77.2 mm"
+      depth: "7.9 mm"
+  display:
+    size: "6.8 in"
+    resolution: "3040x1440"
+    panel_type: "Dynamic AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE, 5G NR]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "Fingerprint reader"
+      - "Qi wireless charging"
+      - "Qi reverse wireless charging"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Telephoto"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "16 MP"
+      features: "LED flash"
+    - label: "TOF 3D"
+      resolution: "0.3 MP"
+    - label: "Camera"
+      resolution: "10 MP"

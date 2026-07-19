@@ -1,0 +1,44 @@
+device:
+  name: "Galaxy S III (LTE / International)"
+  codename: "i9305"
+  maker: "Samsung"
+  aliases: ["galaxy s iii (lte / international)", "gt-i9305", "gt-i9305t", "gt-i9305n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-10"
+  specs:
+    soc: "Samsung Exynos 4412"
+    ram: "2 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "ARM Mali-400 MP4"
+    storage: "16 GB"
+    battery: "2100 mAh Li-Ion"
+    dimensions:
+      height: "137 mm"
+      width: "71 mm"
+      depth: "8.6 mm"
+  display:
+    size: "4.8 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "1.9 MP"

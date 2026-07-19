@@ -1,0 +1,46 @@
+device:
+  name: "Galaxy Note 2 (LTE)"
+  codename: "t0lte"
+  maker: "Samsung"
+  aliases: ["galaxy note 2 (lte)", "gt-n7105/n7105t", "sgh-i317/i317m", "sgh-t889/t889v", "shv-e250s/e250k/e250l"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-09"
+  specs:
+    soc: "Samsung Exynos 4412"
+    ram: "2 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "ARM Mali-400 MP4"
+    storage: "16/32/64 GB"
+    battery: "3100 mAh Li-Ion"
+    dimensions:
+      height: "151.1 mm"
+      width: "80.5 mm"
+      depth: "9.4 mm"
+  display:
+    size: "5.5 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+      - "RGB ambient light"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "1.9 MP"

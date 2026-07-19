@@ -1,0 +1,40 @@
+device:
+  name: "Galaxy Tab S6 Lite (LTE)"
+  codename: "gta4xl"
+  maker: "Samsung"
+  aliases: ["galaxy tab s6 lite (lte)", "sm-p615"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2020-04-02"
+  specs:
+    soc: "Samsung Exynos 9611"
+    ram: "4 GB"
+    cpu: "Cortex-A73 & Cortex-A53"
+    arch: "arm64"
+    gpu: "ARM Mali-G72 MP3"
+    storage: "64/128 GB"
+    battery: "7040 mAh Li-Ion"
+    dimensions:
+      height: "244.5 mm"
+      width: "154.3 mm"
+      depth: "7.0 mm"
+  display:
+    size: "10.4 in"
+    resolution: "1200x2000"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+    sensors:
+      - "Accelerometer"
+      - "Gyroscope"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+    - label: "Camera"
+      resolution: "5 MP"

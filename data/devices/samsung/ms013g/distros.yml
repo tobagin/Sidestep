@@ -1,0 +1,21 @@
+device_codename: "ms013g"
+last_updated: "2026-07-19"
+
+available_distros:
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/ms013g/builds"
+    flash_method: "heimdall_recovery"
+    compatibility:
+      working:
+        - "Android-based custom ROM"
+      partial: []
+      not_working: []
+      notes:
+        - "Samsung device: recovery flashed via Odin download mode (Heimdall)"

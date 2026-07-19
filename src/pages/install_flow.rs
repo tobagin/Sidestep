@@ -531,10 +531,12 @@ impl InstallFlow {
             return;
         };
 
+        // Samsung devices flash over Odin download mode (Heimdall), not fastboot,
+        // regardless of SoC — Samsung locks `fastboot flash`.
+        let use_heimdall = self.device.maker.eq_ignore_ascii_case("samsung");
         log::info!(
-            "Installing LineageOS from channel: {} ({})",
-            channel.label,
-            release_url
+            "Installing LineageOS from channel: {} ({}) heimdall={}",
+            channel.label, release_url, use_heimdall
         );
 
         let progress_page = FlashingPage::new();
@@ -542,7 +544,7 @@ impl InstallFlow {
             progress_page.set_menu_model(menu_model);
         }
 
-        progress_page.start_lineageos_installation("LineageOS", serial, release_url, false);
+        progress_page.start_lineageos_installation("LineageOS", serial, release_url, false, use_heimdall);
 
         self.push_flashing_page(&progress_page);
     }

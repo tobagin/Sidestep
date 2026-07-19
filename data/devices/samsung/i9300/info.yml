@@ -1,0 +1,45 @@
+device:
+  name: "Galaxy S III (International)"
+  codename: "i9300"
+  maker: "Samsung"
+  aliases: ["galaxy s iii (international)", "gt-i9300", "gt-i9300t"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-05"
+  specs:
+    soc: "Samsung Exynos 4412"
+    ram: "1 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "ARM Mali-400 MP4"
+    storage: "16/32 GB"
+    battery: "2100 mAh Li-Ion"
+    dimensions:
+      height: "136.6 mm"
+      width: "70.6 mm"
+      depth: "8.6 mm"
+  display:
+    size: "4.8 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "1.9 MP"

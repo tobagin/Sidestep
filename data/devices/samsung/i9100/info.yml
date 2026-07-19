@@ -1,0 +1,32 @@
+device:
+  name: "Galaxy S II"
+  codename: "i9100"
+  maker: "Samsung"
+  aliases: ["galaxy s ii", "gt-i9100", "gt-i9100t", "gt-i9100m", "gt-i9100p", "sc-02c"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2011-02-11"
+  specs:
+    soc: "Samsung Exynos 4210"
+    ram: "1 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "ARM Mali-400 MP4"
+    storage: "16/32 GB"
+    battery: "1650 mAh Li-Ion"
+  display:
+    size: "4.3 in"
+    resolution: "800x480"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "3.0 + HS"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "1.9 MP"

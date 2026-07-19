@@ -1,0 +1,50 @@
+device:
+  name: "Galaxy Note 9"
+  codename: "crownlte"
+  maker: "Samsung"
+  aliases: ["galaxy note 9", "sm-n960f", "sm-n960f/ds", "sm-n960n"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-08-09"
+  specs:
+    soc: "Samsung Exynos 9810"
+    ram: "6/8 GB"
+    cpu: "Exynos M3 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G72 MP18"
+    storage: "128/512 GB"
+    battery: "4000 mAh Li-Ion"
+    dimensions:
+      height: "161.9 mm"
+      width: "76.4 mm"
+      depth: "8.8 mm"
+  display:
+    size: "6.4 in"
+    resolution: "2960x1440"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Fingerprint reader"
+      - "Motion Coprocessor"
+    sensors:
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Heart rate sensor"
+      - "Proximity sensor"
+      - "RGB ambient light"
+  cameras:
+    - label: "Camera"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "12 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "8 MP"

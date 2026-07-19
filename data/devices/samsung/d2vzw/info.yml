@@ -1,0 +1,41 @@
+device:
+  name: "Galaxy S III (Verizon)"
+  codename: "d2vzw"
+  maker: "Samsung"
+  aliases: ["galaxy s iii (verizon)", "sch-i535"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-06-28"
+  specs:
+    soc: "Qualcomm MSM8960 Snapdragon S4 Plus"
+    ram: "2 GB"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 225"
+    storage: "16 GB"
+    battery: "2100 mAh Li-Ion"
+  display:
+    size: "4.8 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G CDMA, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+    location:
+      - "A-GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "1.9 MP"

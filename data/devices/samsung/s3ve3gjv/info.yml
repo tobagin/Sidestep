@@ -1,0 +1,44 @@
+device:
+  name: "Galaxy S III Neo (Samsung Camera)"
+  codename: "s3ve3gjv"
+  maker: "Samsung"
+  aliases: ["galaxy s iii neo (samsung camera)", "gt-i9301i", "gt-i9301q"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-04-11"
+  specs:
+    soc: "Qualcomm MSM8226 Snapdragon 400"
+    ram: "1.5 GB"
+    cpu: "Cortex-A7"
+    arch: "{'cpu': 'arm', 'userspace': 'arm'}"
+    gpu: "Qualcomm Adreno 305"
+    storage: "8/16 GB"
+    battery: "2100 mAh Li-Ion"
+    dimensions:
+      height: "136.6 mm"
+      width: "70.7 mm"
+      depth: "8.6 mm"
+  display:
+    size: "4.8 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "NFC"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "2 MP"

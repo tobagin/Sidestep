@@ -1,0 +1,41 @@
+device:
+  name: "Galaxy Tab PRO 10.1"
+  codename: "n2awifi"
+  maker: "Samsung"
+  aliases: ["galaxy tab pro 10.1", "sm-t520"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014"
+  specs:
+    soc: "Samsung Exynos 5420"
+    ram: "2 GB"
+    cpu: "Cortex-A15 & Cortex-A7"
+    arch: "arm"
+    gpu: "ARM Mali-T628 MP6"
+    storage: "16/32 GB"
+    battery: "8220 mAh Li-Ion"
+    dimensions:
+      height: "247.3 mm"
+      width: "177.3 mm"
+      depth: "6.6 mm"
+  display:
+    size: "10.1 in"
+    resolution: "2560x1600"
+    panel_type: "Super LCD"
+  connectivity:
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+    sensors:
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+    location:
+      - "GPS"
+  cameras:
+    - label: "Camera"
+      resolution: "8 MP"
+      features: "LED flash"
+    - label: "Camera"
+      resolution: "2.1 MP"
