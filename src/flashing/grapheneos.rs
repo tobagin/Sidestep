@@ -213,6 +213,13 @@ impl GrapheneosInstaller {
                 path = format!("{}:{}", dir.display(), path);
             }
         }
+        // Prefer the newer bundled fastboot (36.x) for GrapheneOS — recent Pixels
+        // need platform-tools 35+, and this path never flashes vbmeta with the
+        // --disable-verity rewrite that the pinned 33.0.3 exists to protect.
+        let newer = "/app/opt/platform-tools-36";
+        if std::path::Path::new(newer).join("fastboot").exists() {
+            path = format!("{newer}:{path}");
+        }
 
         let mut child = Command::new("bash")
             .arg("-c")

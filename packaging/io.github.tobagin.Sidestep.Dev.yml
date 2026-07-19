@@ -56,6 +56,22 @@ modules:
         only-arches:
           - aarch64
 
+  # Newer fastboot (36.0.2) bundled ALONGSIDE 33.0.3, used only by the GrapheneOS
+  # installer (recent Pixels like the Pixel 9 series need platform-tools 35+).
+  # GrapheneOS flashes a proper factory vbmeta and never uses the --disable-verity
+  # rewrite path, so it can't hit the AVB_MAGIC regression that pins 33.0.3.
+  - name: platform-tools-grapheneos
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 fastboot ${FLATPAK_DEST}/opt/platform-tools-36/fastboot
+    sources:
+      - type: archive
+        url: https://dl.google.com/android/repository/platform-tools_r36.0.2-linux.zip
+        sha256: 3afdea91441815ab41254193df0343d92c1b1c0d0237165c3a345c8af8891c31
+        strip-components: 1
+        only-arches:
+          - x86_64
+
   # libusb — required by heimdall for USB access
   - name: libusb
     buildsystem: autotools
@@ -76,9 +92,12 @@ modules:
   # relying on it. There is no install() rule upstream, so we copy the binary.
   - name: heimdall
     buildsystem: cmake-ninja
+    no-make-install: true
     config-opts:
       - -DDISABLE_FRONTEND=ON
       - -DCMAKE_BUILD_TYPE=Release
+      # Heimdall 1.4.2 CMakeLists targets CMake 2.8; modern CMake needs this.
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     post-install:
       - install -Dm755 bin/heimdall ${FLATPAK_DEST}/bin/heimdall
     sources:
