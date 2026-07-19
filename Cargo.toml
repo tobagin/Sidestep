@@ -28,6 +28,8 @@ dirs = "6.0"
 zip = "8.6"
 tar = "0.4"
 minisign-verify = "0.2"
+ssh-key = { version = "0.6", features = ["ed25519"] }
+memmap2 = "0.9"
 
 [build-dependencies]
 glib-build-tools = "0.22"

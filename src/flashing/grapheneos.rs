@@ -18,6 +18,12 @@ use std::sync::mpsc::Sender;
 
 const RELEASES: &str = "https://releases.grapheneos.org";
 
+/// GrapheneOS factory-image signing key (from releases.grapheneos.org/allowed_signers),
+/// embedded so a compromised server can't swap it. SSHSIG namespace below.
+const GRAPHENEOS_PUBKEY: &str =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUg/m5CoP83b0rfSCzYSVA4cw4ir49io5GPoxbgxdJE contact@grapheneos.org";
+const GRAPHENEOS_SIG_NAMESPACE: &str = "factory images";
+
 /// Orchestrates a GrapheneOS install on a supported Pixel.
 pub struct GrapheneosInstaller {
     serial: String,
@@ -86,9 +92,8 @@ impl GrapheneosInstaller {
         log::info!("GrapheneOS latest build for {}: {}", self.device, build);
 
         // ── Step 2: Download the install archive ──
-        // GrapheneOS signs archives with SSH Ed25519 keys (verified via
-        // ssh-keygen -Y verify). We rely on HTTPS transport integrity here;
-        // ponytail: in-app SSH-signature verification is a follow-up.
+        // Verified below against GrapheneOS's embedded Ed25519 key (their
+        // ssh-keygen -Y verify scheme), reproduced in-app with the ssh-key crate.
         let zip_name = format!("{}-install-{}.zip", self.device, build);
         let zip_url = format!("{}/{}", RELEASES, zip_name);
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -110,6 +115,26 @@ impl GrapheneosInstaller {
             )
             .await
             .context("Failed to download GrapheneOS install archive")?;
+
+        // ── Step 2b: Verify the SSH (Ed25519) signature against the embedded key ──
+        let _ = sender.send(InstallProgress::StatusChanged(
+            "Verifying GrapheneOS signature...".into(),
+        ));
+        let sig_url = format!("{zip_url}.sig");
+        let sig_pem = reqwest::Client::builder()
+            .user_agent(format!("Sidestep/{}", crate::config::VERSION))
+            .https_only(true)
+            .build()?
+            .get(&sig_url)
+            .send()
+            .await
+            .context("Failed to download GrapheneOS signature")?
+            .error_for_status()
+            .context("GrapheneOS signature missing")?
+            .text()
+            .await?;
+        Self::verify_signature(&zip_path, &sig_pem)
+            .context("GrapheneOS signature verification failed — refusing to flash")?;
 
         // ── Step 3: Extract ──
         let _ = sender.send(InstallProgress::StatusChanged("Extracting...".into()));
@@ -170,6 +195,24 @@ impl GrapheneosInstaller {
             .next()
             .map(|s| s.to_string())
             .context("Empty GrapheneOS stable metadata")
+    }
+
+    /// Verify the install archive's SSHSIG against the embedded GrapheneOS key.
+    /// The file is memory-mapped so hashing the multi-GB archive doesn't require
+    /// loading it onto the heap. Fail-closed: any mismatch aborts the flash.
+    fn verify_signature(zip_path: &std::path::Path, sig_pem: &str) -> Result<()> {
+        use ssh_key::{public::PublicKey, SshSig};
+        let pk = PublicKey::from_openssh(GRAPHENEOS_PUBKEY)
+            .context("Invalid embedded GrapheneOS public key")?;
+        let sig = SshSig::from_pem(sig_pem.as_bytes())
+            .context("Malformed GrapheneOS signature")?;
+        let file = std::fs::File::open(zip_path).context("Failed to open archive for verify")?;
+        // SAFETY: the file is not mutated while mapped (we just downloaded it).
+        let mmap = unsafe { memmap2::Mmap::map(&file) }.context("Failed to map archive")?;
+        pk.verify(GRAPHENEOS_SIG_NAMESPACE, &mmap[..], &sig)
+            .map_err(|e| anyhow::anyhow!("signature does not match GrapheneOS key: {e}"))?;
+        log::info!("GrapheneOS signature verified");
+        Ok(())
     }
 
     fn extract_zip(&self, zip_path: &PathBuf, extract_dir: &PathBuf) -> Result<()> {
@@ -275,5 +318,29 @@ impl GrapheneosInstaller {
             tokio::time::sleep(Duration::from_secs(2)).await;
         }
         anyhow::bail!("Timed out waiting for device in fastboot mode")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use ssh_key::{public::PublicKey, SshSig};
+
+    // A real GrapheneOS install-archive signature (shiba). We can't verify it
+    // against the multi-GB archive in a unit test, but parsing the embedded key
+    // and this signature — and checking the namespace — catches format/API bugs.
+    const REAL_SIG: &str = "-----BEGIN SSH SIGNATURE-----\n\
+U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAghSD+bkKg/zdvSt9ILNhJUDhzDi\n\
+Kvj2KjkY+jFuDF0kQAAAAOZmFjdG9yeSBpbWFnZXMAAAAAAAAABnNoYTUxMgAAAFMAAAAL\n\
+c3NoLWVkMjU1MTkAAABA+p1JMjrHzUNVtgK/D3f99vL+O4tFAFrMSFZwl5iBKIrqJ5ny80\n\
+crQv15uevW8drVPHiX0WQxRrxg574wWsm5AQ==\n\
+-----END SSH SIGNATURE-----\n";
+
+    #[test]
+    fn embedded_key_and_signature_parse() {
+        let pk = PublicKey::from_openssh(GRAPHENEOS_PUBKEY).expect("embedded key parses");
+        assert!(pk.key_data().ed25519().is_some(), "key is ed25519");
+        let sig = SshSig::from_pem(REAL_SIG.as_bytes()).expect("real signature parses");
+        assert_eq!(sig.namespace(), GRAPHENEOS_SIG_NAMESPACE);
     }
 }
