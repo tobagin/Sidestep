@@ -1,0 +1,44 @@
+device:
+  name: "Xperia T"
+  codename: "mint"
+  maker: "Sony"
+  aliases: ["xperia t"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-09"
+  specs:
+    soc: "Qualcomm MSM8260A Snapdragon S4"
+    ram: "1 GB"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 225"
+    storage: "16 GB"
+    battery: "1780 mAh Li-Ion"
+    dimensions:
+      height: "129.4 mm"
+      width: "67.3 mm"
+      depth: "10.45 mm"
+  display:
+    size: "4.55 in"
+    resolution: "720x1280"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "HDMI"
+      - "Light sensor"
+      - "MHL"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "1.3 MP"
+      resolution: "1.3 MP"

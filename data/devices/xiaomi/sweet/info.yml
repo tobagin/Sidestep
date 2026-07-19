@@ -1,0 +1,57 @@
+device:
+  name: "Redmi Note 10 Pro"
+  codename: "sweet"
+  maker: "Xiaomi"
+  aliases: ["redmi note 10 pro", "m2101k6g", "m2101k6r"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2021-03"
+  specs:
+    soc: "Qualcomm SM7150-AC Snapdragon 732G"
+    ram: "6/8 GB"
+    cpu: "Kryo 470"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 618"
+    storage: "64/128/256 GB"
+    battery: "5020 mAh Li-Po"
+    dimensions:
+      height: "164 mm"
+      width: "76.5 mm"
+      depth: "8.1 mm"
+  display:
+    size: "6.67 in"
+    resolution: "2400x1080"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "5.1"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "IR blaster"
+      - "Light sensor"
+      - "NFC"
+      - "Ultrasound proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "108 MP"
+      resolution: "108 MP"
+    - label: "8 MP (ultrawide)"
+      resolution: "8 MP (ultrawide)"
+    - label: "5 MP (macro)"
+      resolution: "5 MP (macro)"
+    - label: "2 MP (depth)"
+      resolution: "2 MP (depth)"
+    - label: "16 MP"
+      resolution: "16 MP"

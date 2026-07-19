@@ -1,0 +1,50 @@
+device:
+  name: "Mi 6X"
+  codename: "wayne"
+  maker: "Xiaomi"
+  aliases: ["mi 6x"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-04"
+  specs:
+    soc: "Qualcomm SDM660 Snapdragon 660"
+    ram: "4/6 GB"
+    cpu: "Kryo 260"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 512"
+    storage: "32/64/128 GB"
+    battery: "3010 mAh Li-Po"
+    dimensions:
+      height: "158.7 mm"
+      width: "75.4 mm"
+      depth: "7.3 mm"
+  display:
+    size: "5.99 in"
+    resolution: "1080x2160"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "IR blaster"
+      - "Light sensor"
+      - "Pedometer"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "20 MP"
+      resolution: "20 MP"
+    - label: "20 MP"
+      resolution: "20 MP"

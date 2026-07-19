@@ -1,0 +1,27 @@
+# Bootloader unlocking steps
+unlocking_steps:
+  - order: 1
+    title: "Enable Developer Options"
+    description: "Go to Settings > About Phone and tap 'Build Number' 7 times"
+    type: manual
+  - order: 2
+    title: "Enable OEM Unlocking"
+    description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'"
+    type: manual
+  - order: 3
+    title: "Reboot to Bootloader"
+    description: "Reboot the device into fastboot mode"
+    type: automated
+    command: "adb reboot bootloader"
+    duration_secs: 10
+  - order: 4
+    title: "Get Unlock Code from LG"
+    description: "Request an unlock.bin from LG Developer for your device."
+    type: manual
+  - order: 5
+    title: "Unlock Bootloader"
+    description: "Flash the unlock binary"
+    type: automated
+    command: "fastboot flash unlock unlock.bin"
+    warning: "This will factory reset your device!"
+    duration_secs: 30

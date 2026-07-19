@@ -1,0 +1,49 @@
+device:
+  name: "Redmi Note 9"
+  codename: "merlinx"
+  maker: "Xiaomi"
+  aliases: ["redmi note 9"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2020-05"
+  specs:
+    soc: "Mediatek Helio G85"
+    ram: "3/4/6 GB"
+    cpu: "Cortex-A75 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G52 MC2"
+    storage: "64/128 GB"
+    battery: "5020 mAh Li-Po"
+    dimensions:
+      height: "162.3 mm"
+      width: "77.2 mm"
+      depth: "8.9 mm"
+  display:
+    size: "6.53 in"
+    resolution: "1080x2340"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+  cameras:
+    - label: "48 MP (wide)"
+      resolution: "48 MP (wide)"
+    - label: "8 MP (ultrawide)"
+      resolution: "8 MP (ultrawide)"
+    - label: "2 MP (macro)"
+      resolution: "2 MP (macro)"
+    - label: "2 MP (depth)"
+      resolution: "2 MP (depth)"

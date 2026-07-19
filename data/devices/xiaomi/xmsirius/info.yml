@@ -1,0 +1,51 @@
+device:
+  name: "Mi 8 SE"
+  codename: "xmsirius"
+  maker: "Xiaomi"
+  aliases: ["mi 8 se", "m1805e2a"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-06"
+  specs:
+    soc: "Qualcomm SDM710 Snapdragon 710"
+    ram: "4/6 GB"
+    cpu: "Kryo 360"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 616"
+    storage: "64/128 GB"
+    battery: "3120 mAh Li-Po"
+    dimensions:
+      height: "147.3 mm"
+      width: "73.1 mm"
+      depth: "7.5 mm"
+  display:
+    size: "5.88 in"
+    resolution: "1080x2244"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Dual-frequency GNSS"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "IR blaster"
+      - "Light sensor"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "5 MP (depth)"
+      resolution: "5 MP (depth)"
+    - label: "20 MP (front)"
+      resolution: "20 MP (front)"

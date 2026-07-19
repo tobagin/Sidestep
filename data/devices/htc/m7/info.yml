@@ -1,0 +1,44 @@
+device:
+  name: "One (GSM)"
+  codename: "m7"
+  maker: "HTC"
+  aliases: ["one (gsm)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-03"
+  specs:
+    soc: "Qualcomm APQ8064T Snapdragon 600"
+    ram: "2 GB"
+    cpu: "Krait 300"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "32/64 GB"
+    battery: "2300 mAh Li-Po"
+    dimensions:
+      height: "137.4 mm"
+      width: "68.2 mm"
+      depth: "9.3 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1080x1920"
+    panel_type: "Super LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "IR blaster"
+      - "NFC"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+  cameras:
+    - label: "4 MP"
+      resolution: "4 MP"
+    - label: "2.1 MP"
+      resolution: "2.1 MP"

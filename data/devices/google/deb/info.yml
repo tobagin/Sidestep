@@ -1,0 +1,35 @@
+device:
+  name: "Nexus 7 2013 (LTE)"
+  codename: "deb"
+  maker: "Google"
+  aliases: ["nexus 7 2013 (lte)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-07-26"
+  specs:
+    soc: "Qualcomm MSM8960T Snapdragon S4 Pro"
+    ram: "2 GB"
+    cpu: "Krait 300"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "32 GB"
+    battery: "3950 mAh Li-Ion"
+    dimensions:
+      height: "198.5 mm"
+      width: "120 mm"
+      depth: "10.5 mm"
+  display:
+    size: "7 in"
+    resolution: "1920x1200"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"
+    - label: "1.2 MP"
+      resolution: "1.2 MP"

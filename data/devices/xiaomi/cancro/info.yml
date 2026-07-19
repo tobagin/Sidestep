@@ -1,0 +1,41 @@
+device:
+  name: "Mi 3"
+  codename: "cancro"
+  maker: "Xiaomi"
+  aliases: ["mi 3"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-10"
+  specs:
+    soc: "Qualcomm MSM8974 Snapdragon 800"
+    ram: "2 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16/64 GB"
+    battery: "3050 mAh Li-Ion"
+    dimensions:
+      height: "144 mm"
+      width: "73.6 mm"
+      depth: "8.1 mm"
+  display:
+    size: "5 in"
+    resolution: "1080x1920"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Proximity sensor"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "2.07 MP"
+      resolution: "2.07 MP"

@@ -1,0 +1,41 @@
+device:
+  name: "moto x (2014)"
+  codename: "victara"
+  maker: "Motorola"
+  aliases: ["moto x (2014)", "xt1092", "xt1093", "xt1094", "xt1095", "xt1096", "xt1097", "xt1098"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-09-26"
+  specs:
+    soc: "Qualcomm MSM8974AC Snapdragon 801"
+    ram: "2 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16/32 GB"
+    battery: "2300 mAh Li-Po"
+    dimensions:
+      height: "140.8 mm"
+      width: "72.4 mm"
+      depth: "10 mm"
+  display:
+    size: "5.2 in"
+    resolution: "1080x1920"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+      - "Thermometer"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "2 MP"
+      resolution: "2 MP"

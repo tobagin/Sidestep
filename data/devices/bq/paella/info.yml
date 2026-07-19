@@ -1,0 +1,45 @@
+device:
+  name: "Aquaris X5"
+  codename: "paella"
+  maker: "BQ"
+  aliases: ["aquaris x5"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015"
+  specs:
+    soc: "Qualcomm MSM8916T Snapdragon 412"
+    ram: "2/3 GB"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "16/32 GB"
+    battery: "2900 mAh Li-Po"
+    dimensions:
+      height: "144.4 mm"
+      width: "70.5 mm"
+      depth: "7.5 mm"
+  display:
+    size: "5 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

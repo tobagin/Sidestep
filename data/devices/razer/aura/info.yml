@@ -1,0 +1,52 @@
+device:
+  name: "Phone 2"
+  codename: "aura"
+  maker: "Razer"
+  aliases: ["phone 2"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-10"
+  specs:
+    soc: "Qualcomm SDM845 Snapdragon 845"
+    ram: "8 GB LPDDR4X"
+    cpu: "Kryo 385"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 630"
+    storage: "64 GB UFS2.1"
+    battery: "4000 mAh Li-Po"
+    dimensions:
+      height: "158.5 mm"
+      width: "79 mm"
+      depth: "8.5 mm"
+  display:
+    size: "5.72 in"
+    resolution: "1440x2560"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "SBAS"
+      - "QZSS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

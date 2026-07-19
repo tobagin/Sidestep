@@ -1,0 +1,39 @@
+device:
+  name: "2 Pro"
+  codename: "RMX1801"
+  maker: "Realme"
+  aliases: ["2 pro", "rmx1801"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-10-11"
+  specs:
+    soc: "Qualcomm SDM660 Snapdragon 660"
+    ram: "4/6/8 GB LPDDR4X"
+    cpu: "Kryo 260"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 512"
+    storage: "64/128 GB eMMC5.1"
+    battery: "3500 mAh Li-Ion"
+  display:
+    size: "6.3 in"
+    resolution: "2340x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "16 MP (w/ 2 MP depth sensor)"
+      resolution: "16 MP (w/ 2 MP depth sensor)"
+    - label: "16 MP"
+      resolution: "16 MP"

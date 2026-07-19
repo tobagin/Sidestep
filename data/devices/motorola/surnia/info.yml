@@ -1,0 +1,37 @@
+device:
+  name: "moto e LTE (2015)"
+  codename: "surnia"
+  maker: "Motorola"
+  aliases: ["moto e lte (2015)", "xt1514", "xt1521", "xt1523", "xt1524", "xt1526", "xt1527"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-02"
+  specs:
+    soc: "Qualcomm MSM8916 Snapdragon 410"
+    ram: "1 GB"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "8 GB"
+    battery: "2390 mAh Li-Ion"
+    dimensions:
+      height: "129.9 mm"
+      width: "66.8 mm"
+      depth: "12.3 mm"
+  display:
+    size: "4.5 in"
+    resolution: "540x960"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Proximity sensor"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"
+    - label: "0.3 MP"
+      resolution: "0.3 MP"

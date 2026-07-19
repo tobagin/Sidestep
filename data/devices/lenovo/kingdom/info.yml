@@ -1,0 +1,45 @@
+device:
+  name: "Vibe Z2 Pro"
+  codename: "kingdom"
+  maker: "Lenovo"
+  aliases: ["vibe z2 pro", "kingdom_row (row)", "kingdomt (cn)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-09"
+  specs:
+    soc: "Qualcomm MSM8974AC Snapdragon 801"
+    ram: "3 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "32 GB"
+    battery: "4000 mAh Li-Po"
+    dimensions:
+      height: "156 mm"
+      width: "81.3 mm"
+      depth: "7.7 mm"
+  display:
+    size: "6 in"
+    resolution: "2560x1440"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "FM radio"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "RGB ambient light"
+  cameras:
+    - label: "16 MP"
+      resolution: "16 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

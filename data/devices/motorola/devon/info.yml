@@ -1,0 +1,53 @@
+device:
+  name: "moto g32"
+  codename: "devon"
+  maker: "Motorola"
+  aliases: ["moto g32", "xt2235-1", "xt2235-2", "xt2235-3"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2022-08"
+  specs:
+    soc: "Qualcomm SM6225 Snapdragon 680 4G"
+    ram: "4/6/8 GB LPDDR4X"
+    cpu: "Kryo 265"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 610"
+    storage: "64/128/256 GB UFS 2.2"
+    battery: "5000 mAh Li-Po"
+    dimensions:
+      height: "161.8 mm"
+      width: "73.8 mm"
+      depth: "8.5 mm"
+  display:
+    size: "6.5 in"
+    resolution: "1080x2400"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "5.2"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "Stereo speakers"
+      - "USB OTG"
+  cameras:
+    - label: "50 MP (Primary)"
+      resolution: "50 MP (Primary)"
+    - label: "8 MP (ultrawide)"
+      resolution: "8 MP (ultrawide)"
+    - label: "2 MP (depth)"
+      resolution: "2 MP (depth)"
+    - label: "16 MP (Front Facing)"
+      resolution: "16 MP (Front Facing)"

@@ -1,0 +1,35 @@
+device:
+  name: "Android One 2nd Gen"
+  codename: "seed"
+  maker: "Google"
+  aliases: ["android one 2nd gen"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-07"
+  specs:
+    soc: "Qualcomm MSM8916 Snapdragon 410"
+    ram: "2 GB / 1 GB for IQ II"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "16 GB"
+    battery: "2500 mAh Li-Po"
+  display:
+    size: "5 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

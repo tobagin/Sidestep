@@ -1,0 +1,44 @@
+device:
+  name: "One Max (GSM)"
+  codename: "t6"
+  maker: "HTC"
+  aliases: ["one max (gsm)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-10"
+  specs:
+    soc: "Qualcomm APQ8064T Snapdragon 600"
+    ram: "2 GB"
+    cpu: "Krait 300"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "32/64 GB"
+    battery: "3300 mAh Li-Po"
+    dimensions:
+      height: "164.5 mm"
+      width: "82.5 mm"
+      depth: "10.29 mm"
+  display:
+    size: "5.9 in"
+    resolution: "1080x1920"
+    panel_type: "Super LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "IR blaster"
+      - "NFC"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+  cameras:
+    - label: "4 MP"
+      resolution: "4 MP"
+    - label: "2.1 MP"
+      resolution: "2.1 MP"

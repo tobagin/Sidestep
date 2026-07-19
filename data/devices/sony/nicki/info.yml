@@ -1,0 +1,34 @@
+device:
+  name: "Xperia M"
+  codename: "nicki"
+  maker: "Sony"
+  aliases: ["xperia m"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-06"
+  specs:
+    soc: "Qualcomm MSM8227 Snapdragon S4 Plus"
+    ram: "1 GB"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 305"
+    storage: "4 GB"
+    battery: "1750 mAh Li-Po"
+  display:
+    size: "4 in"
+    resolution: "480x854"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Proximity sensor"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"
+    - label: "0.3 MP"
+      resolution: "0.3 MP"

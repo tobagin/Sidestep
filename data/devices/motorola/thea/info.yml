@@ -1,0 +1,39 @@
+device:
+  name: "moto g LTE (2014)"
+  codename: "thea"
+  maker: "Motorola"
+  aliases: ["moto g lte (2014)", "xt1072", "xt1077", "xt1078", "xt1079"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-01"
+  specs:
+    soc: "Qualcomm MSM8926 Snapdragon 400"
+    ram: "1 GB"
+    cpu: "Cortex-A7"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 305"
+    storage: "8/16 GB"
+    battery: "2390 mAh Li-Ion"
+    dimensions:
+      height: "141.5 mm"
+      width: "70.7 mm"
+      depth: "11 mm"
+  display:
+    size: "5 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Gyroscope"
+      - "Proximity sensor"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "2 MP"
+      resolution: "2 MP"

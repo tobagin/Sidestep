@@ -1,0 +1,41 @@
+device_codename: "h990"
+last_updated: "2026-07-19"
+
+available_distros:
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/h990/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Android-based custom ROM"
+      partial: []
+      not_working: []
+      notes:
+        - "Installed via recovery sideload"
+
+  # --- /e/OS ---
+  - id: "eos"
+    name: "/e/OS"
+    developer: "e Foundation (Murena)"
+    discovery_strategy: "eos_html_scrape"
+    base_url: "https://images.ecloud.global/community/h990/"
+    channels:
+      - id: "a15"
+        label: "Android 15 (Community)"
+      - id: "a14"
+        label: "Android 14 (Community)"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Privacy-focused Android (deGoogled)"
+      partial: []
+      not_working: []
+      notes:
+        - "Community build; installed via recovery sideload"

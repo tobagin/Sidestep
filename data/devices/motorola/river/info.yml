@@ -1,0 +1,47 @@
+device:
+  name: "moto g7"
+  codename: "river"
+  maker: "Motorola"
+  aliases: ["moto g7", "xt1962-01", "xt1962-04", "xt1962-05", "xt1962-06"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-02"
+  specs:
+    soc: "Qualcomm SDM632 Snapdragon 632"
+    ram: "4 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 506"
+    storage: "64 GB"
+    battery: "3000 mAh Li-Ion"
+    dimensions:
+      height: "157 mm"
+      width: "75.3 mm"
+      depth: "8.0 mm"
+  display:
+    size: "6.2 in"
+    resolution: "1080x2270"
+    panel_type: "IPS LTPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.2"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "FM radio"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "5 MP (depth)"
+      resolution: "5 MP (depth)"
+    - label: "8 MP"
+      resolution: "8 MP"

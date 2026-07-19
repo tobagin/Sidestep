@@ -1,0 +1,31 @@
+device:
+  name: "Shield Tablet"
+  codename: "shieldtablet"
+  maker: "NVIDIA"
+  aliases: ["shield tablet"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-07-29"
+  specs:
+    soc: "NVIDIA Tegra K1 (T124)"
+    ram: "2 GB"
+    cpu: "Cortex-A15"
+    arch: "arm"
+    gpu: "NVIDIA GK20A (Kepler)"
+    storage: "16/32 GB"
+    battery: "5197 mAh Li-Ion"
+  display:
+    size: "8 in"
+    resolution: "1920x1200"
+    panel_type: "IPS Retinal LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

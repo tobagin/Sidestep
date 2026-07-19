@@ -1,0 +1,50 @@
+device:
+  name: "Xperia XA2 Plus"
+  codename: "voyager"
+  maker: "Sony"
+  aliases: ["xperia xa2 plus", "h3413", "h4413", "h4493"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-07"
+  specs:
+    soc: "Qualcomm SDM630 Snapdragon 630"
+    ram: "4/6 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 508"
+    storage: "32 GB"
+    battery: "3580 mAh Li-Ion"
+    dimensions:
+      height: "157 mm"
+      width: "75 mm"
+      depth: "9.6 mm"
+  display:
+    size: "6 in"
+    resolution: "1080x2160"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "23 MP"
+      resolution: "23 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

@@ -1,0 +1,56 @@
+device:
+  name: "edge 20 pro"
+  codename: "pstar"
+  maker: "Motorola"
+  aliases: ["edge 20 pro", "xt2153-1"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2021-08"
+  specs:
+    soc: "Qualcomm SM8250-AC Snapdragon 870"
+    ram: "6/8/12 GB LPDDR5"
+    cpu: "Kryo 585"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 650"
+    storage: "128/256 GB UFS 3.1"
+    battery: "4500 mAh Li-Po"
+    dimensions:
+      height: "163 mm"
+      width: "76 mm"
+      depth: "8 mm"
+  display:
+    size: "6.7 in"
+    resolution: "1080x2400"
+    panel_type: "OLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 3G CDMA2000, 4G LTE, 5G NR]
+    bluetooth: "5.1"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Depth Sensor"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "HDMI"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Pedometer"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "108 MP (wide)"
+      resolution: "108 MP (wide)"
+    - label: "8 MP (telephoto)"
+      resolution: "8 MP (telephoto)"
+    - label: "16 MP (ultrawide)"
+      resolution: "16 MP (ultrawide)"
+    - label: "32 MP (wide)"
+      resolution: "32 MP (wide)"

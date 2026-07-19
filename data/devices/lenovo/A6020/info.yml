@@ -1,0 +1,42 @@
+device:
+  name: "Vibe K5"
+  codename: "A6020"
+  maker: "Lenovo"
+  aliases: ["vibe k5", "a6020a40", "a6020a41", "a6020a46", "a6020l36", "a6020l37"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016-04"
+  specs:
+    soc: "Qualcomm MSM8929 Snapdragon 415"
+    ram: "2/3 GB"
+    cpu: "Cortex-A53 & Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 405"
+    storage: "16 GB"
+    battery: "2750 mAh Li-Ion"
+    dimensions:
+      height: "142 mm"
+      width: "71 mm"
+      depth: "8 mm"
+  display:
+    size: "5 in"
+    resolution: "1080x1920"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "GPS"
+      - "Gyroscope"
+      - "Proximity sensor"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

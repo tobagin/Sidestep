@@ -1,0 +1,39 @@
+device:
+  name: "DROID RAZR (GSM)"
+  codename: "umts_spyder"
+  maker: "Motorola"
+  aliases: ["droid razr (gsm)", "xt910"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2011-11-11"
+  specs:
+    soc: "TI OMAP4430"
+    ram: "1 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "PowerVR SGX540"
+    storage: "16 GB"
+    battery: "3300 mAh Li-Ion"
+    dimensions:
+      height: "130.7 mm"
+      width: "68.9 mm"
+      depth: "7.1 mm"
+  display:
+    size: "4.3 in"
+    resolution: "540x960"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Proximity sensor"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "1.3 MP"
+      resolution: "1.3 MP"

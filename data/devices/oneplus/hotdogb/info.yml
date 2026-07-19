@@ -1,0 +1,57 @@
+device:
+  name: "7T"
+  codename: "hotdogb"
+  maker: "OnePlus"
+  aliases: ["7t", "hd1900", "hd1901", "hd1903", "hd1905"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2019-09"
+  specs:
+    soc: "Qualcomm SM8150-AC Snapdragon 855+"
+    ram: "8/12GB GB LPDDR4X"
+    cpu: "Kryo 485"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 640"
+    storage: "128/256 GB UFS3.0"
+    battery: "3800 mAh Li-Po"
+    dimensions:
+      height: "160.9 mm"
+      width: "74.4 mm"
+      depth: "8.1 mm"
+  display:
+    size: "6.55 in"
+    resolution: "1080x2400"
+    panel_type: "Fluid AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 3G CDMA2000, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "DP over USB-C"
+      - "Dual SIM"
+      - "Dual-frequency GNSS"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "SBAS"
+      - "QZSS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Ultrasound proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "48 MP (wide)"
+      resolution: "48 MP (wide)"
+    - label: "12 MP (telephoto)"
+      resolution: "12 MP (telephoto)"
+    - label: "16 MP (ultrawide)"
+      resolution: "16 MP (ultrawide)"
+    - label: "16 MP"
+      resolution: "16 MP"

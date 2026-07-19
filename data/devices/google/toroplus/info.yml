@@ -1,0 +1,42 @@
+device:
+  name: "Galaxy Nexus LTE (Sprint)"
+  codename: "toroplus"
+  maker: "Google"
+  aliases: ["galaxy nexus lte (sprint)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-01"
+  specs:
+    soc: "TI OMAP4460"
+    ram: "1 GB"
+    cpu: "Cortex-A9"
+    arch: "arm"
+    gpu: "PowerVR SGX540"
+    storage: "32 GB"
+    battery: "1850 mAh Li-Ion"
+    dimensions:
+      height: "135.5 mm"
+      width: "67.9 mm"
+      depth: "9.4 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1280x720"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G CDMA, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"
+    - label: "1.3 MP"
+      resolution: "1.3 MP"

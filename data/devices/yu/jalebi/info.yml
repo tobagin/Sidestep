@@ -1,0 +1,32 @@
+device:
+  name: "Yunique"
+  codename: "jalebi"
+  maker: "YU"
+  aliases: ["yunique"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-09"
+  specs:
+    soc: "Qualcomm MSM8916 Snapdragon 410"
+    ram: "1 GB"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "8 GB"
+    battery: "2000 mAh Li-Po"
+  display:
+    size: "4.7 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Dual SIM"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "2 MP"
+      resolution: "2 MP"

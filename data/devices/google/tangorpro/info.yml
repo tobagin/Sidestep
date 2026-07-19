@@ -1,0 +1,40 @@
+device:
+  name: "Pixel Tablet"
+  codename: "tangorpro"
+  maker: "Google"
+  aliases: ["pixel tablet"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2023-06-10"
+  specs:
+    soc: "Google Tensor GS201"
+    ram: "8 GB"
+    cpu: "Cortex-X1 & Cortex-A78 & Cortex-A55"
+    arch: "arm64"
+    gpu: "ARM Mali-G710 MP7"
+    storage: "128/256 GB"
+    battery: "7020 mAh Li-Po"
+    dimensions:
+      height: "169 mm"
+      width: "258 mm"
+      depth: "8.1 mm"
+  display:
+    size: "10.95 in"
+    resolution: "2560x1600"
+    panel_type: "IPS LCD"
+  connectivity:
+    bluetooth: "5.2"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "Accelerometer"
+      - "Compass"
+      - "Fingerprint reader"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Ultra Wideband (UWB)"
+      - "USB OTG"
+  cameras:
+    - label: "8 MP (main)"
+      resolution: "8 MP (main)"
+    - label: "8 MP (front)"
+      resolution: "8 MP (front)"

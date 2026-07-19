@@ -1,0 +1,42 @@
+device:
+  name: "Z9 Max"
+  codename: "nx512j"
+  maker: "Nubia"
+  aliases: ["z9 max"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-06"
+  specs:
+    soc: "Qualcomm MSM8939 Snapdragon 615"
+    ram: "2 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 405"
+    storage: "16 GB"
+    battery: "2900 mAh Li-Ion"
+    dimensions:
+      height: "154.8 mm"
+      width: "76.6 mm"
+      depth: "7.9 mm"
+  display:
+    size: "5.5 in"
+    resolution: "1920x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Proximity sensor"
+  cameras:
+    - label: "15.9 MP"
+      resolution: "15.9 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

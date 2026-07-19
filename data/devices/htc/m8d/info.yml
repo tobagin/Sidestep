@@ -1,0 +1,44 @@
+device:
+  name: "One (M8) Dual SIM"
+  codename: "m8d"
+  maker: "HTC"
+  aliases: ["one (m8) dual sim"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-06"
+  specs:
+    soc: "Qualcomm MSM8974AB Snapdragon 801"
+    ram: "2 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "16 GB"
+    battery: "2600 mAh Li-Po"
+    dimensions:
+      height: "146.36 mm"
+      width: "70.6 mm"
+      depth: "9.35 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1080x1920"
+    panel_type: "Super LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "IR blaster"
+      - "NFC"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+  cameras:
+    - label: "4 MP (dual)"
+      resolution: "4 MP (dual)"
+    - label: "5 MP"
+      resolution: "5 MP"

@@ -1,0 +1,43 @@
+device:
+  name: "moto z play"
+  codename: "addison"
+  maker: "Motorola"
+  aliases: ["moto z play", "xt1635-01", "xt1635-02", "xt1635-03"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016-09"
+  specs:
+    soc: "Qualcomm MSM8953 Snapdragon 625"
+    ram: "3 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 506"
+    storage: "32 GB"
+    battery: "3510 mAh Li-Po"
+    dimensions:
+      height: "156.4 mm"
+      width: "76.4 mm"
+      depth: "7 mm"
+  display:
+    size: "5.5 in"
+    resolution: "1080x1920"
+    panel_type: "Super AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "16 MP"
+      resolution: "16 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

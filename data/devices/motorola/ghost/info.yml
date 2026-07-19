@@ -1,0 +1,44 @@
+device:
+  name: "moto x"
+  codename: "ghost"
+  maker: "Motorola"
+  aliases: ["moto x", "xt1052", "xt1053", "xt1055", "xt1056", "xt1058", "xt1060"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-08-23"
+  specs:
+    soc: "Qualcomm MSM8960DT Snapdragon S4 Pro"
+    ram: "2 GB"
+    cpu: "Krait 200"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "16/32 GB"
+    battery: "2200 mAh Li-Ion"
+    dimensions:
+      height: "129.3 mm"
+      width: "65.3 mm"
+      depth: "10.4 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1280x720"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Audio Coprocessor"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Motion Coprocessor"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "10 MP"
+      resolution: "10 MP"
+    - label: "2 MP"
+      resolution: "2 MP"

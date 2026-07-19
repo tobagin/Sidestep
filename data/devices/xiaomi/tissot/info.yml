@@ -1,0 +1,48 @@
+device:
+  name: "Mi A1"
+  codename: "tissot"
+  maker: "Xiaomi"
+  aliases: ["mi a1"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2017-10"
+  specs:
+    soc: "Qualcomm MSM8953 Snapdragon 625"
+    ram: "4 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 506"
+    storage: "32/64 GB"
+    battery: "3080 mAh Li-Ion"
+    dimensions:
+      height: "155.4 mm"
+      width: "75.8 mm"
+      depth: "7.3 mm"
+  display:
+    size: "5.5 in"
+    resolution: "1080x1920"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "Fingerprint reader"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "IR blaster"
+      - "Light sensor"
+      - "Proximity sensor"
+  cameras:
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

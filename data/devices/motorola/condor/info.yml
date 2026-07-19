@@ -1,0 +1,32 @@
+device:
+  name: "moto e"
+  codename: "condor"
+  maker: "Motorola"
+  aliases: ["moto e", "xt1021", "xt1022", "xt1023"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-05-13"
+  specs:
+    soc: "Qualcomm MSM8212 Snapdragon 200"
+    ram: "1 GB"
+    cpu: "Cortex-A7"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 302"
+    storage: "4 GB"
+    battery: "1980 mAh Li-Po"
+  display:
+    size: "4.3 in"
+    resolution: "540x960"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Proximity sensor"
+  cameras:
+    - label: "5 MP"
+      resolution: "5 MP"

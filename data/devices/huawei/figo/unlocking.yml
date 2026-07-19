@@ -1,0 +1,15 @@
+# Bootloader unlocking steps
+unlocking_steps:
+  - order: 1
+    title: "Enable Developer Options"
+    description: "Go to Settings > About Phone and tap 'Build Number' 7 times"
+    type: manual
+  - order: 2
+    title: "Enable OEM Unlocking"
+    description: "Go to Settings > System > Developer Options and enable 'OEM unlocking'"
+    type: manual
+  - order: 3
+    title: "Unlock code no longer available"
+    description: "Huawei stopped issuing bootloader unlock codes; unlocking may require a third-party service."
+    type: manual
+    warning: "Huawei bootloader unlocking is officially unsupported"

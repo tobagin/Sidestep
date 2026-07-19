@@ -1,0 +1,42 @@
+device:
+  name: "Xperia XZ2 Compact"
+  codename: "xz2c"
+  maker: "Sony"
+  aliases: ["xperia xz2 compact", "h8314", "h8324"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-04"
+  specs:
+    soc: "Qualcomm SDM845 Snapdragon 845"
+    ram: "4 GB"
+    cpu: "Kryo 385"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 630"
+    storage: "64 GB UFS2.1"
+    battery: "2870 mAh Li-Ion"
+    dimensions:
+      height: "135 mm"
+      width: "65 mm"
+      depth: "12.1 mm"
+  display:
+    size: "5 in"
+    resolution: "1080x2160"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+  cameras:
+    - label: "19 MP"
+      resolution: "19 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

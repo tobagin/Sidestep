@@ -1,0 +1,50 @@
+device:
+  name: "Xperia Z3 Compact"
+  codename: "z3c"
+  maker: "Sony"
+  aliases: ["xperia z3 compact", "d5803", "d5833"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-09-04"
+  specs:
+    soc: "Qualcomm MSM8974AC Snapdragon 801"
+    ram: "2 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16 GB"
+    battery: "2600 mAh Li-Ion"
+    dimensions:
+      height: "127.3 mm"
+      width: "64.9 mm"
+      depth: "8.6 mm"
+  display:
+    size: "4.6 in"
+    resolution: "1280x720"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "FM radio"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "MHL"
+      - "NFC"
+      - "Pedometer"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+      - "USB OTG"
+  cameras:
+    - label: "20.7 MP"
+      resolution: "20.7 MP"
+    - label: "2.2 MP"
+      resolution: "2.2 MP"

@@ -1,0 +1,21 @@
+device_codename: "hammerhead"
+last_updated: "2026-07-19"
+
+available_distros:
+  # --- LineageOS ---
+  - id: "lineageos"
+    name: "LineageOS"
+    developer: "LineageOS Project"
+    discovery_strategy: "lineageos_api_v2"
+    channels:
+      - id: "nightly"
+        label: "Nightly"
+        release_url: "https://download.lineageos.org/api/v2/devices/hammerhead/builds"
+    flash_method: "recovery_sideload"
+    compatibility:
+      working:
+        - "Android-based custom ROM"
+      partial: []
+      not_working: []
+      notes:
+        - "Installed via recovery sideload"

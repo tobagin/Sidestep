@@ -1,0 +1,45 @@
+device:
+  name: "R7s (International)"
+  codename: "r7sf"
+  maker: "OPPO"
+  aliases: ["r7s (international)", "r7sf"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-11"
+  specs:
+    soc: "Qualcomm MSM8939 Snapdragon 615"
+    ram: "4 GB"
+    cpu: "Cortex-A53"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 405"
+    storage: "32 GB"
+    battery: "3070 mAh Li-Po"
+    dimensions:
+      height: "151.8 mm"
+      width: "75.4 mm"
+      depth: "7 mm"
+  display:
+    size: "5.5 in"
+    resolution: "1080x1920"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

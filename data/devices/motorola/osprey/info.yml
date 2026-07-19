@@ -1,0 +1,34 @@
+device:
+  name: "moto g (2015)"
+  codename: "osprey"
+  maker: "Motorola"
+  aliases: ["moto g (2015)", "xt1540", "xt1541", "xt1542", "xt1543", "xt1544", "xt1548", "xt1550"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2015-07"
+  specs:
+    soc: "Qualcomm MSM8916 Snapdragon 410"
+    ram: "1/2 GB"
+    cpu: "Cortex-A53"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 306"
+    storage: "8/16 GB"
+    battery: "2470 mAh Li-Ion"
+  display:
+    size: "5 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 3G CDMA2000, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Proximity sensor"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

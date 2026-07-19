@@ -1,0 +1,40 @@
+device:
+  name: "Nexus 9 (LTE)"
+  codename: "flounder_lte"
+  maker: "Google"
+  aliases: ["nexus 9 (lte)"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-11-03"
+  specs:
+    soc: "NVIDIA Tegra K1 (T124)"
+    ram: "2 GB"
+    cpu: "Denver"
+    arch: "arm64"
+    gpu: "NVIDIA Kepler DX1 192-core"
+    storage: "32 GB"
+    battery: "6700 mAh Li-Po"
+    dimensions:
+      height: "228.25 mm"
+      width: "153.68 mm"
+      depth: "7.95 mm"
+  display:
+    size: "8.9 in"
+    resolution: "2048x1536"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.1"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "1.6 MP"
+      resolution: "1.6 MP"

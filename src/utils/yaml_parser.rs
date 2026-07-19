@@ -74,4 +74,18 @@ mod tests {
         let ids: Vec<_> = cfg.available_distros.iter().map(|d| d.id.as_str()).collect();
         assert!(ids.contains(&"grapheneos"), "grapheneos present: {ids:?}");
     }
+
+    #[test]
+    fn parses_generated_community_devices() {
+        let p = YamlParser::new("data/devices");
+        // A newly-added community device (LG V20) with rich specs from the wiki.
+        let dev = p.parse_device("lg", "us996d").expect("parse us996d");
+        assert!(!dev.name.is_empty());
+        let cfg = p.parse_device_config("lg", "us996d").expect("parse us996d distros");
+        let ids: Vec<_> = cfg.available_distros.iter().map(|d| d.id.as_str()).collect();
+        assert!(ids.contains(&"lineageos"), "lineageos present: {ids:?}");
+        // Motorola with per-vendor unlock steps.
+        let m = p.parse_device("motorola", "addison").expect("parse addison");
+        assert_eq!(m.name, "moto z play");
+    }
 }

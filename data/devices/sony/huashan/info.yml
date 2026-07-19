@@ -1,0 +1,44 @@
+device:
+  name: "Xperia SP"
+  codename: "huashan"
+  maker: "Sony"
+  aliases: ["xperia sp"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-04"
+  specs:
+    soc: "Qualcomm MSM8960T Snapdragon S4 Pro"
+    ram: "1 GB"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "8 GB"
+    battery: "2370 mAh Li-Ion"
+    dimensions:
+      height: "133 mm"
+      width: "68 mm"
+      depth: "10.6 mm"
+  display:
+    size: "4.6 in"
+    resolution: "720x1280"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "HDMI"
+      - "Light sensor"
+      - "MHL"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "0.3 MP"
+      resolution: "0.3 MP"

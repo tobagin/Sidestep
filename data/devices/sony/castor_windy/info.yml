@@ -1,0 +1,45 @@
+device:
+  name: "Xperia Tablet Z2 Wi-Fi"
+  codename: "castor_windy"
+  maker: "Sony"
+  aliases: ["xperia tablet z2 wi-fi", "sgp511", "sgp512"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-03-26"
+  specs:
+    soc: "Qualcomm MSM8974AC Snapdragon 801"
+    ram: "3 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16/32 GB"
+    battery: "6000 mAh Li-Ion"
+    dimensions:
+      height: "172.3 mm"
+      width: "266.0 mm"
+      depth: "6.4 mm"
+  display:
+    size: "10.1 in"
+    resolution: "1920x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "FM radio"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "MHL"
+      - "NFC"
+      - "Stereo front speakers"
+      - "USB OTG"
+  cameras:
+    - label: "8.1 MP"
+      resolution: "8.1 MP"
+    - label: "2.2 MP"
+      resolution: "2.2 MP"

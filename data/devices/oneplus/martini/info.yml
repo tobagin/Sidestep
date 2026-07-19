@@ -1,0 +1,56 @@
+device:
+  name: "9RT"
+  codename: "martini"
+  maker: "OnePlus"
+  aliases: ["9rt", "mt2110", "mt2111"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2021-10"
+  specs:
+    soc: "Qualcomm SM8350 Snapdragon 888"
+    ram: "8/12 GB LPDDR5"
+    cpu: "Kryo 680"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 660"
+    storage: "128/256 GB UFS3.1"
+    battery: "4500 mAh Li-Po"
+    dimensions:
+      height: "162.2 mm"
+      width: "74.6 mm"
+      depth: "8.3 mm"
+  display:
+    size: "6.62 in"
+    resolution: "1080x2400"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE, 5G NR]
+    bluetooth: "5.2"
+    wifi: "802.11 a/b/g/n/ac/ax"
+    peripherals:
+      - "A-GPS"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Dual-frequency GNSS"
+      - "Fingerprint reader"
+      - "BeiDou"
+      - "Galileo"
+      - "GLONASS"
+      - "GPS"
+      - "SBAS"
+      - "QZSS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "50 MP (main)"
+      resolution: "50 MP (main)"
+    - label: "16 MP (ultrawide)"
+      resolution: "16 MP (ultrawide)"
+    - label: "2 MP (macro)"
+      resolution: "2 MP (macro)"
+    - label: "16 MP"
+      resolution: "16 MP"

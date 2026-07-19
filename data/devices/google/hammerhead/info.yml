@@ -1,0 +1,31 @@
+device:
+  name: "Nexus 5"
+  codename: "hammerhead"
+  maker: "Google"
+  aliases: ["nexus 5"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-10-31"
+  specs:
+    soc: "Qualcomm MSM8974 Snapdragon 800"
+    ram: "2 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16/32 GB"
+    battery: "2300 mAh Li-Ion"
+  display:
+    size: "5 in"
+    resolution: "1920x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 2G CDMA, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "1.3 MP"
+      resolution: "1.3 MP"

@@ -1,0 +1,42 @@
+device:
+  name: "Yoga Tab 3 Plus Wi-Fi"
+  codename: "YTX703F"
+  maker: "Lenovo"
+  aliases: ["yoga tab 3 plus wi-fi", "ytx703f"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016-12"
+  specs:
+    soc: "Qualcomm APQ8076 Snapdragon 652"
+    ram: "3 GB"
+    cpu: "Cortex-A53 & Cortex-A72"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 510"
+    storage: "32 GB"
+    battery: "9600 mAh Li-Ion"
+    dimensions:
+      height: "179 mm"
+      width: "247 mm"
+      depth: "4.7 mm"
+  display:
+    size: "10.1 in"
+    resolution: "2560x1600"
+    panel_type: "IPS LCD"
+  connectivity:
+    bluetooth: "4.1"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Audio Coprocessor"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "Stereo front speakers"
+  cameras:
+    - label: "13 MP"
+      resolution: "13 MP"
+    - label: "5 MP (front)"
+      resolution: "5 MP (front)"

@@ -1,0 +1,45 @@
+device:
+  name: "Aquaris X5 Plus"
+  codename: "gohan"
+  maker: "BQ"
+  aliases: ["aquaris x5 plus"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016"
+  specs:
+    soc: "Qualcomm MSM8976 Snapdragon 652"
+    ram: "2/3 GB"
+    cpu: "Cortex-A72"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 510"
+    storage: "16/32 GB"
+    battery: "3100 mAh Li-Po"
+    dimensions:
+      height: "145 mm"
+      width: "70 mm"
+      depth: "7.7 mm"
+  display:
+    size: "5 in"
+    resolution: "1920x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "FM radio"
+      - "GPS"
+      - "Gyroscope"
+      - "Hall effect sensor"
+      - "Light sensor"
+      - "Proximity sensor"
+      - "USB OTG"
+  cameras:
+    - label: "16 MP"
+      resolution: "16 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

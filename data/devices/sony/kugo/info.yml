@@ -1,0 +1,48 @@
+device:
+  name: "Xperia X Compact"
+  codename: "kugo"
+  maker: "Sony"
+  aliases: ["xperia x compact", "so-02j", "f5321"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2016"
+  specs:
+    soc: "Qualcomm MSM8956 Snapdragon 650"
+    ram: "3 GB"
+    cpu: "Cortex-A53 & Cortex-A72"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 510"
+    storage: "32 GB"
+    battery: "2700 mAh Li-Ion"
+    dimensions:
+      height: "129 mm"
+      width: "65 mm"
+      depth: "9.5 mm"
+  display:
+    size: "4.6 in"
+    resolution: "720x1280"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.2"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Barometer"
+      - "Color spectrum sensor"
+      - "Compass"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+      - "USB OTG"
+  cameras:
+    - label: "23 MP"
+      resolution: "23 MP"
+    - label: "5 MP"
+      resolution: "5 MP"

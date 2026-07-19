@@ -1,0 +1,40 @@
+device:
+  name: "Nexus 4"
+  codename: "mako"
+  maker: "Google"
+  aliases: ["nexus 4"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2012-11-13"
+  specs:
+    soc: "Qualcomm APQ8064 Snapdragon S4 Pro"
+    ram: "2 GB"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "8/16 GB"
+    battery: "2100 mAh Li-Po"
+    dimensions:
+      height: "133.9 mm"
+      width: "68.7 mm"
+      depth: "9.1 mm"
+  display:
+    size: "4.7 in"
+    resolution: "1280x768"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS]
+    bluetooth: "4.0"
+    wifi: "802.11 b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "GPS"
+      - "Mobility DisplayPort (MyDP)"
+      - "NFC"
+      - "Proximity sensor"
+      - "Qi wireless charging"
+  cameras:
+    - label: "8 MP"
+      resolution: "8 MP"
+    - label: "1.3 MP"
+      resolution: "1.3 MP"

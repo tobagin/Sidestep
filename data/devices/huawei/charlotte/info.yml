@@ -1,0 +1,43 @@
+device:
+  name: "P20 Pro"
+  codename: "charlotte"
+  maker: "Huawei"
+  aliases: ["p20 pro", "clt-al00", "clt-al01", "clt-l04", "clt-l09", "clt-l29", "clt-tl00", "clt-tl01"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-04"
+  specs:
+    soc: "HiSilicon Kirin 970"
+    ram: "6/8 GB"
+    cpu: "Cortex-A73 & Cortex-A53"
+    arch: "arm64"
+    gpu: "ARM Mali-G72 MP12"
+    storage: "128/256 GB"
+    battery: "4000 mAh Li-Po"
+    dimensions:
+      height: "155 mm"
+      width: "73.9 mm"
+      depth: "7.8 mm"
+  display:
+    size: "6.1 in"
+    resolution: "1080x2240"
+    panel_type: "AMOLED"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.2"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "Accelerometer"
+      - "Compass"
+      - "eSIM"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Proximity sensor"
+  cameras:
+    - label: "40 MP"
+      resolution: "40 MP"
+    - label: "20 MP"
+      resolution: "20 MP"
+    - label: "8 MP"
+      resolution: "8 MP"

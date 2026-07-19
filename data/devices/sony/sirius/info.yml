@@ -1,0 +1,50 @@
+device:
+  name: "Xperia Z2"
+  codename: "sirius"
+  maker: "Sony"
+  aliases: ["xperia z2", "d6502", "d6503"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2014-04"
+  specs:
+    soc: "Qualcomm MSM8974AB Snapdragon 801"
+    ram: "3 GB"
+    cpu: "Krait 400"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 330"
+    storage: "16 GB"
+    battery: "3200 mAh Li-Ion"
+    dimensions:
+      height: "146.8 mm"
+      width: "73.3 mm"
+      depth: "8.2 mm"
+  display:
+    size: "5.2 in"
+    resolution: "1920x1080"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "3.5mm jack"
+      - "A-GPS"
+      - "Accelerometer"
+      - "Barometer"
+      - "Compass"
+      - "FM radio"
+      - "GLONASS"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "MHL"
+      - "NFC"
+      - "Pedometer"
+      - "Proximity sensor"
+      - "Stereo front speakers"
+      - "USB OTG"
+  cameras:
+    - label: "20.7 MP"
+      resolution: "20.7 MP"
+    - label: "2.2 MP"
+      resolution: "2.2 MP"

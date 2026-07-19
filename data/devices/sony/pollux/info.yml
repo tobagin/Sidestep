@@ -1,0 +1,44 @@
+device:
+  name: "Xperia Tablet Z LTE"
+  codename: "pollux"
+  maker: "Sony"
+  aliases: ["xperia tablet z lte"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2013-02"
+  specs:
+    soc: "Qualcomm APQ8064 Snapdragon S4 Pro"
+    ram: "2 GB LPDDR2"
+    cpu: "Krait"
+    arch: "arm"
+    gpu: "Qualcomm Adreno 320"
+    storage: "16 GB"
+    battery: "6000 mAh Li-Po"
+    dimensions:
+      height: "172 mm"
+      width: "266 mm"
+      depth: "6.9 mm"
+  display:
+    size: "10.1 in"
+    resolution: "1200x1920"
+    panel_type: "TFT LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "4.0 + LE"
+    wifi: "802.11 a/b/g/n"
+    peripherals:
+      - "3.5mm jack"
+      - "Accelerometer"
+      - "Compass"
+      - "GPS"
+      - "Gyroscope"
+      - "HDMI"
+      - "Light sensor"
+      - "MHL"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "8.1 MP"
+      resolution: "8.1 MP"
+    - label: "2.2 MP"
+      resolution: "2.2 MP"

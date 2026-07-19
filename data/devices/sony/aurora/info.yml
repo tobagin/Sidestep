@@ -1,0 +1,45 @@
+device:
+  name: "Xperia XZ2 Premium"
+  codename: "aurora"
+  maker: "Sony"
+  aliases: ["xperia xz2 premium", "h8116", "h8166"]
+  warnings:
+    - "Unlocking will factory reset the device"
+  release_date: "2018-04"
+  specs:
+    soc: "Qualcomm SDM845 Snapdragon 845"
+    ram: "6 GB"
+    cpu: "Kryo 385"
+    arch: "arm64"
+    gpu: "Qualcomm Adreno 630"
+    storage: "64 GB UFS2.1"
+    battery: "3540 mAh Li-Ion"
+    dimensions:
+      height: "158 mm"
+      width: "80 mm"
+      depth: "11.9 mm"
+  display:
+    size: "5.8 in"
+    resolution: "3840x2160"
+    panel_type: "IPS LCD"
+  connectivity:
+    network: [2G GSM, 3G UMTS, 4G LTE]
+    bluetooth: "5.0"
+    wifi: "802.11 a/b/g/n/ac"
+    peripherals:
+      - "Accelerometer"
+      - "Compass"
+      - "Dual SIM"
+      - "Fingerprint reader"
+      - "GPS"
+      - "Gyroscope"
+      - "Light sensor"
+      - "NFC"
+      - "Proximity sensor"
+  cameras:
+    - label: "19 MP"
+      resolution: "19 MP"
+    - label: "12 MP"
+      resolution: "12 MP"
+    - label: "13 MP"
+      resolution: "13 MP"
