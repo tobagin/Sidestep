@@ -12,6 +12,7 @@ pub mod postmarketos;
 pub mod lineageos;
 pub mod eos;
 pub mod factory_image;
+pub mod heimdall;
 
 use std::path::PathBuf;
 
@@ -38,3 +39,4 @@ pub use postmarketos::PostmarketosInstaller;
 pub use lineageos::LineageosInstaller;
 pub use eos::EosInstaller;
 pub use factory_image::FactoryImageInstaller;
+pub use heimdall::HeimdallInstaller;

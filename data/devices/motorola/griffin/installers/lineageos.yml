@@ -1,6 +1,0 @@
-name: "LineageOS"
-prerequisites: []
-steps:
-  install:
-    type: "flash"
-    url: ""

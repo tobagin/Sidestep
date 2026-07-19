@@ -10,6 +10,7 @@ use crate::pages::safety::SafetyPage;
 use crate::pages::wizard_choice_page::WizardChoicePage;
 use gtk::{gio, glib, prelude::*};
 use libadwaita as adw;
+use adw::prelude::*;
 use std::rc::Rc;
 
 /// Manages the wizard flow for installing a distro on a device.
@@ -336,11 +337,72 @@ impl InstallFlow {
     // Install launchers
     // ────────────────────────────────────────────────────────────────
 
+    /// Guard against flashing on a low battery — a phone dying mid-flash is a
+    /// classic hard-brick. Returns true if it's safe to proceed. Battery is
+    /// unreadable in fastboot mode (`None`); in that case we can't check, so we
+    /// allow it rather than block legitimate installs.
+    fn battery_ok(self: &Rc<Self>) -> bool {
+        let Some(level) = self.device.battery_level else {
+            return true;
+        };
+        let min = self.device.battery_min;
+        if level >= min {
+            return true;
+        }
+        if let Some(window) = self.nav_view.root() {
+            let dialog = adw::AlertDialog::new(
+                Some("Battery Too Low"),
+                Some(&format!(
+                    "Your device is at {level}% but needs at least {min}% before flashing. \
+                     A phone that powers off mid-flash can be permanently bricked.\n\n\
+                     Charge the device and try again.",
+                )),
+            );
+            dialog.add_response("ok", "OK");
+            dialog.present(Some(&window));
+        }
+        false
+    }
+
+    /// If this device+distro flashes over the Odin protocol (Samsung Exynos),
+    /// launch the Heimdall backend and return true. Otherwise return false so
+    /// the caller falls through to the fastboot path.
+    fn try_launch_heimdall(self: &Rc<Self>, distro_id: &str, distro_name: &str) -> bool {
+        let Some(config) = self.db.load_installer_config(&self.device, distro_id) else {
+            return false;
+        };
+        if !config.uses_heimdall() {
+            return false;
+        }
+        let Some(ref serial) = self.device.serial else {
+            log::error!("No device serial available for Heimdall installation");
+            return true; // it *is* a heimdall device; don't fall through to fastboot
+        };
+        if config.firmware.is_empty() {
+            log::error!("Heimdall device {distro_id} has no firmware images configured");
+            return true;
+        }
+        self.pause_detection();
+        let progress_page = FlashingPage::new();
+        if let Some(ref menu_model) = self.menu_model {
+            progress_page.set_menu_model(menu_model);
+        }
+        progress_page.start_heimdall_installation(distro_name, serial, config.firmware);
+        self.push_flashing_page(&progress_page);
+        true
+    }
+
     fn launch_install(
         self: &Rc<Self>,
         distro_id: &str,
         channel: &ChannelConfig,
     ) {
+        if !self.battery_ok() {
+            return;
+        }
+        if self.try_launch_heimdall(distro_id, &channel.label) {
+            return;
+        }
         self.pause_detection();
 
         match distro_id {
@@ -356,6 +418,12 @@ impl InstallFlow {
     /// Launch install for interface-based distros (Mobian, postmarketOS when
     /// reached via interfaces instead of channels).
     fn launch_interface_install(self: &Rc<Self>, distro_id: &str, interface_id: &str) {
+        if !self.battery_ok() {
+            return;
+        }
+        if self.try_launch_heimdall(distro_id, distro_id) {
+            return;
+        }
         self.pause_detection();
 
         match distro_id {
@@ -381,21 +449,26 @@ impl InstallFlow {
         };
         let channel_path = channel_path.trim_end_matches('/');
 
-        // Load firmware config from installer YAML
-        let firmware = self.db.load_installer_config(&self.device, "ubuntutouch")
-            .or_else(|| self.db.load_installer_config(&self.device, "ubports"))
-            .map(|c| c.firmware)
+        // Load firmware/bootstrap config from installer YAML
+        let config = self.db.load_installer_config(&self.device, "ubuntutouch")
+            .or_else(|| self.db.load_installer_config(&self.device, "ubports"));
+        let (firmware, downloads, bootstrap) = config
+            .map(|c| (c.firmware, c.ubports_downloads, c.bootstrap))
             .unwrap_or_default();
 
-        log::info!("Installing Ubuntu Touch from channel: {} ({}) with {} firmware images",
-            channel.label, channel_path, firmware.len());
+        log::info!(
+            "Installing Ubuntu Touch from channel: {} ({}) — {} firmware, {} downloads, {} bootstrap steps",
+            channel.label, channel_path, firmware.len(), downloads.len(), bootstrap.len()
+        );
 
         let progress_page = FlashingPage::new();
         if let Some(ref menu_model) = self.menu_model {
             progress_page.set_menu_model(menu_model);
         }
 
-        progress_page.start_ubports_installation("Ubuntu Touch", serial, channel_path, firmware);
+        progress_page.start_ubports_installation(
+            "Ubuntu Touch", serial, channel_path, firmware, downloads, bootstrap,
+        );
 
         self.push_flashing_page(&progress_page);
     }
@@ -416,14 +489,9 @@ impl InstallFlow {
             return;
         };
 
-        // Load flash partitions config from installer YAML
-        let flash_partitions = self.db.load_installer_config(&self.device, "droidian")
-            .map(|c| c.flash_partitions)
-            .unwrap_or_default();
-
         log::info!(
-            "Installing Droidian from channel: {} (pattern: {}) with {} flash partitions",
-            channel.label, artifact_match, flash_partitions.len()
+            "Installing Droidian from channel: {} (pattern: {}) via flash_all.sh",
+            channel.label, artifact_match
         );
 
         let progress_page = FlashingPage::new();
@@ -431,7 +499,7 @@ impl InstallFlow {
             progress_page.set_menu_model(menu_model);
         }
 
-        progress_page.start_droidian_installation("Droidian", serial, release_url, artifact_match, flash_partitions);
+        progress_page.start_droidian_installation("Droidian", serial, release_url, artifact_match);
 
         self.push_flashing_page(&progress_page);
     }
@@ -605,7 +673,13 @@ impl InstallFlow {
             }
         };
 
-        let device_name = format!("{}-{}", self.device.maker.to_lowercase(), self.device.codename);
+        // postmarketOS device dirs are all lowercase (e.g. "fairphone-fp4"), but
+        // some of our codenames are uppercase ("FP4"), so lowercase both parts.
+        let device_name = format!(
+            "{}-{}",
+            self.device.maker.to_lowercase(),
+            self.device.codename.to_lowercase()
+        );
 
         // Load flash operations config from installer YAML
         let flash_operations = self.db.load_installer_config(&self.device, "postmarketos")
@@ -674,7 +748,10 @@ impl InstallFlow {
         self.nav_view.push(&page);
     }
 
-    fn launch_factory_image_flash(&self, android_version: &str, url: &str, sha256: &str) {
+    fn launch_factory_image_flash(self: &Rc<Self>, android_version: &str, url: &str, sha256: &str) {
+        if !self.battery_ok() {
+            return;
+        }
         let Some(ref serial) = self.device.serial else {
             log::error!("No device serial available for factory image flash");
             return;
@@ -697,6 +774,17 @@ impl InstallFlow {
                 .and_then(|w| w.downcast::<crate::window::SidestepWindow>().ok())
             {
                 window.show_toast("Android flashed successfully!");
+                window.reset_to_waiting();
+            }
+        });
+
+        // On failure the "Start Over" button emits installation-failed; without
+        // this handler detection stayed paused and the app was stuck after a
+        // partial factory flash — exactly when recovery matters most.
+        progress_page.connect_installation_failed(move |page| {
+            if let Some(window) = page.root()
+                .and_then(|w| w.downcast::<crate::window::SidestepWindow>().ok())
+            {
                 window.reset_to_waiting();
             }
         });

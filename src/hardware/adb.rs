@@ -84,19 +84,52 @@ impl Adb {
         self.getprop(serial, "ro.product.model").await
     }
 
-    /// Reboot into bootloader mode
-    pub async fn reboot_bootloader(&self, serial: &str) -> Result<()> {
-        log::info!("Rebooting {} to bootloader", serial);
-        
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "reboot", "bootloader"])
+    /// Run an adb subcommand and fail if it exits non-zero. Many callers
+    /// previously ignored the exit status, so a device that had vanished or
+    /// errored looked like success — dangerous right before a flash step.
+    async fn run_checked(&self, args: &[&str], ctx: &'static str) -> Result<()> {
+        let output = Command::new(&self.binary_path)
+            .args(args)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
             .await
-            .context("Failed to reboot to bootloader")?;
-
+            .context(ctx)?;
+        if !output.status.success() {
+            anyhow::bail!("{}: {}", ctx, String::from_utf8_lossy(&output.stderr).trim());
+        }
         Ok(())
+    }
+
+    /// Run an adb `wait-for-*` command, enforcing our own timeout and killing
+    /// the child if it's exceeded — adb's wait commands otherwise block forever
+    /// if the device never appears, hanging the whole install.
+    async fn wait_checked(&self, args: &[&str], ctx: &'static str) -> Result<()> {
+        use std::time::Duration;
+        let fut = Command::new(&self.binary_path)
+            .args(args)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .kill_on_drop(true)
+            .output();
+        let output = tokio::time::timeout(Duration::from_secs(300), fut)
+            .await
+            .map_err(|_| anyhow::anyhow!("{}: timed out after 5 minutes", ctx))?
+            .context(ctx)?;
+        if !output.status.success() {
+            anyhow::bail!("{}: {}", ctx, String::from_utf8_lossy(&output.stderr).trim());
+        }
+        Ok(())
+    }
+
+    /// Reboot into bootloader mode
+    pub async fn reboot_bootloader(&self, serial: &str) -> Result<()> {
+        log::info!("Rebooting {} to bootloader", serial);
+        self.run_checked(
+            &["-s", serial, "reboot", "bootloader"],
+            "Failed to reboot to bootloader",
+        )
+        .await
     }
 
     /// Run a shell command on the device
@@ -170,45 +203,40 @@ impl Adb {
     /// Wait for device to enter recovery mode
     pub async fn wait_for_recovery(&self, serial: &str) -> Result<()> {
         log::info!("Waiting for {} to enter recovery mode", serial);
-
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "wait-for-recovery"])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to wait for recovery")?;
-
-        Ok(())
+        self.wait_checked(
+            &["-s", serial, "wait-for-recovery"],
+            "Failed to wait for recovery",
+        )
+        .await
     }
 
     pub async fn wait_for_sideload(&self, serial: &str) -> Result<()> {
         log::info!("Waiting for {} to enter sideload mode", serial);
-
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "wait-for-sideload"])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to wait for sideload")?;
-
-        Ok(())
+        self.wait_checked(
+            &["-s", serial, "wait-for-sideload"],
+            "Failed to wait for sideload",
+        )
+        .await
     }
 
     /// Reboot into recovery mode
     pub async fn reboot_recovery(&self, serial: &str) -> Result<()> {
         log::info!("Rebooting {} to recovery", serial);
+        self.run_checked(
+            &["-s", serial, "reboot", "recovery"],
+            "Failed to reboot to recovery",
+        )
+        .await
+    }
 
-        Command::new(&self.binary_path)
-            .args(["-s", serial, "reboot", "recovery"])
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .output()
-            .await
-            .context("Failed to reboot to recovery")?;
-
-        Ok(())
+    /// Reboot into download (Odin) mode — Samsung Exynos flashing via Heimdall.
+    pub async fn reboot_download(&self, serial: &str) -> Result<()> {
+        log::info!("Rebooting {} to download mode", serial);
+        self.run_checked(
+            &["-s", serial, "reboot", "download"],
+            "Failed to reboot to download mode",
+        )
+        .await
     }
 
     /// Sideload a zip file via ADB sideload (used in recovery mode)
@@ -216,11 +244,10 @@ impl Adb {
         log::info!("Sideloading {} to {}", zip_path.display(), serial);
 
         let output = Command::new(&self.binary_path)
-            .args([
-                "-s", serial,
-                "sideload",
-                zip_path.to_str().unwrap(),
-            ])
+            .arg("-s")
+            .arg(serial)
+            .arg("sideload")
+            .arg(zip_path) // OsStr — no panic on non-UTF8 paths
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -252,12 +279,11 @@ impl Adb {
         log::info!("Pushing {} to {}", local.display(), remote);
 
         let output = Command::new(&self.binary_path)
-            .args([
-                "-s", serial,
-                "push",
-                local.to_str().unwrap(),
-                remote,
-            ])
+            .arg("-s")
+            .arg(serial)
+            .arg("push")
+            .arg(local) // OsStr — no panic on non-UTF8 paths
+            .arg(remote)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -270,5 +296,80 @@ impl Adb {
         }
 
         Ok(())
+    }
+
+    /// Pull a file from the device to a local path.
+    pub async fn pull(&self, serial: &str, remote: &str, local: &Path) -> Result<()> {
+        let output = Command::new(&self.binary_path)
+            .arg("-s")
+            .arg(serial)
+            .arg("pull")
+            .arg(remote)
+            .arg(local) // OsStr — no panic on non-UTF8 paths
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context("Failed to run adb pull")?;
+
+        if !output.status.success() {
+            anyhow::bail!("adb pull failed: {}", String::from_utf8_lossy(&output.stderr));
+        }
+        Ok(())
+    }
+
+    /// Best-effort backup of the partitions that carry cellular identity (IMEI,
+    /// modem calibration). These can ONLY be read with root in adb mode — they
+    /// are unreadable from fastboot — so on the typical unlocked-but-unrooted
+    /// device this backs up nothing and returns an empty list. It never fails
+    /// the install; it's a bonus for rooted users on top of the safety warning.
+    /// Returns the names of partitions actually saved.
+    pub async fn backup_critical_partitions(&self, serial: &str, dest_dir: &Path) -> Vec<String> {
+        const PARTITIONS: &[&str] = &["efs", "modemst1", "modemst2", "persist", "fsg", "nvram"];
+
+        // Root is required to read raw block devices.
+        let has_root = self
+            .shell(serial, "su -c id 2>/dev/null")
+            .await
+            .map(|o| o.contains("uid=0"))
+            .unwrap_or(false);
+        if !has_root {
+            log::info!("No root on {serial}; skipping IMEI/EFS auto-backup (see safety warning)");
+            return Vec::new();
+        }
+
+        if let Err(e) = tokio::fs::create_dir_all(dest_dir).await {
+            log::warn!("Could not create backup dir {}: {e}", dest_dir.display());
+            return Vec::new();
+        }
+
+        let mut saved = Vec::new();
+        for p in PARTITIONS {
+            let remote = format!("/data/local/tmp/sidestep-{p}.img");
+            // by-name symlinks are the portable path across recent devices.
+            let dd = format!(
+                "su -c 'dd if=/dev/block/bootdevice/by-name/{p} of={remote} 2>/dev/null'"
+            );
+            if self.shell(serial, &dd).await.is_err() {
+                continue;
+            }
+            let local = dest_dir.join(format!("{p}.img"));
+            if self.pull(serial, &remote, &local).await.is_ok() {
+                // A zero-byte pull means the partition didn't exist — drop it.
+                if tokio::fs::metadata(&local).await.map(|m| m.len() > 0).unwrap_or(false) {
+                    saved.push(p.to_string());
+                } else {
+                    let _ = tokio::fs::remove_file(&local).await;
+                }
+            }
+            let _ = self.shell(serial, &format!("su -c 'rm -f {remote}'")).await;
+        }
+
+        if saved.is_empty() {
+            log::info!("IMEI/EFS auto-backup found no readable partitions on {serial}");
+        } else {
+            log::info!("Backed up partitions {:?} to {}", saved, dest_dir.display());
+        }
+        saved
     }
 }

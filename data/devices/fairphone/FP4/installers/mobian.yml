@@ -4,3 +4,17 @@ steps:
   install:
     type: "flash"
     url: ""
+# Flash procedure per Debian wiki (InstallingDebianOn/Fairphone/Fairphone4):
+# flash boot, sparse-flash rootfs -> userdata, erase dtbo, reboot. No erase
+# userdata (unlike the sdm845 devices). Recommend latest stock Android first,
+# as Mobian reuses firmware from the Android partitions.
+flash_operations:
+  - type: flash
+    partition: "boot"
+    source: "boot"
+  - type: flash_sparse
+    partition: "userdata"
+    source: "rootfs"
+    chunk_size: "100M"
+  - type: erase
+    partition: "dtbo"

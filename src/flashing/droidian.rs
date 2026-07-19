@@ -6,7 +6,6 @@ use crate::flashing::downloader::ImageDownloader;
 use crate::flashing::progress::InstallProgress;
 use crate::hardware::adb::Adb;
 use crate::hardware::fastboot::Fastboot;
-use crate::models::installer::FlashPartition;
 use anyhow::{Context, Result};
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
@@ -17,31 +16,24 @@ pub struct DroidianInstaller {
     serial: String,
     release_url: String,
     artifact_pattern: String,
-    flash_partitions: Vec<FlashPartition>,
     download_dir: PathBuf,
 }
 
 impl DroidianInstaller {
-    pub fn new(
-        serial: String,
-        release_url: String,
-        artifact_pattern: String,
-        flash_partitions: Vec<FlashPartition>,
-    ) -> Self {
+    pub fn new(serial: String, release_url: String, artifact_pattern: String) -> Self {
         let download_dir = crate::flashing::download_dir().join("droidian");
 
         Self {
             serial,
             release_url,
             artifact_pattern,
-            flash_partitions,
             download_dir,
         }
     }
 
     /// Spawn the installer on a background thread, returning immediately.
     /// Progress is reported via the returned mpsc::Receiver.
-    pub fn spawn(self) -> std::sync::mpsc::Receiver<InstallProgress> {
+    pub fn spawn(self, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> std::sync::mpsc::Receiver<InstallProgress> {
         let (sender, receiver) = std::sync::mpsc::channel();
 
         std::thread::spawn(move || {
@@ -51,7 +43,7 @@ impl DroidianInstaller {
                 .expect("Failed to create tokio runtime");
 
             rt.block_on(async {
-                if let Err(e) = self.run(&sender).await {
+                if let Err(e) = self.run(&sender, cancel).await {
                     log::error!("Droidian installation failed: {:#}", e);
                     let _ = sender.send(InstallProgress::Error(format!("{:#}", e)));
                 }
@@ -62,13 +54,24 @@ impl DroidianInstaller {
     }
 
     /// Main installation flow (runs on background thread)
-    async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
-        if self.flash_partitions.is_empty() {
-            anyhow::bail!("No flash partitions configured for Droidian installation");
-        }
-
-        let downloader = ImageDownloader::new(self.download_dir.clone());
+    async fn run(&self, sender: &Sender<InstallProgress>, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> Result<()> {
+        // Flashing is driven by the flash_all.sh bundled in each Droidian zip
+        // (handles A/B slots, vendor_boot, vbmeta, userdata per the device's own
+        // device-configuration.conf), so no static flash_partitions are needed.
+        let downloader = ImageDownloader::new(self.download_dir.clone()).with_cancel(cancel.clone());
         let adb = Adb::new();
+
+        // Best-effort IMEI/EFS backup while still in adb mode (rooted devices
+        // only; everyone else is covered by the mandatory safety warning).
+        let backup_dir = crate::flashing::download_dir().join("imei-backup").join(&self.serial);
+        let saved = adb.backup_critical_partitions(&self.serial, &backup_dir).await;
+        if !saved.is_empty() {
+            let _ = sender.send(InstallProgress::StatusChanged(format!(
+                "Backed up {} to {}",
+                saved.join(", "),
+                backup_dir.display()
+            )));
+        }
         let fastboot = Fastboot::new();
 
         // ── Step 1: Query GitHub API for latest release ──
@@ -82,9 +85,15 @@ impl DroidianInstaller {
         let _ = sender.send(InstallProgress::StatusChanged(
             "Downloading checksums...".into(),
         ));
+        // A missing checksum used to silently skip verification entirely (the
+        // download and the verify step were both gated on Some). Refuse instead —
+        // a renamed/absent SHA256SUMS line must not turn into "flash unverified".
         let expected_hash = self
             .download_and_parse_checksums(&downloader, &checksums_url, &zip_name)
-            .await?;
+            .await?
+            .ok_or_else(|| {
+                anyhow::anyhow!("No checksum found for {zip_name}; refusing to flash unverified image")
+            })?;
 
         // ── Step 3: Download ZIP ──
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -95,7 +104,7 @@ impl DroidianInstaller {
             .download_if_needed(
                 &zip_url,
                 &zip_name,
-                expected_hash.as_deref(),
+                Some(&expected_hash),
                 Some(Box::new(move |downloaded, total| {
                     let _ = sender_clone.send(InstallProgress::DownloadProgress {
                         downloaded,
@@ -108,22 +117,19 @@ impl DroidianInstaller {
             .context("Failed to download Droidian ZIP")?;
 
         // ── Step 4: Verify ZIP checksum ──
-        if let Some(ref hash) = expected_hash {
-            let _ = sender.send(InstallProgress::VerifyProgress {
-                verified: 0,
-                total: 1,
-                file_name: zip_name.clone(),
-            });
-            let ok = ChecksumVerifier::verify(&zip_path, hash)?;
-            if !ok {
-                anyhow::bail!("Checksum mismatch for {}", zip_name);
-            }
-            let _ = sender.send(InstallProgress::VerifyProgress {
-                verified: 1,
-                total: 1,
-                file_name: zip_name.clone(),
-            });
+        let _ = sender.send(InstallProgress::VerifyProgress {
+            verified: 0,
+            total: 1,
+            file_name: zip_name.clone(),
+        });
+        if !ChecksumVerifier::verify(&zip_path, &expected_hash)? {
+            anyhow::bail!("Checksum mismatch for {}", zip_name);
         }
+        let _ = sender.send(InstallProgress::VerifyProgress {
+            verified: 1,
+            total: 1,
+            file_name: zip_name.clone(),
+        });
 
         // ── Step 5: Extract ZIP ──
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -149,48 +155,81 @@ impl DroidianInstaller {
         ));
         self.wait_for_fastboot(&fastboot).await?;
 
-        // ── Step 8: Flash partitions ──
+        // ── Step 8: Run Droidian's own flasher (flash_all.sh) ──
+        // It reads the device's device-configuration.conf and flashes the right
+        // partitions (A/B or a-only, vendor_boot, vbmeta, userdata) and reboots.
         let _ = sender.send(InstallProgress::StatusChanged(
-            "Flashing partitions...".into(),
+            "Flashing Droidian...".into(),
         ));
-        let total = self.flash_partitions.len();
-        for (i, part) in self.flash_partitions.iter().enumerate() {
-            let _ = sender.send(InstallProgress::FlashProgress {
-                current: i + 1,
-                total,
-                description: format!("Flashing {}...", part.partition),
-            });
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 0,
+            total: 1,
+            description: "Flashing Droidian (flash_all.sh)...".into(),
+        });
+        self.run_flash_all(&extract_dir, sender).await?;
+        let _ = sender.send(InstallProgress::FlashProgress {
+            current: 1,
+            total: 1,
+            description: "Flash complete".into(),
+        });
 
-            let image_path = extract_dir.join(&part.image_path);
-            if !image_path.exists() {
-                anyhow::bail!(
-                    "Image file not found: {} (expected at {})",
-                    part.image_path,
-                    image_path.display()
-                );
-            }
+        let _ = sender.send(InstallProgress::Complete);
+        Ok(())
+    }
 
-            if part.flags.is_empty() {
-                fastboot
-                    .flash(&self.serial, &part.partition, &image_path)
-                    .await
-                    .with_context(|| format!("Failed to flash {}", part.partition))?;
-            } else {
-                let flag_refs: Vec<&str> = part.flags.iter().map(|s| s.as_str()).collect();
-                fastboot
-                    .flash_with_flags(&self.serial, &part.partition, &image_path, &flag_refs)
-                    .await
-                    .with_context(|| format!("Failed to flash {}", part.partition))?;
+    /// Execute the `flash_all.sh` bundled in the extracted Droidian zip. The
+    /// script flashes exactly the partitions this device needs (per its
+    /// device-configuration.conf) and reboots. We run it non-interactively:
+    /// `yes` feeds "y" to its device-confirmation prompt, stderr is merged into
+    /// stdout, and the bundled fastboot is put on PATH.
+    async fn run_flash_all(&self, extract_dir: &PathBuf, sender: &Sender<InstallProgress>) -> Result<()> {
+        use tokio::io::{AsyncBufReadExt, BufReader};
+        use tokio::process::Command;
+
+        let script = extract_dir.join("flash_all.sh");
+        if !script.exists() {
+            anyhow::bail!(
+                "flash_all.sh not found in the Droidian image — cannot flash safely"
+            );
+        }
+
+        // Put the bundled fastboot (and adb) directory on PATH so the script's
+        // bare `fastboot` calls resolve to the version we ship.
+        let mut path = std::env::var("PATH").unwrap_or_default();
+        if let Ok(fb) = std::env::var("FASTBOOT_PATH") {
+            if let Some(dir) = std::path::Path::new(&fb).parent() {
+                path = format!("{}:{}", dir.display(), path);
             }
         }
 
-        // ── Step 9: Reboot ──
-        let _ = sender.send(InstallProgress::StatusChanged(
-            "Rebooting device...".into(),
-        ));
-        fastboot.reboot(&self.serial).await?;
+        let mut child = Command::new("bash")
+            .arg("-c")
+            .arg("yes y | bash flash_all.sh 2>&1")
+            .current_dir(extract_dir)
+            .env("PATH", path)
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped())
+            .kill_on_drop(true)
+            .spawn()
+            .context("Failed to launch flash_all.sh (is bash available?)")?;
 
-        let _ = sender.send(InstallProgress::Complete);
+        // Stream the script's output into the terminal overlay and status line.
+        if let Some(out) = child.stdout.take() {
+            let mut lines = BufReader::new(out).lines();
+            while let Ok(Some(line)) = lines.next_line().await {
+                let trimmed = line.trim();
+                if trimmed.is_empty() {
+                    continue;
+                }
+                // The script prefixes messages with I:/W:/E:.
+                let _ = sender.send(InstallProgress::StatusChanged(trimmed.to_string()));
+            }
+        }
+
+        let status = child.wait().await.context("flash_all.sh did not complete")?;
+        if !status.success() {
+            anyhow::bail!("Droidian flash_all.sh failed (exit {:?})", status.code());
+        }
         Ok(())
     }
 
@@ -288,7 +327,13 @@ impl DroidianInstaller {
 
         for i in 0..archive.len() {
             let mut entry = archive.by_index(i)?;
-            let out_path = extract_dir.join(entry.name());
+            // enclosed_name() rejects `..` and absolute paths (zip-slip); a
+            // crafted entry name must not write outside extract_dir.
+            let Some(rel) = entry.enclosed_name() else {
+                log::warn!("Skipping unsafe ZIP entry name: {}", entry.name());
+                continue;
+            };
+            let out_path = extract_dir.join(rel);
 
             if entry.is_dir() {
                 std::fs::create_dir_all(&out_path)?;

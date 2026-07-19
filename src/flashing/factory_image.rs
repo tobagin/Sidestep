@@ -39,7 +39,7 @@ impl FactoryImageInstaller {
     }
 
     /// Spawn the installer on a background thread, returning immediately.
-    pub fn spawn(self) -> std::sync::mpsc::Receiver<InstallProgress> {
+    pub fn spawn(self, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> std::sync::mpsc::Receiver<InstallProgress> {
         let (sender, receiver) = std::sync::mpsc::channel();
 
         std::thread::spawn(move || {
@@ -49,7 +49,7 @@ impl FactoryImageInstaller {
                 .expect("Failed to create tokio runtime");
 
             rt.block_on(async {
-                if let Err(e) = self.run(&sender).await {
+                if let Err(e) = self.run(&sender, cancel).await {
                     log::error!("Factory image installation failed: {:#}", e);
                     let _ = sender.send(InstallProgress::Error(format!("{:#}", e)));
                 }
@@ -59,9 +59,21 @@ impl FactoryImageInstaller {
         receiver
     }
 
-    async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
-        let downloader = ImageDownloader::new(self.download_dir.clone());
+    async fn run(&self, sender: &Sender<InstallProgress>, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> Result<()> {
+        let downloader = ImageDownloader::new(self.download_dir.clone()).with_cancel(cancel.clone());
         let adb = Adb::new();
+
+        // Best-effort IMEI/EFS backup while still in adb mode (rooted devices
+        // only; everyone else is covered by the mandatory safety warning).
+        let backup_dir = crate::flashing::download_dir().join("imei-backup").join(&self.serial);
+        let saved = adb.backup_critical_partitions(&self.serial, &backup_dir).await;
+        if !saved.is_empty() {
+            let _ = sender.send(InstallProgress::StatusChanged(format!(
+                "Backed up {} to {}",
+                saved.join(", "),
+                backup_dir.display()
+            )));
+        }
         let fastboot = Fastboot::new();
 
         // Derive filename from URL
@@ -232,7 +244,12 @@ impl FactoryImageInstaller {
 
         for i in 0..archive.len() {
             let mut entry = archive.by_index(i)?;
-            let out_path = extract_dir.join(entry.name());
+            // enclosed_name() rejects `..` and absolute paths (zip-slip).
+            let Some(rel) = entry.enclosed_name() else {
+                log::warn!("Skipping unsafe ZIP entry name: {}", entry.name());
+                continue;
+            };
+            let out_path = extract_dir.join(rel);
 
             if entry.is_dir() {
                 std::fs::create_dir_all(&out_path)?;

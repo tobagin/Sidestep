@@ -10,7 +10,7 @@ A wizard for unlocking Android bootloaders and installing mobile Linux distribut
 
 ## 🎉 Version 0.3.0 - Latest Release
 
-**Sidestep 0.3.0** brings the catalog to 47 devices across 11 manufacturers, with full cross-distro coverage including Ubuntu Touch, postmarketOS, LineageOS, and /e/OS.
+**Sidestep 0.3.0** brings the catalog to 46 devices across 13 manufacturers, covering Ubuntu Touch, postmarketOS, LineageOS, /e/OS, Droidian, and Mobian. LineageOS and /e/OS install broadly via `adb sideload`; fastboot-flashed distros currently ship complete flash configs for a subset of devices, with more being added.
 
 ### ✨ Key Features
 

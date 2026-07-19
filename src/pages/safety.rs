@@ -20,6 +20,8 @@ mod imp {
         #[template_child]
         pub backup_check: TemplateChild<gtk::CheckButton>,
         #[template_child]
+        pub imei_check: TemplateChild<gtk::CheckButton>,
+        #[template_child]
         pub warranty_check: TemplateChild<gtk::CheckButton>,
         #[template_child]
         pub risk_check: TemplateChild<gtk::CheckButton>,
@@ -59,6 +61,9 @@ mod imp {
 
             let cb = update_sensitivity.clone();
             self.backup_check.connect_toggled(move |_| cb());
+
+            let cb = update_sensitivity.clone();
+            self.imei_check.connect_toggled(move |_| cb());
 
             let cb = update_sensitivity.clone();
             self.warranty_check.connect_toggled(move |_| cb());
@@ -134,6 +139,7 @@ impl SafetyPage {
     fn update_continue_sensitivity(&self) {
         let imp = self.imp();
         let all_checked = imp.backup_check.is_active()
+            && imp.imei_check.is_active()
             && imp.warranty_check.is_active()
             && imp.risk_check.is_active();
         imp.continue_button.set_sensitive(all_checked);

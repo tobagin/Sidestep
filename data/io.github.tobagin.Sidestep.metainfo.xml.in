@@ -8,7 +8,8 @@
   <description>
     <p>
       Sidestep guides you through unlocking your Android device's bootloader and
-      installing mobile Linux distributions like postmarketOS, Ubuntu Touch, and Mobian.
+      installing mobile Linux distributions including postmarketOS, Ubuntu Touch,
+      Mobian, Droidian, LineageOS, and /e/OS.
     </p>
     <p>Features:</p>
     <ul>
@@ -24,6 +25,28 @@
     <color type="primary" scheme_preference="dark">#1a5fb4</color>
   </branding>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Waiting for a device to be connected</caption>
+      <image>https://raw.githubusercontent.com/tobagin/Sidestep/main/data/screenshots/main.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Device details and specifications</caption>
+      <image>https://raw.githubusercontent.com/tobagin/Sidestep/main/data/screenshots/device-details.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Choosing a distribution to install</caption>
+      <image>https://raw.githubusercontent.com/tobagin/Sidestep/main/data/screenshots/distros.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Installing a distribution with live progress</caption>
+      <image>https://raw.githubusercontent.com/tobagin/Sidestep/main/data/screenshots/installing-mobian.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Installation complete</caption>
+      <image>https://raw.githubusercontent.com/tobagin/Sidestep/main/data/screenshots/installation-complete.png</image>
+    </screenshot>
+  </screenshots>
   <url type="homepage">https://github.com/tobagin/Sidestep</url>
   <url type="bugtracker">https://github.com/tobagin/Sidestep/issues</url>
   <developer id="io.github.tobagin">
@@ -37,9 +60,8 @@
         <ul>
           <li>10 new devices: OnePlus 6T, OnePlus 3/3T, Pocophone F1, Redmi Note 7 Pro, Fairphone 4/5, SHIFT6mq, Moto Z, Xperia 5 II</li>
           <li>Droidian community device support for griffin, oneplus3, violet, pdx206</li>
-          <li>Mobian support for all Qualcomm-based devices</li>
-          <li>Full cross-distro coverage for every new device</li>
-          <li>25 supported devices across 11 manufacturers</li>
+          <li>Mobian support for Qualcomm-based devices</li>
+          <li>46 devices across 13 manufacturers in the catalog</li>
         </ul>
       </description>
     </release>

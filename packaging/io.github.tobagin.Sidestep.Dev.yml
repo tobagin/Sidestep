@@ -56,6 +56,36 @@ modules:
         only-arches:
           - aarch64
 
+  # libusb — required by heimdall for USB access
+  - name: libusb
+    buildsystem: autotools
+    config-opts:
+      - --disable-udev
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/releases/download/v1.0.30/libusb-1.0.30.tar.bz2
+        sha256: fea36f34f9156400209595e300840767ab1a385ede1dc7ee893015aea9c6dbaf
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+      - "*.la"
+
+  # Heimdall — Samsung download-mode (Odin) flashing for Exynos devices.
+  # CLI only (DISABLE_FRONTEND avoids the Qt GUI). NOTE: the Heimdall install
+  # path is unverified on hardware; validate with a real Samsung device before
+  # relying on it. There is no install() rule upstream, so we copy the binary.
+  - name: heimdall
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DDISABLE_FRONTEND=ON
+      - -DCMAKE_BUILD_TYPE=Release
+    post-install:
+      - install -Dm755 bin/heimdall ${FLATPAK_DEST}/bin/heimdall
+    sources:
+      - type: archive
+        url: https://github.com/Benjamin-Dobell/Heimdall/archive/refs/tags/v1.4.2.tar.gz
+        sha256: 589bef88f2597c8a84fe6fafbe928ddc9687438b5b54edd917d7df48c7e3eff8
+
   # Main application
   - name: sidestep
     buildsystem: meson

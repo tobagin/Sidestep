@@ -3,6 +3,7 @@
 
 pub mod adb;
 pub mod fastboot;
+pub mod heimdall;
 pub mod device_detector;
 
 pub use adb::Adb;

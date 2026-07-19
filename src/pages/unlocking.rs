@@ -375,10 +375,13 @@ async fn run_command(command: &str, serial: Option<&str>) -> anyhow::Result<Stri
         anyhow::bail!("Empty command");
     };
 
+    // Only adb/fastboot may be invoked. Command strings come from the device DB,
+    // which is auto-synced from a remote tarball (models/sync.rs) and is therefore
+    // untrusted — allowing arbitrary program names here would be remote code execution.
     let binary = match program {
         "adb" => std::env::var("ADB_PATH").unwrap_or_else(|_| "adb".to_string()),
         "fastboot" => std::env::var("FASTBOOT_PATH").unwrap_or_else(|_| "fastboot".to_string()),
-        other => other.to_string(),
+        other => anyhow::bail!("Refusing to run non-allowlisted program: {other}"),
     };
 
     let mut args: Vec<String> = Vec::new();

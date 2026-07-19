@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use crate::flashing::{DroidianInstaller, EosInstaller, FactoryImageInstaller, InstallProgress, LineageosInstaller, MobianInstaller, PostmarketosInstaller, UbportsInstaller};
-use crate::models::installer::{FirmwareImage, FlashPartition, FlashOperation};
+use crate::models::installer::{BootstrapStep, FirmwareImage, FlashOperation, UbportsDownload};
 use gtk::{gio, glib, prelude::*, subclass::prelude::*};
 use libadwaita as adw;
 use adw::prelude::*;
@@ -36,9 +36,14 @@ mod imp {
         #[template_child]
         pub error_banner: TemplateChild<adw::Banner>,
         #[template_child]
+        pub cancel_box: TemplateChild<gtk::Box>,
+        #[template_child]
         pub cancel_button: TemplateChild<gtk::Button>,
         #[template_child]
         pub restart_box: TemplateChild<gtk::Box>,
+        // Set true when the user clicks Cancel. Only downloads honour it; once
+        // flashing begins the button is hidden so a flash is never interrupted.
+        pub cancel: std::sync::Arc<std::sync::atomic::AtomicBool>,
         #[template_child]
         pub restart_button: TemplateChild<gtk::Button>,
         #[template_child]
@@ -78,6 +83,14 @@ mod imp {
             let obj = self.obj().clone();
             self.restart_button.connect_clicked(move |_| {
                 obj.emit_by_name::<()>("installation-failed", &[]);
+            });
+
+            let obj = self.obj().clone();
+            self.cancel_button.connect_clicked(move |_| {
+                let imp = obj.imp();
+                imp.cancel.store(true, std::sync::atomic::Ordering::Relaxed);
+                imp.cancel_box.set_visible(false);
+                imp.status_page.set_description(Some("Cancelling…"));
             });
         }
     }
@@ -122,26 +135,38 @@ impl FlashingPage {
 
     pub fn set_distro_name(&self, name: &str) {
         log::info!("Starting installation for: {}", name);
-        self.imp().distro_name.replace(name.to_string());
+        let imp = self.imp();
+        imp.distro_name.replace(name.to_string());
+        // Block Esc / swipe-back / header back-button while flashing. Popping
+        // this page mid-flash left detection paused and the invisible page still
+        // writing partitions. Programmatic navigation (success/reset) is
+        // unaffected — can-pop only gates user-initiated pops.
+        self.set_can_pop(false);
+        // Fresh run: clear any prior cancel request and offer Cancel for the
+        // (safe, cancellable) download phase.
+        imp.cancel.store(false, std::sync::atomic::Ordering::Relaxed);
+        imp.cancel_box.set_visible(true);
+    }
+
+    /// Cancellation flag shared with the background installer.
+    fn cancel_flag(&self) -> std::sync::Arc<std::sync::atomic::AtomicBool> {
+        self.imp().cancel.clone()
     }
 
     pub fn distro_name(&self) -> String {
         self.imp().distro_name.borrow().clone()
     }
 
-    /// Legacy mock-based installation (for non-UBports distros)
-    pub fn start_installation(&self, distro_name: &str) {
-        self.set_distro_name(distro_name);
-
-        let imp = self.imp();
-        imp.status_page.set_title(&format!("Installing {}", distro_name));
-        imp.status_page.set_description(Some("Preparing..."));
-
-        self.mock_progress();
-    }
-
     /// Start real UBports installation with progress from background thread
-    pub fn start_ubports_installation(&self, distro_name: &str, serial: &str, channel_path: &str, firmware: Vec<FirmwareImage>) {
+    pub fn start_ubports_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        channel_path: &str,
+        firmware: Vec<FirmwareImage>,
+        downloads: Vec<UbportsDownload>,
+        bootstrap: Vec<BootstrapStep>,
+    ) {
         self.set_distro_name(distro_name);
 
         let imp = self.imp();
@@ -153,20 +178,39 @@ impl FlashingPage {
         #[allow(deprecated)]
         imp.decompress_row.set_icon_name(Some("channel-secure-symbolic"));
 
-        let installer = UbportsInstaller::new(serial.to_string(), channel_path.to_string(), firmware);
-        let receiver = installer.spawn();
+        let installer = UbportsInstaller::new(
+            serial.to_string(),
+            channel_path.to_string(),
+            firmware,
+            downloads,
+            bootstrap,
+        );
+        let receiver = installer.spawn(self.cancel_flag());
 
-        // Poll receiver on the main thread
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
+    }
+
+    /// Start a Samsung download-mode (Heimdall/Odin) installation.
+    pub fn start_heimdall_installation(
+        &self,
+        distro_name: &str,
+        serial: &str,
+        images: Vec<FirmwareImage>,
+    ) {
+        self.set_distro_name(distro_name);
+
+        let imp = self.imp();
+        imp.status_page.set_title(&format!("Installing {}", distro_name));
+        imp.status_page.set_description(Some("Preparing..."));
+        imp.decompress_row.set_title("Verifying Checksums");
+        #[allow(deprecated)]
+        imp.decompress_row.set_icon_name(Some("channel-secure-symbolic"));
+
+        let installer =
+            crate::flashing::HeimdallInstaller::new(serial.to_string(), images);
+        let receiver = installer.spawn(self.cancel_flag());
+
+        self.poll_progress(receiver);
     }
 
     /// Start real Droidian installation with progress from background thread
@@ -176,7 +220,6 @@ impl FlashingPage {
         serial: &str,
         release_url: &str,
         artifact_pattern: &str,
-        flash_partitions: Vec<FlashPartition>,
     ) {
         self.set_distro_name(distro_name);
 
@@ -194,21 +237,10 @@ impl FlashingPage {
             serial.to_string(),
             release_url.to_string(),
             artifact_pattern.to_string(),
-            flash_partitions,
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
-        // Poll receiver on the main thread
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
     }
 
     /// Start real Mobian installation with progress from background thread
@@ -242,19 +274,9 @@ impl FlashingPage {
             device_model.to_string(),
             flash_operations,
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
-        // Poll receiver on the main thread
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
     }
 
     /// Start real postmarketOS installation with progress from background thread
@@ -282,19 +304,9 @@ impl FlashingPage {
             device.to_string(),
             flash_operations,
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
-        // Poll receiver on the main thread
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
     }
 
     /// Start real LineageOS installation with progress from background thread
@@ -322,19 +334,9 @@ impl FlashingPage {
             api_url.to_string(),
             update_only,
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
-        // Poll receiver on the main thread
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
     }
 
     /// Start /e/OS installation with progress from background thread
@@ -362,18 +364,9 @@ impl FlashingPage {
             codename.to_string(),
             channel.to_string(),
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
-                    return glib::ControlFlow::Break;
-                }
-            }
-            glib::ControlFlow::Continue
-        });
+        self.poll_progress(receiver);
     }
 
     /// Start factory image (stock Android) installation with progress from background thread
@@ -403,17 +396,35 @@ impl FlashingPage {
             sha256.to_string(),
             android_version.to_string(),
         );
-        let receiver = installer.spawn();
+        let receiver = installer.spawn(self.cancel_flag());
 
+        self.poll_progress(receiver);
+    }
+
+    /// Poll an installer's progress receiver on the main thread. Handles the
+    /// three outcomes explicitly — crucially, `Disconnected` (the installer
+    /// thread ended without a terminal Complete/Error message, e.g. it panicked)
+    /// is surfaced as an error instead of spinning "Preparing…" forever.
+    fn poll_progress(&self, receiver: std::sync::mpsc::Receiver<InstallProgress>) {
+        use std::sync::mpsc::TryRecvError;
         let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            while let Ok(msg) = receiver.try_recv() {
-                let should_stop = page.handle_progress(msg);
-                if should_stop {
+        glib::timeout_add_local(std::time::Duration::from_millis(100), move || loop {
+            match receiver.try_recv() {
+                Ok(msg) => {
+                    if page.handle_progress(msg) {
+                        return glib::ControlFlow::Break;
+                    }
+                }
+                Err(TryRecvError::Empty) => return glib::ControlFlow::Continue,
+                Err(TryRecvError::Disconnected) => {
+                    page.handle_progress(InstallProgress::Error(
+                        "The installer stopped unexpectedly. Do not disconnect your \
+                         device — check its screen before retrying."
+                            .to_string(),
+                    ));
                     return glib::ControlFlow::Break;
                 }
             }
-            glib::ControlFlow::Continue
         });
     }
 
@@ -482,6 +493,8 @@ impl FlashingPage {
                 total,
                 description,
             } => {
+                // Flashing has begun — past the point where cancelling is safe.
+                imp.cancel_box.set_visible(false);
                 if total > 0 {
                     let fraction = current as f64 / total as f64;
                     imp.flash_progress.set_fraction(fraction.min(1.0));
@@ -521,6 +534,7 @@ impl FlashingPage {
             }
 
             InstallProgress::Complete => {
+                imp.cancel_box.set_visible(false);
                 self.log_to_terminal("Installation complete");
                 imp.status_page.set_title("Installation Complete!");
                 imp.download_row.set_subtitle("Complete");
@@ -540,6 +554,7 @@ impl FlashingPage {
             }
 
             InstallProgress::Error(msg) => {
+                imp.cancel_box.set_visible(false);
                 log::error!("Installation error: {}", msg);
                 self.log_to_terminal(&format!("Error: {}", msg));
                 imp.status_page.set_title("Installation Failed");
@@ -555,45 +570,6 @@ impl FlashingPage {
         false
     }
 
-    fn mock_progress(&self) {
-        let page = self.clone();
-        glib::timeout_add_local(std::time::Duration::from_millis(100), move || {
-            let imp = page.imp();
-            let fraction = imp.download_progress.fraction();
-            if fraction < 1.0 {
-                imp.download_progress.set_fraction(fraction + 0.05);
-                imp.download_row.set_subtitle(&format!("{:.0}%", (fraction + 0.05) * 100.0));
-                return glib::ControlFlow::Continue;
-            }
-
-            imp.download_row.set_subtitle("Complete");
-            imp.download_row.add_suffix(&gtk::Image::from_icon_name("emblem-ok-symbolic"));
-
-            // Decompress
-            let fraction_dec = imp.decompress_progress.fraction();
-            if fraction_dec < 1.0 {
-                 imp.decompress_progress.set_fraction(fraction_dec + 0.05);
-                 return glib::ControlFlow::Continue;
-            }
-             imp.decompress_row.set_subtitle("Complete");
-
-            // Flash
-            let fraction_flash = imp.flash_progress.fraction();
-            if fraction_flash < 1.0 {
-                 imp.flash_progress.set_fraction(fraction_flash + 0.05);
-                 return glib::ControlFlow::Continue;
-            }
-             imp.flash_row.set_subtitle("Complete");
-
-            imp.status_page.set_title("Installation Complete!");
-            imp.verify_icon.set_visible(true);
-            imp.verify_row.set_subtitle("Verified");
-
-            page.emit_by_name::<()>("installation-complete", &[]);
-
-            glib::ControlFlow::Break
-        });
-    }
 }
 
 /// Format a progress message as a terminal log line. Returns None for

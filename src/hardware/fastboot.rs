@@ -93,11 +93,11 @@ impl Fastboot {
         log::info!("Flashing {} to partition {}", image.display(), partition);
 
         let output = Command::new(&self.binary_path)
-            .args([
-                "-s", serial,
-                "flash", partition,
-                image.to_str().unwrap()
-            ])
+            .arg("-s")
+            .arg(serial)
+            .arg("flash")
+            .arg(partition)
+            .arg(image) // OsStr — no panic on non-UTF8 paths
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -149,10 +149,10 @@ impl Fastboot {
             args.push("-w");
         }
         args.push("update");
-        args.push(zip_path.to_str().unwrap());
 
         let output = Command::new(&self.binary_path)
             .args(&args)
+            .arg(zip_path) // OsStr — no panic on non-UTF8 paths
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -172,14 +172,18 @@ impl Fastboot {
     /// Reboot the device
     pub async fn reboot(&self, serial: &str) -> Result<()> {
         log::info!("Rebooting device {}", serial);
-        
-        Command::new(&self.binary_path)
+
+        let output = Command::new(&self.binary_path)
             .args(["-s", serial, "reboot"])
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
             .await
             .context("Failed to reboot device")?;
+
+        if !output.status.success() {
+            anyhow::bail!("Reboot failed: {}", String::from_utf8_lossy(&output.stderr));
+        }
 
         Ok(())
     }
@@ -244,10 +248,10 @@ impl Fastboot {
 
         let mut args = vec!["-s", serial, "flash", partition];
         args.extend_from_slice(flags);
-        args.push(image.to_str().unwrap());
 
         let output = Command::new(&self.binary_path)
             .args(&args)
+            .arg(image) // OsStr — no panic on non-UTF8 paths
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -283,12 +287,8 @@ impl Fastboot {
 
         let sparse_flag = format!("-S{}", chunk_size);
         let output = Command::new(&self.binary_path)
-            .args([
-                "-s", serial,
-                &sparse_flag,
-                "flash", partition,
-                image.to_str().unwrap(),
-            ])
+            .args(["-s", serial, &sparse_flag, "flash", partition])
+            .arg(image) // OsStr — no panic on non-UTF8 paths
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .output()
@@ -353,5 +353,61 @@ impl Fastboot {
         }
 
         Ok(())
+    }
+
+    /// Run a fastboot subcommand and fail on non-zero exit. Building block for
+    /// the UBports bootstrap DSL verbs below.
+    async fn run_checked(&self, args: &[&str], ctx: &'static str) -> Result<()> {
+        let output = Command::new(&self.binary_path)
+            .arg("-s")
+            .args(args)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .output()
+            .await
+            .context(ctx)?;
+        if !output.status.success() {
+            anyhow::bail!("{}: {}", ctx, String::from_utf8_lossy(&output.stderr).trim());
+        }
+        Ok(())
+    }
+
+    /// `fastboot --set-active=<slot>` — select the active A/B slot.
+    pub async fn set_active(&self, serial: &str, slot: &str) -> Result<()> {
+        log::info!("Setting active slot to {} on {}", slot, serial);
+        let flag = format!("--set-active={slot}");
+        self.run_checked(&[serial, &flag], "fastboot set-active failed").await
+    }
+
+    /// `fastboot delete-logical-partition <name>`.
+    pub async fn delete_logical_partition(&self, serial: &str, partition: &str) -> Result<()> {
+        log::info!("Deleting logical partition {} on {}", partition, serial);
+        self.run_checked(
+            &[serial, "delete-logical-partition", partition],
+            "fastboot delete-logical-partition failed",
+        )
+        .await
+    }
+
+    /// `fastboot resize-logical-partition <name> <size>`.
+    pub async fn resize_logical_partition(&self, serial: &str, partition: &str, size: &str) -> Result<()> {
+        log::info!("Resizing logical partition {} to {} on {}", partition, size, serial);
+        self.run_checked(
+            &[serial, "resize-logical-partition", partition, size],
+            "fastboot resize-logical-partition failed",
+        )
+        .await
+    }
+
+    /// `fastboot wipe-super <image>` — reset the super partition metadata.
+    pub async fn wipe_super(&self, serial: &str) -> Result<()> {
+        log::info!("Wiping super partition on {}", serial);
+        self.run_checked(&[serial, "wipe-super"], "fastboot wipe-super failed").await
+    }
+
+    /// `fastboot reboot fastboot` — reboot into fastbootd (userspace fastboot).
+    pub async fn reboot_fastboot(&self, serial: &str) -> Result<()> {
+        log::info!("Rebooting {} into fastbootd", serial);
+        self.run_checked(&[serial, "reboot", "fastboot"], "fastboot reboot fastboot failed").await
     }
 }

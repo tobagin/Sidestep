@@ -101,6 +101,17 @@ template $SafetyPage: Adw.NavigationPage {
                             }
                         }
 
+                        Adw.ActionRow imei_row {
+                            icon-name: "network-cellular-signal-good-symbolic";
+                            title: _("IMEI / Cellular Identity");
+                            subtitle: _("Flashing can erase the EFS/modem partitions that hold your IMEI. Sidestep cannot back these up automatically unless your device is rooted — back them up with a custom recovery (e.g. TWRP) first if you can. Losing them permanently disables cellular.");
+
+                            [suffix]
+                            CheckButton imei_check {
+                                valign: center;
+                            }
+                        }
+
                         Adw.ActionRow warranty_row {
                             icon-name: "dialog-warning-symbolic";
                             title: _("Warranty Void");

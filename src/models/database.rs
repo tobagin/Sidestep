@@ -196,20 +196,26 @@ impl DeviceDatabase {
             crate::models::sync::user_data_dir(),
         ];
 
+        let maker = Self::maker_to_dir(&device.maker);
         for dir in possible_dirs {
-            let config_path = dir
-                .join("devices")
-                .join(Self::maker_to_dir(&device.maker))
-                .join(device.codename.to_lowercase())
-                .join("installers")
-                .join(format!("{}.yml", distro_id));
+            // Device dirs are named for the codename; try as-is then lowercased.
+            // Some (e.g. fairphone/FP4, FP5) keep upstream capitalisation, so a
+            // blind to_lowercase() would never find them.
+            for name in [device.codename.clone(), device.codename.to_lowercase()] {
+                let config_path = dir
+                    .join("devices")
+                    .join(&maker)
+                    .join(&name)
+                    .join("installers")
+                    .join(format!("{}.yml", distro_id));
 
-            if let Ok(content) = std::fs::read_to_string(&config_path) {
-                match serde_yaml::from_str::<InstallerConfig>(&content) {
-                    Ok(config) => return Some(config),
-                    Err(e) => {
-                        log::error!("Failed to parse {}: {}", config_path.display(), e);
-                        return None;
+                if let Ok(content) = std::fs::read_to_string(&config_path) {
+                    match serde_yaml::from_str::<InstallerConfig>(&content) {
+                        Ok(config) => return Some(config),
+                        Err(e) => {
+                            log::error!("Failed to parse {}: {}", config_path.display(), e);
+                            return None;
+                        }
                     }
                 }
             }

@@ -49,7 +49,7 @@ impl EosInstaller {
         }
     }
 
-    pub fn spawn(self) -> std::sync::mpsc::Receiver<InstallProgress> {
+    pub fn spawn(self, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> std::sync::mpsc::Receiver<InstallProgress> {
         let (sender, receiver) = std::sync::mpsc::channel();
 
         std::thread::spawn(move || {
@@ -59,7 +59,7 @@ impl EosInstaller {
                 .expect("Failed to create tokio runtime");
 
             rt.block_on(async {
-                if let Err(e) = self.run(&sender).await {
+                if let Err(e) = self.run(&sender, cancel).await {
                     log::error!("/e/OS installation failed: {:#}", e);
                     let _ = sender.send(InstallProgress::Error(format!("{:#}", e)));
                 }
@@ -69,9 +69,21 @@ impl EosInstaller {
         receiver
     }
 
-    async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
-        let downloader = ImageDownloader::new(self.download_dir.clone());
+    async fn run(&self, sender: &Sender<InstallProgress>, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> Result<()> {
+        let downloader = ImageDownloader::new(self.download_dir.clone()).with_cancel(cancel.clone());
         let adb = Adb::new();
+
+        // Best-effort IMEI/EFS backup while still in adb mode (rooted devices
+        // only; everyone else is covered by the mandatory safety warning).
+        let backup_dir = crate::flashing::download_dir().join("imei-backup").join(&self.serial);
+        let saved = adb.backup_critical_partitions(&self.serial, &backup_dir).await;
+        if !saved.is_empty() {
+            let _ = sender.send(InstallProgress::StatusChanged(format!(
+                "Backed up {} to {}",
+                saved.join(", "),
+                backup_dir.display()
+            )));
+        }
         let fastboot = Fastboot::new();
 
         // ── Step 1: Scrape image index ──
@@ -84,9 +96,16 @@ impl EosInstaller {
         log::info!("/e/OS recovery: {}", recovery_name);
         log::info!("/e/OS ROM: {}", rom_name);
 
-        // ── Step 2: Download SHA256 checksum ──
+        // ── Step 2: Download SHA256 checksums ──
         let rom_sha256 = self.fetch_sha256(&sha256_url).await?;
         log::info!("ROM SHA256: {}", rom_sha256);
+        // The recovery image is flashed directly to the boot partition, so it
+        // must be verified too — an unverified/truncated boot image can brick.
+        let recovery_sha256 = self
+            .fetch_sha256(&format!("{}.sha256sum", recovery_url))
+            .await
+            .context("Failed to fetch /e/OS recovery checksum")?;
+        log::info!("Recovery SHA256: {}", recovery_sha256);
 
         // ── Step 3: Download recovery image ──
         let _ = sender.send(InstallProgress::StatusChanged(
@@ -97,7 +116,7 @@ impl EosInstaller {
             .download_if_needed(
                 &recovery_url,
                 &recovery_name,
-                None,
+                Some(&recovery_sha256),
                 Some(Box::new(move |downloaded, total| {
                     let _ = sender_clone.send(InstallProgress::DownloadProgress {
                         downloaded,
@@ -108,6 +127,11 @@ impl EosInstaller {
             )
             .await
             .context("Failed to download /e/OS recovery")?;
+
+        // Verify the recovery image before it ever touches the boot partition.
+        if !ChecksumVerifier::verify(&recovery_path, &recovery_sha256)? {
+            anyhow::bail!("Checksum mismatch for /e/OS recovery image");
+        }
 
         // ── Step 4: Download ROM zip ──
         let _ = sender.send(InstallProgress::StatusChanged(

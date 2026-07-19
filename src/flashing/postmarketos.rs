@@ -58,7 +58,7 @@ impl PostmarketosInstaller {
 
     /// Spawn the installer on a background thread, returning immediately.
     /// Progress is reported via the returned mpsc::Receiver.
-    pub fn spawn(self) -> std::sync::mpsc::Receiver<InstallProgress> {
+    pub fn spawn(self, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> std::sync::mpsc::Receiver<InstallProgress> {
         let (sender, receiver) = std::sync::mpsc::channel();
 
         std::thread::spawn(move || {
@@ -68,7 +68,7 @@ impl PostmarketosInstaller {
                 .expect("Failed to create tokio runtime");
 
             rt.block_on(async {
-                if let Err(e) = self.run(&sender).await {
+                if let Err(e) = self.run(&sender, cancel).await {
                     log::error!("postmarketOS installation failed: {:#}", e);
                     let _ = sender.send(InstallProgress::Error(format!("{:#}", e)));
                 }
@@ -79,13 +79,25 @@ impl PostmarketosInstaller {
     }
 
     /// Main installation flow (runs on background thread)
-    async fn run(&self, sender: &Sender<InstallProgress>) -> Result<()> {
+    async fn run(&self, sender: &Sender<InstallProgress>, cancel: std::sync::Arc<std::sync::atomic::AtomicBool>) -> Result<()> {
         if self.flash_operations.is_empty() {
             anyhow::bail!("No flash operations configured for postmarketOS installation");
         }
 
-        let downloader = ImageDownloader::new(self.download_dir.clone());
+        let downloader = ImageDownloader::new(self.download_dir.clone()).with_cancel(cancel.clone());
         let adb = Adb::new();
+
+        // Best-effort IMEI/EFS backup while still in adb mode (rooted devices
+        // only; everyone else is covered by the mandatory safety warning).
+        let backup_dir = crate::flashing::download_dir().join("imei-backup").join(&self.serial);
+        let saved = adb.backup_critical_partitions(&self.serial, &backup_dir).await;
+        if !saved.is_empty() {
+            let _ = sender.send(InstallProgress::StatusChanged(format!(
+                "Backed up {} to {}",
+                saved.join(", "),
+                backup_dir.display()
+            )));
+        }
         let fastboot = Fastboot::new();
 
         // ── Step 1: Discover latest build directory ──

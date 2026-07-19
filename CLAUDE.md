@@ -35,8 +35,7 @@ Sidestep is a GTK4/Libadwaita desktop app (Rust, Flatpak) that guides users thro
 - **`models/`** — Data types: `Device`, `Distro`, `DeviceDatabase`. Device database loaded from YAML files in `data/devices/{manufacturer}/{codename}/`.
 - **`flashing/`** — Installation engine: download (`reqwest` + progress), decompress (XZ/GZIP), verify (SHA256), flash (fastboot commands). `ubports.rs` is the Ubuntu Touch installer implementation.
 - **`pages/`** — GTK composite template widgets for each wizard screen. UI defined in Blueprint language (`.blp` files in `data/ui/pages/`).
-- **`wizard/`** — `WizardController` state machine managing the install flow.
-- **`wizards/`** — Wizard implementations (e.g., `install_wizard.rs`).
+- **`pages/install_flow.rs`** — `InstallFlow`, an `Rc`-shared controller that drives the install wizard by pushing pages onto the window's `NavigationView`. Navigation state is implicit in the `NavigationView` stack (there is no separate state-machine type).
 - **`utils/`** — YAML parser for device database.
 
 ### Application Flow
