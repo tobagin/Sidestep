@@ -11,7 +11,7 @@ available_distros:
       - id: "nightly"
         label: "Nightly"
         artifact_match: "volla_vidofnir-api32-arm64"
-        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/tags/nightly"
     flash_method: "fastboot_zip_orchestrator"
     compatibility:
       working:

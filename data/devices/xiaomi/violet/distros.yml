@@ -31,36 +31,6 @@ available_distros:
         - "Community port based on Halium 9"
         - "Development builds only"
 
-  # --- Droidian ---
-  - id: "droidian"
-    name: "Droidian"
-    developer: "Droidian Team"
-    discovery_strategy: "github_release_latest"
-    channels:
-      - id: "nightly"
-        label: "Nightly"
-        artifact_match: "xiaomi_violet-api28-arm64"
-        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
-    flash_method: "fastboot_zip_orchestrator"
-    compatibility:
-      working:
-        - "Cellular (calls, SMS, data)"
-        - "WiFi"
-        - "Bluetooth"
-        - "GPU acceleration"
-        - "Audio (speaker, earpiece)"
-        - "Vibration"
-      partial:
-        - "Camera"
-        - "GPS"
-        - "Fingerprint reader"
-      not_working:
-        - "IR blaster"
-      notes:
-        - "Community port"
-        - "Debian-based with Halium abstraction layer"
-        - "First boot may take up to 5 minutes"
-
   # --- LineageOS ---
   - id: "lineageos"
     name: "LineageOS"

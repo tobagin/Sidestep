@@ -1,6 +1,57 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/FP4/boot.img
+  filename: boot.img
+  sha256: c1ab7a12e48edddc089cd93265e475ff58242919427520a589fc19203c8fb628
+- url: https://cdimage.ubports.com/devices/FP4/dtbo.img
+  filename: dtbo.img
+  sha256: 68ad83e20eb2b47592c2b7fe48161893770b1727c7b7ce7240504eaf8612d733
+- url: https://cdimage.ubports.com/devices/FP4/recovery.img
+  filename: recovery.img
+  sha256: f5b867a95295de34a77294160282c52fe1cd4d3847535f32c0be4a466bc55432
+bootstrap:
+- op: wait
+- op: assert_var
+  variable: unlocked
+  value: 'yes'
+- op: set_active
+  slot: a
+- op: flash
+  partition: boot
+  file: boot.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: reboot_fastboot
+- op: delete_logical_partition
+  partition: system_ext_a
+- op: delete_logical_partition
+  partition: system_ext_b
+- op: delete_logical_partition
+  partition: product_a
+- op: delete_logical_partition
+  partition: product_b
+- op: delete_logical_partition
+  partition: system_b
+- op: delete_logical_partition
+  partition: vendor_b
+- op: delete_logical_partition
+  partition: odm_b
+- op: resize_logical_partition
+  partition: system_a
+  size: 4718592000
+- op: reboot_bootloader
+- op: erase
+  partition: userdata
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

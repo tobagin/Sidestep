@@ -79,8 +79,8 @@ available_distros:
     channels:
       - id: "nightly"
         label: "Nightly"
-        artifact_match: "oneplus_oneplus3-api28-arm64"
-        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+        artifact_match: "oneplus-oneplus3-api28-arm64"
+        release_url: "https://api.github.com/repos/Droidian-oneplus3/droidian-images/releases/tags/nightly"
     flash_method: "fastboot_zip_orchestrator"
     compatibility:
       working:

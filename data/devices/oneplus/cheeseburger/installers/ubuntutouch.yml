@@ -1,6 +1,17 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/dumpling_cheeseburger/halium-unlocked-recovery_cheeseburger.img
+  filename: halium-unlocked-recovery_cheeseburger.img
+  sha256: e4a02a815f6b6a1b4f13762096d56699262e19e93ec6746f395c6fe415bff008
+bootstrap:
+- op: flash
+  partition: recovery
+  file: halium-unlocked-recovery_cheeseburger.img
+- op: format
+  partition: userdata
+  fs: ext4

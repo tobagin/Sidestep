@@ -1,6 +1,26 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubports-xiaomi-sdm660/artifacts/releases/download/v0.1/boot.img
+  filename: boot.img
+  sha256: 07111aba0f8c8720baae6ea6d31c898a8b8fe0dc942185cdc39f2d114ef1702d
+bootstrap:
+- op: format
+  partition: system
+  fs: ext4
+- op: format
+  partition: cache
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: vendor
+  file: vendor.img
+- op: flash
+  partition: boot
+  file: boot.img

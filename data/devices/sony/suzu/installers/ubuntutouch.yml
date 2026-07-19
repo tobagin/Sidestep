@@ -1,6 +1,27 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/halium-unlocked-recovery_suzu.img
+  filename: halium-unlocked-recovery_suzu.img
+  sha256: d230df1a9d4d5d8e92232ec272e365996ef5a77edb60aaddbfcd5aa97e058dc1
+bootstrap:
+- op: erase
+  partition: system
+- op: erase
+  partition: cache
+- op: erase
+  partition: userdata
+- op: flash
+  partition: boot
+  file: halium-unlocked-recovery_suzu.img
+- op: flash
+  partition: recovery
+  file: halium-unlocked-recovery_suzu.img
+- op: flash
+  partition: oem
+  file: unpacked/SW_binaries_for_Xperia_AOSP_N_MR1_5.7_r1_v08_loire.img
+- op: reboot

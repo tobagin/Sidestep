@@ -1,6 +1,63 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://volla.tech/filedump/volla-yggdrasilx-10.0-ubports-installer-bootstrap.zip
+  filename: volla-yggdrasilx-10.0-ubports-installer-bootstrap.zip
+  sha256: d74cbf319f9525275497a2fe3f87d657498213f903d416505b17eef47574f9f6
+  unpack: true
+bootstrap:
+- op: flash
+  partition: boot
+  file: unpacked/recovery.img
+- op: flash
+  partition: dtbo
+  file: unpacked/dtbo.img
+- op: flash
+  partition: lk
+  file: unpacked/lk.img
+- op: flash
+  partition: lk2
+  file: unpacked/lk.img
+- op: flash
+  partition: logo
+  file: unpacked/logo.img
+- op: flash
+  partition: md1dsp
+  file: unpacked/md1dsp.img
+- op: flash
+  partition: md1img
+  file: unpacked/md1img.img
+- op: flash
+  partition: preloader
+  file: unpacked/preloader.img
+- op: flash
+  partition: recovery
+  file: unpacked/recovery.img
+- op: flash
+  partition: spmfw
+  file: unpacked/spmfw.img
+- op: flash
+  partition: sspm_1
+  file: unpacked/sspm.img
+- op: flash
+  partition: sspm_2
+  file: unpacked/sspm.img
+- op: flash
+  partition: tee1
+  file: unpacked/tee.img
+- op: flash
+  partition: tee2
+  file: unpacked/tee.img
+- op: flash
+  partition: vendor
+  file: unpacked/vendor.img
+- op: erase
+  partition: system
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

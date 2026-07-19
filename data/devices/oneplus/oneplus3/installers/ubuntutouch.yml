@@ -1,6 +1,27 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: http://cdimage.ubports.com/devices/halium-unlocked-recovery_oneplus3.img
+  filename: halium-unlocked-recovery_oneplus3.img
+  sha256: ca6359915a692523d7d12f6f0ca85e81d89328e7ad5bd46779e0af5c4b8c850b
+- url: https://archive.org/download/twrp-3.2.1-0-oneplus3/twrp-3.2.1-0-oneplus3.img
+  filename: twrp-3.2.1-0-oneplus3.img
+  sha256: 4df27c0e0ea7dde9139f7f4717206df3577c34163c2822bc3e8a26b15c60ccd4
+bootstrap:
+- op: user_action
+  message: twrp_unlock
+- op: user_action
+  message: twrp_wipe_format
+- op: flash
+  partition: recovery
+  file: halium-unlocked-recovery_oneplus3.img
+- op: format
+  partition: cache
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4

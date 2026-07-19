@@ -1,6 +1,48 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/lavender/dtbo.img
+  filename: dtbo.img
+  sha256: 84ce5cc1549a87da0ac9e6545251f1317de5ce2322d54c384c366c9bd2d8efc6
+- url: https://cdimage.ubports.com/devices/lavender/recovery.img
+  filename: recovery.img
+  sha256: 990a377a0a87809a9ceb4f85c693e7c7c190224ff98e18a8a0e21966688bda0b
+- url: https://cdimage.ubports.com/devices/lavender/splash.img
+  filename: splash.img
+  sha256: fd1ac18cb18a16b14d6d40da6abf0538724d3e83f4d5e60615d5b7038dce7c50
+- url: https://cdimage.ubports.com/devices/lavender/vbmeta.img
+  filename: vbmeta.img
+  sha256: 65f5493e01ede7e538a14df063013a921ecd122680c7d3b3598d46fc7a916517
+bootstrap:
+- op: format
+  partition: system
+  fs: ext4
+- op: format
+  partition: cache
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: boot
+  file: recovery.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: splash
+  file: splash.img
+- op: flash
+  partition: vendor
+  file: unpacked/vendor.img
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+- op: reboot

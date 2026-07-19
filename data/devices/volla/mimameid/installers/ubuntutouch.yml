@@ -1,6 +1,59 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://volla.tech/filedump/volla-mimameid-12.0-ubports-installer-bootstrap.zip
+  filename: volla-mimameid-12.0-ubports-installer-bootstrap.zip
+  sha256: bfcac4a2722bb01eb911d1daf9c9b50c246f5cb8e85cfa1aaaed5701d20bcc2c
+  unpack: true
+bootstrap:
+- op: set_active
+  slot: a
+- op: flash
+  partition: boot_a
+  file: unpacked/boot.img
+- op: flash
+  partition: dtbo_a
+  file: unpacked/dtbo.img
+- op: flash
+  partition: gz_a
+  file: unpacked/gz.img
+- op: flash
+  partition: lk_a
+  file: unpacked/lk.img
+- op: flash
+  partition: logo
+  file: unpacked/logo.img
+- op: flash
+  partition: md1img_a
+  file: unpacked/md1img.img
+- op: flash
+  partition: preloader_a
+  file: unpacked/preloader.img
+- op: flash
+  partition: scp_a
+  file: unpacked/scp.img
+- op: flash
+  partition: spmfw_a
+  file: unpacked/spmfw.img
+- op: flash
+  partition: sspm_a
+  file: unpacked/sspm.img
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: flash
+  partition: tee_a
+  file: unpacked/tee.img
+- op: flash
+  partition: vbmeta_a
+  file: unpacked/vbmeta.img
+  flags:
+  - --disable-verity
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

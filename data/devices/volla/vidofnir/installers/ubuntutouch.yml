@@ -1,6 +1,38 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://volla.tech/filedump/volla-vidofnir-12.0-ubports-installer-bootstrap-v3.zip
+  filename: volla-vidofnir-12.0-ubports-installer-bootstrap-v3.zip
+  sha256: da18b5498ebae0267be894fff73bfd629be73967cf33f071d571ffc3ef46ce97
+  unpack: true
+bootstrap:
+- op: set_active
+  slot: a
+- op: flash
+  partition: lk_a
+  file: unpacked/lk.img
+- op: flash
+  partition: boot_a
+  file: unpacked/boot.img
+- op: flash
+  partition: vendor_boot_a
+  file: unpacked/vendor_boot.img
+- op: flash
+  partition: dtbo_a
+  file: unpacked/dtbo.img
+- op: flash
+  partition: vbmeta_a
+  file: unpacked/vbmeta.img
+  flags:
+  - --disable-verity
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

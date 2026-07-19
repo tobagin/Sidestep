@@ -1,6 +1,37 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubuntu-touch-denniz/ubuntu-touch-denniz/releases/download/20221020/super.zip
+  filename: super.zip
+  sha256: b157287a25bf5a9baffd08e421638b0ba5a3335d3fb6ed3f60cab32646a93332
+  unpack: true
+- url: https://github.com/ubuntu-touch-denniz/ubuntu-touch-denniz/releases/download/20221020/recovery.img
+  filename: recovery.img
+  sha256: cd6ec16aa37fdd092310dec591eeeef96811ba3c68cb949a996628e89ee17a9b
+- url: https://github.com/ubuntu-touch-denniz/ubuntu-touch-denniz/releases/download/20221020/dtbo.img
+  filename: dtbo.img
+  sha256: 0d49f0606c88b2280607d8aa8381bf4e4b1f647c79ce784fb0d2c3be7b6397b1
+- url: https://dl.google.com/developers/android/qt/images/gsi/vbmeta.img
+  filename: vbmeta.img
+  sha256: f6da5489fd877cb69cf61fa721cfd6d77e530084aefe9b96664f818947ff61f6
+bootstrap:
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

@@ -1,6 +1,43 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubuntu-touch-redmi-mt6768/ubuntu-touch-merlin/releases/download/20250217/recovery.img
+  filename: recovery.img
+  sha256: 58cd96315ca4693ccde87048db6f6334a9a0886210dcb8ff83dd2bcb628269e4
+- url: https://github.com/ubuntu-touch-redmi-mt6768/ubuntu-touch-merlin/releases/download/20250217/dtbo.img
+  filename: dtbo.img
+  sha256: 5f5fe86cddacaeaa7db59af4ec416ef294319af24190ff75f23d8e37f2fb0c5b
+- url: https://github.com/ubuntu-touch-redmi-mt6768/ubuntu-touch-merlin/releases/download/20250217/super.zip
+  filename: super.zip
+  sha256: 2c68453b95db547273bff2d05c683d03463e106c14657315ed86170de2db3c96
+  unpack: true
+- url: https://dl.google.com/developers/android/qt/images/gsi/vbmeta.img
+  filename: vbmeta.img
+  sha256: f6da5489fd877cb69cf61fa721cfd6d77e530084aefe9b96664f818947ff61f6
+bootstrap:
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+  flags:
+  - --disable-verity
+  - --disable-verification
+- op: flash
+  partition: boot
+  file: recovery.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: reboot

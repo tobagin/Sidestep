@@ -1,6 +1,74 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://volla.tech/filedump/volla-mimir-13.0-ubports-installer-bootstrap.zip
+  filename: volla-mimir-13.0-ubports-installer-bootstrap.zip
+  sha256: 1d3aaa0e78834e9e6667c43c79ef748737b5264c0c6641917636240484be022c
+  unpack: true
+bootstrap:
+- op: set_active
+  slot: a
+- op: flash
+  partition: preloader_a
+  file: unpacked/preloader_tb8781p1_64.bin
+- op: flash
+  partition: vbmeta_a
+  file: unpacked/vbmeta.img
+  flags:
+  - --disable-verity
+- op: flash
+  partition: md1img_a
+  file: unpacked/md1img.img
+- op: flash
+  partition: spmfw_a
+  file: unpacked/spmfw.img
+- op: flash
+  partition: pi_img_a
+  file: unpacked/pi_img.img
+- op: flash
+  partition: dpm_a
+  file: unpacked/dpm.img
+- op: flash
+  partition: scp_a
+  file: unpacked/scp.img
+- op: flash
+  partition: sspm_a
+  file: unpacked/sspm.img
+- op: flash
+  partition: mcupm_a
+  file: unpacked/mcupm.img
+- op: flash
+  partition: gz_a
+  file: unpacked/gz.img
+- op: flash
+  partition: lk_a
+  file: unpacked/lk.img
+- op: flash
+  partition: boot_a
+  file: unpacked/boot.img
+- op: flash
+  partition: vendor_boot_a
+  file: unpacked/vendor_boot.img
+- op: flash
+  partition: dtbo_a
+  file: unpacked/dtbo.img
+- op: flash
+  partition: tee_a
+  file: unpacked/tee.img
+- op: flash
+  partition: csci
+  file: unpacked/csci.ini
+- op: flash
+  partition: logo
+  file: unpacked/logo.bin
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

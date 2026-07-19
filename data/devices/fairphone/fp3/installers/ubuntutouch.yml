@@ -1,6 +1,21 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://gitlab.com/ubports/porting/community-ports/android10/fairphone/fairphone_fp3/-/jobs/2902188165/artifacts/raw/out/boot.img
+  filename: boot.img
+  sha256: 980eb17fc4f2e9a70fe6728d0ae819d0bae3135ec88487e038df138ee0ecfc4e
+bootstrap:
+- op: flash
+  partition: boot
+  file: boot.img
+- op: erase
+  partition: userdata
+- op: format
+  partition: userdata
+  fs: ext4
+- op: user_action
+  message: recovery

@@ -1,6 +1,29 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/enchilada_fajita/boot.img
+  filename: boot.img
+  sha256: e931800a0ab4f7743c395cfccdac1919f0fab6d9b3cb7582c71fbd4f30fa9612
+- url: https://cdimage.ubports.com/devices/enchilada_fajita/vbmeta.img
+  filename: vbmeta.img
+  sha256: f406f8c2c89aaeeecaaa8719b832a3c6011d36c49a8d7db26b452638f9cb091c
+bootstrap:
+- op: format
+  partition: system
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: boot
+  file: boot.img
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+  flags:
+  - --disable-verity
+  - --disable-verification

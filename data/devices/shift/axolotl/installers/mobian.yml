@@ -4,3 +4,18 @@ steps:
   install:
     type: "flash"
     url: ""
+# Flash procedure per Debian wiki (InstallingDebianOn/OnePlus/OnePlus6), shared
+# across sdm845 devices. The installer resolves source "boot" -> *.boot-<device>.img
+# and "rootfs" -> *.rootfs.img from the extracted weekly image, and reboots after.
+flash_operations:
+  - type: flash
+    partition: "boot"
+    source: "boot"
+  - type: erase
+    partition: "userdata"
+  - type: flash_sparse
+    partition: "userdata"
+    source: "rootfs"
+    chunk_size: "100M"
+  - type: erase
+    partition: "dtbo"

@@ -1,6 +1,31 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: http://cdimage.ubports.com/devices/recovery-bacon.img
+  filename: recovery-bacon.img
+  sha256: 9b5bf80d1cfc6b21b87d8b29d9a4a02cc9745dd541e3e75180de40be4e92a780
+- url: https://github.com/ubports/android_device_oneplus_bacon-1/raw/ubp-5.1/ubuntu_overlay/partitions/LOGO.img
+  filename: LOGO.img
+  sha256: 57c7e5d940d65452f59a2485ab9182e67d66f6bd6e5bafc0b5f40850eddb1980
+- url: http://cdimage.ubports.com/devices/bacon/recovery.img
+  filename: recovery.img
+  sha256: 663f8eb72fddaa756ec73afcc1d4ceed00737c49fab2affd6e549b92cceaa754
+bootstrap:
+- op: flash
+  partition: recovery
+  file: recovery-bacon.img
+- op: flash
+  partition: LOGO
+  file: LOGO.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: LOGO
+  file: LOGO.img
+- op: erase
+  partition: cache

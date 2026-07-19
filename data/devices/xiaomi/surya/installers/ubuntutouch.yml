@@ -1,6 +1,38 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubuntu-touch-surya/ubuntu-touch-surya/releases/download/stable-repartition/recovery.img
+  filename: recovery.img
+  sha256: 357b32fe91a76879babcc24a0b2ad51e767283955e454ca58cf3e7f75b0fbdd5
+- url: https://github.com/ubuntu-touch-surya/ubuntu-touch-surya/releases/download/stable-repartition/dtbo.img
+  filename: dtbo.img
+  sha256: f08d0116435d600d7e3ac002813031644d6d3ad8fb3e078ec6985d956dde8158
+- url: https://github.com/ubuntu-touch-surya/ubuntu-touch-surya/releases/download/stable-repartition/super.img
+  filename: super.img
+  sha256: 2d8b05f9aefa946b8a055249c77d38377970acc2f2fe6722877d5522d3bff10d
+- url: https://github.com/ubuntu-touch-surya/ubuntu-touch-surya/releases/download/stable-repartition/vendor.img
+  filename: vendor.img
+  sha256: 8b5cb118fcb0c34af5443eaac2cd703ac9ab8e104f420eaa07276e5b0e532029
+bootstrap:
+- op: format
+  partition: cache
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: reboot_fastboot
+- op: wipe_super
+- op: flash
+  partition: vendor
+  file: vendor.img
+- op: reboot_recovery

@@ -1,6 +1,43 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubuntu-touch-juice/ubuntu-touch-citrus/releases/download/20210929/recovery.img
+  filename: recovery.img
+  sha256: 7230d19149e208dc4786e65b453de5dbf578ced87fec451f3d35b745aa4e4231
+- url: https://github.com/ubuntu-touch-juice/ubuntu-touch-citrus/releases/download/20210929/dtbo.img
+  filename: dtbo.img
+  sha256: 6a0270409a8b40a0fa46fd2e488f3be6931ee69d43742681c8ca5b380c445d93
+- url: https://github.com/ubuntu-touch-juice/ubuntu-touch-citrus/releases/download/20210929/super.zip
+  filename: super.zip
+  sha256: 2e54e32f1a1dcb858ea1880284a9aee92c32656211b1a337f233eaa1bb33fee8
+  unpack: true
+- url: https://dl.google.com/developers/android/qt/images/gsi/vbmeta.img
+  filename: vbmeta.img
+  sha256: f6da5489fd877cb69cf61fa721cfd6d77e530084aefe9b96664f818947ff61f6
+bootstrap:
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+  flags:
+  - --disable-verity
+  - --disable-verification
+- op: flash
+  partition: boot
+  file: recovery.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: super
+  file: unpacked/super.img
+- op: reboot

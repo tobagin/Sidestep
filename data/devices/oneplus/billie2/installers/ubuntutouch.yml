@@ -1,6 +1,63 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/rubencarneiro/billie2/releases/download/1.0/boot.img
+  filename: boot.img
+  sha256: d67e2f5d33d6dde0165aa3695fb67b8bfe6fc486b5b6a3886fa1e22b75bcb2d6
+- url: https://github.com/rubencarneiro/billie2/releases/download/1.0/recovery.img
+  filename: recovery.img
+  sha256: 053dad21fa66cc27688ec98f2cc39e131598b65813265b9e847092ba4b3eea01
+- url: https://github.com/rubencarneiro/billie2/releases/download/1.0/dtbo.img
+  filename: dtbo.img
+  sha256: 47eac9731ffbdea4373acb60eeb30837642d3e69773a65f71125b304390225dc
+- url: https://github.com/rubencarneiro/billie2/releases/download/1.0/vbmeta.img
+  filename: vbmeta.img
+  sha256: 06ad2b775ec21134aa935eb6e0a48514198822ee7bfb1773f27cc006a0c6e427
+bootstrap:
+- op: wait
+- op: assert_var
+  variable: unlocked
+  value: 'yes'
+- op: set_active
+  slot: a
+- op: flash
+  partition: boot
+  file: boot.img
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: flash
+  partition: vbmeta
+  file: vbmeta.img
+- op: reboot_fastboot
+- op: delete_logical_partition
+  partition: system_ext_a
+- op: delete_logical_partition
+  partition: system_ext_b
+- op: delete_logical_partition
+  partition: product_a
+- op: delete_logical_partition
+  partition: product_b
+- op: delete_logical_partition
+  partition: system_b
+- op: delete_logical_partition
+  partition: vendor_b
+- op: delete_logical_partition
+  partition: odm_b
+- op: resize_logical_partition
+  partition: system_a
+  size: 3221225472
+- op: reboot_bootloader
+- op: erase
+  partition: userdata
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery

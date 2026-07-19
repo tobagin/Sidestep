@@ -1,6 +1,16 @@
 name: "Droidian"
-prerequisites: []
+prerequisites:
+  - title: "LineageOS 16 (Treble) base required"
+    check: "lineageos_16_treble_installed"
+    message: "The OnePlus 3/3T predates Project Treble and has no /vendor partition, which Droidian needs.\n\nBefore installing Droidian the device must be treblized and running a LineageOS 16.0 (Treble) base:\n\n1. Flash the treble TWRP (twrp-op3treble-3.3.1-1.img)\n2. In TWRP → Advanced → Terminal, run: treblize\n3. Flash the device-specific firmware (9.0.6)\n4. Sideload lineage-16.0 treble (lineage-16.0-...-oneplus3.zip)\n5. In TWRP, Advanced Wipe everything EXCEPT Vendor and USB-OTG\n\nDo you already have LineageOS 16 (Treble) installed?"
+    on_success: "install"
+    on_failure: "install_base"
 steps:
   install:
     type: "flash"
     url: ""
+  install_base:
+    type: "instruction"
+    message: "Follow Droidian's OnePlus 3/3T guide to treblize the device and flash the LineageOS 16 (Treble) base, then return here to install Droidian.\n\nThe treblize step repartitions internal storage to create /vendor — do it carefully and only from the treble TWRP linked below.\n\nOnce LineageOS 16 boots and you have wiped everything except Vendor, come back and start Droidian again."
+    link: "https://devices.droidian.org/#/oneplus3"
+    action_label: "Open OnePlus 3 guide"

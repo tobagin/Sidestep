@@ -4,3 +4,15 @@ steps:
   install:
     type: "flash"
     url: ""
+# Flash procedure per Debian wiki (InstallingDebianOn/Fairphone/Fairphone5).
+# sparse-flash is used for userdata for robustness on the large rootfs image.
+flash_operations:
+  - type: flash
+    partition: "boot"
+    source: "boot"
+  - type: flash_sparse
+    partition: "userdata"
+    source: "rootfs"
+    chunk_size: "100M"
+  - type: erase
+    partition: "dtbo"

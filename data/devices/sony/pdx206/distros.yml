@@ -10,8 +10,8 @@ available_distros:
     channels:
       - id: "nightly"
         label: "Nightly"
-        artifact_match: "sony_pdx206-api30-arm64"
-        release_url: "https://api.github.com/repos/droidian-images/droidian/releases/latest"
+        artifact_match: "pdx206-phosh-api30-arm64"
+        release_url: "https://api.github.com/repos/ArchieMeng/droidian-recipes/releases/tags/nightly"
     flash_method: "fastboot_zip_orchestrator"
     compatibility:
       working:

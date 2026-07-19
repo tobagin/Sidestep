@@ -1,6 +1,28 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/UbuntuTouch-sagit/ubuntu-touch-sagit/releases/download/v1.1/vendor.zip
+  filename: vendor.zip
+  sha256: 13b018a5e72a966b22cc4fdabfacdd5eff434366269602b1bae713973f57aaa6
+  unpack: true
+- url: https://github.com/UbuntuTouch-sagit/ubuntu-touch-sagit/releases/download/v1.1/recovery.img
+  filename: recovery.img
+  sha256: bf857a093e1df99fba91252d4114ef8796d515e821657fcbfb504a5cdc8893c5
+bootstrap:
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: boot
+  file: recovery.img
+- op: flash
+  partition: cust
+  file: unpacked/vendor.img
+- op: reboot

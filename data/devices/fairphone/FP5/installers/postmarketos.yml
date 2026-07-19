@@ -4,3 +4,12 @@ steps:
   install:
     type: "flash"
     url: ""
+# postmarketOS ships a boot image (…-boot.img.xz) + rootfs (…img.xz); the
+# installer downloads/decompresses both and flashes per these operations.
+flash_operations:
+  - type: flash
+    partition: "boot"
+    source: "boot"
+  - type: flash
+    partition: "userdata"
+    source: "rootfs"

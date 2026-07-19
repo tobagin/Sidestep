@@ -1,6 +1,22 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/Kethen/samsung-exynos8890/releases/download/2022-07-23/recovery_herolte.img
+  filename: recovery_herolte.img
+  sha256: d573383abf8cc8112910d237e212174359b2611372289afa83ff70ffea91763f
+- url: https://github.com/Kethen/samsung-exynos8890/releases/download/2022-07-23/boot-reboot-recovery-herolte.img
+  filename: boot-reboot-recovery-herolte.img
+  sha256: 05524f217e71494e88e077b54facfe00ce324674a4b84e4300a2793ed22ead90
+bootstrap:
+- op: user_action
+  message: download
+- op: heimdall_flash
+  partition: BOOT
+  file: boot-reboot-recovery-herolte.img
+- op: heimdall_flash
+  partition: RECOVERY
+  file: recovery_herolte.img

@@ -1,6 +1,31 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://github.com/ubuntu-touch-miatoll/ubuntu-touch-miatoll/releases/download/stable-installer-fix/recovery.img
+  filename: recovery.img
+  sha256: e03f68c4769d68e1437de6fb3de6bcb996c12eba6b442962b41e7a6441513c7e
+- url: https://github.com/ubuntu-touch-miatoll/ubuntu-touch-miatoll/releases/download/stable-installer-fix/dtbo.img
+  filename: dtbo.img
+  sha256: d000f2c07571b6b007836cfdb2ea998b2e709504e34598a7f09259f6a50be8b3
+bootstrap:
+- op: format
+  partition: cache
+  fs: ext4
+- op: format
+  partition: userdata
+  fs: ext4
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: flash
+  partition: dtbo
+  file: dtbo.img
+- op: reboot_fastboot
+- op: resize_logical_partition
+  partition: system
+  size: 3670016000
+- op: reboot_bootloader

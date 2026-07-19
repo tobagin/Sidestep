@@ -1,6 +1,43 @@
-name: "Ubuntu Touch"
+name: Ubuntu Touch
 prerequisites: []
 steps:
   install:
-    type: "flash"
-    url: ""
+    type: flash
+    url: ''
+ubports_downloads:
+- url: https://cdimage.ubports.com/devices/pro1x/recovery.img
+  filename: recovery.img
+  sha256: 79eb3c3969343c6c969ce9eea2deab22ab140e29cd388df9345877b78cb80795
+bootstrap:
+- op: wait
+- op: assert_var
+  variable: unlocked
+  value: 'yes'
+- op: set_active
+  slot: a
+- op: flash
+  partition: recovery
+  file: recovery.img
+- op: reboot_fastboot
+- op: delete_logical_partition
+  partition: system_ext_a
+- op: delete_logical_partition
+  partition: system_ext_b
+- op: delete_logical_partition
+  partition: product_a
+- op: delete_logical_partition
+  partition: product_b
+- op: delete_logical_partition
+  partition: system_b
+- op: delete_logical_partition
+  partition: vendor_b
+- op: delete_logical_partition
+  partition: odm_b
+- op: resize_logical_partition
+  partition: system_a
+  size: 4718592000
+- op: reboot_bootloader
+- op: format
+  partition: userdata
+  fs: ext4
+- op: reboot_recovery
